@@ -150,11 +150,9 @@
                               <td>{{ peso.dataInserimento | formatMediumDate }}</td>
                               <td>
                                 <div class="btn-group">
-                                  <button class="btn btn-primary btn-sm" (click)="editPeso(peso)">
-                                    <fa-icon icon="pencil-alt"></fa-icon>
-                                  </button>
                                   <button class="btn btn-danger btn-sm" (click)="deletePeso(peso)">
                                     <fa-icon icon="times"></fa-icon>
+                                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Elimina</span>
                                   </button>
                                 </div>
                               </td>
@@ -283,11 +281,9 @@
                               <td>{{ plic.dataInserimento | formatMediumDate }}</td>
                               <td>
                                 <div class="btn-group">
-                                  <button class="btn btn-primary btn-sm" (click)="editPlicometria(plic)">
-                                    <fa-icon icon="pencil-alt"></fa-icon>
-                                  </button>
                                   <button class="btn btn-danger btn-sm" (click)="deletePlicometria(plic)">
                                     <fa-icon icon="times"></fa-icon>
+                                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Elimina</span>
                                   </button>
                                 </div>
                               </td>
@@ -440,11 +436,9 @@
                               <td>{{ circ.dataInserimento | formatMediumDate }}</td>
                               <td>
                                 <div class="btn-group">
-                                  <button class="btn btn-primary btn-sm" (click)="editCirconferenza(circ)">
-                                    <fa-icon icon="pencil-alt"></fa-icon>
-                                  </button>
                                   <button class="btn btn-danger btn-sm" (click)="deleteCirconferenza(circ)">
                                     <fa-icon icon="times"></fa-icon>
+                                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Elimina</span>
                                   </button>
                                 </div>
                               </td>

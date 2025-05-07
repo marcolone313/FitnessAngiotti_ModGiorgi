@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, input } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, inject, input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 import SharedModule from 'app/shared/shared.module';
@@ -12,17 +12,14 @@ import { IPesoCliente, NewPesoCliente } from 'app/entities/peso-cliente/peso-cli
 import { CirconferenzaService } from 'app/entities/circonferenza/service/circonferenza.service';
 import { ICirconferenza, NewCirconferenza } from 'app/entities/circonferenza/circonferenza.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { PesoClienteUpdateComponent } from 'app/entities/peso-cliente/update/peso-cliente-update.component';
-import { PlicometriaUpdateComponent } from 'app/entities/plicometria/update/plicometria-update.component';
-import { CirconferenzaUpdateComponent } from 'app/entities/circonferenza/update/circonferenza-update.component';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { HttpResponse } from '@angular/common/http';
 import dayjs from 'dayjs/esm';
 import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 import { PesoClienteDeleteDialogComponent } from 'app/entities/peso-cliente/delete/peso-cliente-delete-dialog.component';
 import { PlicometriaDeleteDialogComponent } from 'app/entities/plicometria/delete/plicometria-delete-dialog.component';
 import { CirconferenzaDeleteDialogComponent } from 'app/entities/circonferenza/delete/circonferenza-delete-dialog.component';
-import { filter } from 'rxjs/operators';
+import { filter, finalize } from 'rxjs/operators';
+import { forkJoin, of } from 'rxjs';
 
 @Component({
   standalone: true,
@@ -31,7 +28,7 @@ import { filter } from 'rxjs/operators';
   imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe, ReactiveFormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ClienteDetailComponent implements AfterViewInit {
+export class ClienteDetailComponent implements OnInit, AfterViewInit {
   cliente = input<ICliente | null>(null);
   protected dataUtils = inject(DataUtils);
 
@@ -52,14 +49,19 @@ export class ClienteDetailComponent implements AfterViewInit {
   activeTab = 'peso';
 
   // Quick add forms
-  pesoForm: FormGroup;
-  plicometriaForm: FormGroup;
-  circonferenzaForm: FormGroup;
+  private _pesoForm: FormGroup | null = null;
+  private _plicometriaForm: FormGroup | null = null;
+  private _circonferenzaForm: FormGroup | null = null;
 
   // Loading states
   isLoadingPeso = false;
   isLoadingPlic = false;
   isLoadingCirc = false;
+
+  // Data loading status
+  private hasLoadedPeso = false;
+  private hasLoadedPlic = false;
+  private hasLoadedCirc = false;
 
   // Pagination
   itemsPerPage = 10;
@@ -67,37 +69,103 @@ export class ClienteDetailComponent implements AfterViewInit {
   plicPage = 1;
   circPage = 1;
 
-  constructor() {
-    // Initialize forms
-    this.pesoForm = this.fb.group({
-      peso: ['', [Validators.required, Validators.min(0)]],
-      mese: ['', [Validators.required, Validators.min(1), Validators.max(12)]],
-      dataInserimento: [dayjs(), [Validators.required]],
-    });
+  // Form getters with lazy initialization
+  get pesoForm(): FormGroup {
+    if (!this._pesoForm) {
+      this._pesoForm = this.fb.group({
+        peso: ['', [Validators.required, Validators.min(0)]],
+        mese: ['', [Validators.required, Validators.min(1), Validators.max(12)]],
+        dataInserimento: [dayjs(), [Validators.required]],
+      });
+    }
+    return this._pesoForm;
+  }
 
-    this.plicometriaForm = this.fb.group({
-      tricipite: ['', [Validators.min(0)]],
-      petto: ['', [Validators.min(0)]],
-      ascella: ['', [Validators.min(0)]],
-      sottoscapolare: ['', [Validators.min(0)]],
-      soprailliaca: ['', [Validators.min(0)]],
-      addome: ['', [Validators.min(0)]],
-      coscia: ['', [Validators.min(0)]],
-      mese: ['', [Validators.required, Validators.min(1), Validators.max(12)]],
-      dataInserimento: [dayjs(), [Validators.required]],
-    });
+  get plicometriaForm(): FormGroup {
+    if (!this._plicometriaForm) {
+      this._plicometriaForm = this.fb.group({
+        tricipite: ['', [Validators.min(0)]],
+        petto: ['', [Validators.min(0)]],
+        ascella: ['', [Validators.min(0)]],
+        sottoscapolare: ['', [Validators.min(0)]],
+        soprailliaca: ['', [Validators.min(0)]],
+        addome: ['', [Validators.min(0)]],
+        coscia: ['', [Validators.min(0)]],
+        mese: ['', [Validators.required, Validators.min(1), Validators.max(12)]],
+        dataInserimento: [dayjs(), [Validators.required]],
+      });
+    }
+    return this._plicometriaForm;
+  }
 
-    this.circonferenzaForm = this.fb.group({
-      torace: ['', [Validators.min(0)]],
-      braccio: ['', [Validators.min(0)]],
-      avambraccio: ['', [Validators.min(0)]],
-      ombelico: ['', [Validators.min(0)]],
-      fianchi: ['', [Validators.min(0)]],
-      sottoOmbelico: ['', [Validators.min(0)]],
-      vita: ['', [Validators.min(0)]],
-      coscia: ['', [Validators.min(0)]],
-      mese: ['', [Validators.required, Validators.min(1), Validators.max(12)]],
-      dataInserimento: [dayjs(), [Validators.required]],
+  get circonferenzaForm(): FormGroup {
+    if (!this._circonferenzaForm) {
+      this._circonferenzaForm = this.fb.group({
+        torace: ['', [Validators.min(0)]],
+        braccio: ['', [Validators.min(0)]],
+        avambraccio: ['', [Validators.min(0)]],
+        ombelico: ['', [Validators.min(0)]],
+        fianchi: ['', [Validators.min(0)]],
+        sottoOmbelico: ['', [Validators.min(0)]],
+        vita: ['', [Validators.min(0)]],
+        coscia: ['', [Validators.min(0)]],
+        mese: ['', [Validators.required, Validators.min(1), Validators.max(12)]],
+        dataInserimento: [dayjs(), [Validators.required]],
+      });
+    }
+    return this._circonferenzaForm;
+  }
+
+  ngOnInit(): void {
+    // Initialize first tab data
+    this.loadInitialData();
+  }
+
+  // Load critical data on init, then queue up background loading of other tabs
+  loadInitialData(): void {
+    // First load the peso data (for the default tab)
+    this.loadPesoData();
+    this.hasLoadedPeso = true;
+
+    // Schedule the loading of other tab data in the background
+    setTimeout(() => {
+      this.loadRemainingData();
+    }, 300);
+  }
+
+  // Load other tab data in the background to improve perceived performance
+  loadRemainingData(): void {
+    const idCliente = this.cliente()?.id;
+    if (!idCliente) return;
+
+    // Create query objects for each data type
+    const queryObject = {
+      'clienteId.equals': idCliente,
+      size: this.itemsPerPage,
+      sort: ['id,desc'], // Ordinamento per ID invece che per data
+    };
+
+    // Load both other data types in parallel using forkJoin
+    forkJoin([
+      !this.hasLoadedPlic ? this.plicometriaSrv.query({ ...queryObject, page: this.plicPage - 1 }) : of(null),
+      !this.hasLoadedCirc ? this.circonferenzaSrv.query({ ...queryObject, page: this.circPage - 1 }) : of(null),
+    ]).subscribe({
+      next: ([plicRes, circRes]) => {
+        // Process plicometria data if it was loaded
+        if (plicRes) {
+          this.plicometrie = plicRes.body || [];
+          this.hasLoadedPlic = true;
+        }
+
+        // Process circonferenza data if it was loaded
+        if (circRes) {
+          this.circonferenze = circRes.body || [];
+          this.hasLoadedCirc = true;
+        }
+
+        // Update the view
+        this.cdr.markForCheck();
+      },
     });
   }
 
@@ -105,20 +173,20 @@ export class ClienteDetailComponent implements AfterViewInit {
     if (this.activeTab !== tab) {
       this.activeTab = tab;
 
-      // Caricamento lazy dei dati in base alla tab selezionata
+      // Load data if not already loaded
       switch (tab) {
         case 'peso':
-          if (this.pesi.length === 0) {
+          if (!this.hasLoadedPeso) {
             this.loadPesoData();
           }
           break;
         case 'plicometria':
-          if (this.plicometrie.length === 0) {
+          if (!this.hasLoadedPlic) {
             this.loadPlicometriaData();
           }
           break;
         case 'circonferenza':
-          if (this.circonferenze.length === 0) {
+          if (!this.hasLoadedCirc) {
             this.loadCirconferenzaData();
           }
           break;
@@ -141,8 +209,7 @@ export class ClienteDetailComponent implements AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    // Carica solo i dati della tab iniziale
-    this.loadPesoData();
+    // Initial loading is now done in ngOnInit
   }
 
   loadPesoData(): void {
@@ -156,23 +223,29 @@ export class ClienteDetailComponent implements AfterViewInit {
       'clienteId.equals': idCliente,
       page: this.pesoPage - 1,
       size: this.itemsPerPage,
-      sort: ['dataInserimento,desc'],
+      sort: ['id,desc'], // Ordinamento per ID invece che per data
     };
 
-    this.pesoSrv.query(queryObject).subscribe({
-      next: res => {
-        this.pesi = res.body || [];
-        this.isLoadingPeso = false;
-        this.cdr.markForCheck();
-      },
-      error: () => {
-        this.pesi = [];
-        this.isLoadingPeso = false;
-        this.cdr.markForCheck();
-      },
-    });
+    this.pesoSrv
+      .query(queryObject)
+      .pipe(
+        finalize(() => {
+          this.isLoadingPeso = false;
+          this.hasLoadedPeso = true;
+          this.cdr.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: res => {
+          this.pesi = res.body || [];
+        },
+        error: () => {
+          this.pesi = [];
+        },
+      });
   }
 
+  // Modifica del metodo loadPlicometriaData
   loadPlicometriaData(): void {
     const idCliente = this.cliente()?.id;
     if (!idCliente) return;
@@ -184,23 +257,29 @@ export class ClienteDetailComponent implements AfterViewInit {
       'clienteId.equals': idCliente,
       page: this.plicPage - 1,
       size: this.itemsPerPage,
-      sort: ['dataInserimento,desc'],
+      sort: ['id,desc'], // Ordinamento per ID invece che per data
     };
 
-    this.plicometriaSrv.query(queryObject).subscribe({
-      next: res => {
-        this.plicometrie = res.body || [];
-        this.isLoadingPlic = false;
-        this.cdr.markForCheck();
-      },
-      error: () => {
-        this.plicometrie = [];
-        this.isLoadingPlic = false;
-        this.cdr.markForCheck();
-      },
-    });
+    this.plicometriaSrv
+      .query(queryObject)
+      .pipe(
+        finalize(() => {
+          this.isLoadingPlic = false;
+          this.hasLoadedPlic = true;
+          this.cdr.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: res => {
+          this.plicometrie = res.body || [];
+        },
+        error: () => {
+          this.plicometrie = [];
+        },
+      });
   }
 
+  // Modifica del metodo loadCirconferenzaData
   loadCirconferenzaData(): void {
     const idCliente = this.cliente()?.id;
     if (!idCliente) return;
@@ -212,21 +291,26 @@ export class ClienteDetailComponent implements AfterViewInit {
       'clienteId.equals': idCliente,
       page: this.circPage - 1,
       size: this.itemsPerPage,
-      sort: ['dataInserimento,desc'],
+      sort: ['id,desc'], // Ordinamento per ID invece che per data
     };
 
-    this.circonferenzaSrv.query(queryObject).subscribe({
-      next: res => {
-        this.circonferenze = res.body || [];
-        this.isLoadingCirc = false;
-        this.cdr.markForCheck();
-      },
-      error: () => {
-        this.circonferenze = [];
-        this.isLoadingCirc = false;
-        this.cdr.markForCheck();
-      },
-    });
+    this.circonferenzaSrv
+      .query(queryObject)
+      .pipe(
+        finalize(() => {
+          this.isLoadingCirc = false;
+          this.hasLoadedCirc = true;
+          this.cdr.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: res => {
+          this.circonferenze = res.body || [];
+        },
+        error: () => {
+          this.circonferenze = [];
+        },
+      });
   }
 
   // Funzioni di paginazione
@@ -243,34 +327,6 @@ export class ClienteDetailComponent implements AfterViewInit {
   navigateToCircPage(page: number): void {
     this.circPage = page;
     this.loadCirconferenzaData();
-  }
-
-  // Open edit modals
-  editPeso(peso: IPesoCliente): void {
-    const modalRef = this.modalService.open(PesoClienteUpdateComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.pesoCliente = peso;
-
-    modalRef.closed.subscribe(() => {
-      this.loadPesoData();
-    });
-  }
-
-  editPlicometria(plicometria: IPlicometria): void {
-    const modalRef = this.modalService.open(PlicometriaUpdateComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.plicometria = plicometria;
-
-    modalRef.closed.subscribe(() => {
-      this.loadPlicometriaData();
-    });
-  }
-
-  editCirconferenza(circonferenza: ICirconferenza): void {
-    const modalRef = this.modalService.open(CirconferenzaUpdateComponent, { size: 'lg', backdrop: 'static' });
-    modalRef.componentInstance.circonferenza = circonferenza;
-
-    modalRef.closed.subscribe(() => {
-      this.loadCirconferenzaData();
-    });
   }
 
   // Delete operations
@@ -301,7 +357,7 @@ export class ClienteDetailComponent implements AfterViewInit {
     });
   }
 
-  // Quick add methods
+  // Quick add methods with optimistic updates
   addNewPeso(): void {
     if (this.pesoForm.invalid) return;
 
@@ -309,8 +365,8 @@ export class ClienteDetailComponent implements AfterViewInit {
       id: null,
       ...this.pesoForm.value,
       cliente: {
-        id: this.cliente()?.id,
-        email: this.cliente()?.email,
+        id: this.cliente()?.id || 0,
+        email: this.cliente()?.email || '',
       },
     };
 
@@ -318,13 +374,19 @@ export class ClienteDetailComponent implements AfterViewInit {
     this.cdr.markForCheck();
 
     this.pesoSrv.create(newPeso).subscribe({
-      next: () => {
+      next: response => {
+        // Optimistic update - add the new record to the array
+        if (response.body) {
+          this.pesi = [response.body, ...this.pesi];
+        }
+
         this.pesoForm.reset({
           peso: '',
           mese: '',
           dataInserimento: dayjs(),
         });
-        this.loadPesoData();
+        this.isLoadingPeso = false;
+        this.cdr.markForCheck();
       },
       error: () => {
         this.isLoadingPeso = false;
@@ -340,8 +402,8 @@ export class ClienteDetailComponent implements AfterViewInit {
       id: null,
       ...this.plicometriaForm.value,
       cliente: {
-        id: this.cliente()?.id,
-        email: this.cliente()?.email,
+        id: this.cliente()?.id || 0,
+        email: this.cliente()?.email || '',
       },
     };
 
@@ -349,7 +411,12 @@ export class ClienteDetailComponent implements AfterViewInit {
     this.cdr.markForCheck();
 
     this.plicometriaSrv.create(newPlicometria).subscribe({
-      next: () => {
+      next: response => {
+        // Optimistic update - add the new record to the array
+        if (response.body) {
+          this.plicometrie = [response.body, ...this.plicometrie];
+        }
+
         this.plicometriaForm.reset({
           tricipite: '',
           petto: '',
@@ -361,7 +428,8 @@ export class ClienteDetailComponent implements AfterViewInit {
           mese: '',
           dataInserimento: dayjs(),
         });
-        this.loadPlicometriaData();
+        this.isLoadingPlic = false;
+        this.cdr.markForCheck();
       },
       error: () => {
         this.isLoadingPlic = false;
@@ -377,8 +445,8 @@ export class ClienteDetailComponent implements AfterViewInit {
       id: null,
       ...this.circonferenzaForm.value,
       cliente: {
-        id: this.cliente()?.id,
-        email: this.cliente()?.email,
+        id: this.cliente()?.id || 0,
+        email: this.cliente()?.email || '',
       },
     };
 
@@ -386,7 +454,12 @@ export class ClienteDetailComponent implements AfterViewInit {
     this.cdr.markForCheck();
 
     this.circonferenzaSrv.create(newCirconferenza).subscribe({
-      next: () => {
+      next: response => {
+        // Optimistic update - add the new record to the array
+        if (response.body) {
+          this.circonferenze = [response.body, ...this.circonferenze];
+        }
+
         this.circonferenzaForm.reset({
           torace: '',
           braccio: '',
@@ -399,7 +472,8 @@ export class ClienteDetailComponent implements AfterViewInit {
           mese: '',
           dataInserimento: dayjs(),
         });
-        this.loadCirconferenzaData();
+        this.isLoadingCirc = false;
+        this.cdr.markForCheck();
       },
       error: () => {
         this.isLoadingCirc = false;
