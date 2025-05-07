@@ -142,7 +142,9 @@
                         <tbody>
                           @for (peso of pesi; track peso.id) {
                             <tr>
-                              <td>{{ peso.id }}</td>
+                              <td>
+                                <a [routerLink]="['/peso-cliente', peso.id, 'view']">{{ peso.id }}</a>
+                              </td>
                               <td>
                                 <strong>{{ peso.peso }}</strong>
                               </td>
@@ -269,7 +271,9 @@
                         <tbody>
                           @for (plic of plicometrie; track plic.id) {
                             <tr>
-                              <td>{{ plic.id }}</td>
+                              <td>
+                                <a [routerLink]="['/plicometria', plic.id, 'view']">{{ plic.id }}</a>
+                              </td>
                               <td>{{ plic.tricipite }}</td>
                               <td>{{ plic.petto }}</td>
                               <td>{{ plic.ascella }}</td>
@@ -423,7 +427,9 @@
                         <tbody>
                           @for (circ of circonferenze; track circ.id) {
                             <tr>
-                              <td>{{ circ.id }}</td>
+                              <td>
+                                <a [routerLink]="['/circonferenza', circ.id, 'view']">{{ circ.id }}</a>
+                              </td>
                               <td>{{ circ.torace }}</td>
                               <td>{{ circ.braccio }}</td>
                               <td>{{ circ.avambraccio }}</td>
