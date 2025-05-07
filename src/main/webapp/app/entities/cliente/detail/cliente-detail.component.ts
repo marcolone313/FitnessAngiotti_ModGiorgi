@@ -11,6 +11,8 @@ import { PesoClienteService } from 'app/entities/peso-cliente/service/peso-clien
 import { IPesoCliente, NewPesoCliente } from 'app/entities/peso-cliente/peso-cliente.model';
 import { CirconferenzaService } from 'app/entities/circonferenza/service/circonferenza.service';
 import { ICirconferenza, NewCirconferenza } from 'app/entities/circonferenza/circonferenza.model';
+import { DietaService } from 'app/entities/dieta/service/dieta.service';
+import { IDieta } from 'app/entities/dieta/dieta.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import dayjs from 'dayjs/esm';
@@ -18,6 +20,7 @@ import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 import { PesoClienteDeleteDialogComponent } from 'app/entities/peso-cliente/delete/peso-cliente-delete-dialog.component';
 import { PlicometriaDeleteDialogComponent } from 'app/entities/plicometria/delete/plicometria-delete-dialog.component';
 import { CirconferenzaDeleteDialogComponent } from 'app/entities/circonferenza/delete/circonferenza-delete-dialog.component';
+import { DietaDeleteDialogComponent } from 'app/entities/dieta/delete/dieta-delete-dialog.component';
 import { filter, finalize } from 'rxjs/operators';
 import { forkJoin, of } from 'rxjs';
 
@@ -36,6 +39,7 @@ export class ClienteDetailComponent implements OnInit, AfterViewInit {
   plicometriaSrv = inject(PlicometriaService);
   pesoSrv = inject(PesoClienteService);
   circonferenzaSrv = inject(CirconferenzaService);
+  dietaSrv = inject(DietaService);
   modalService = inject(NgbModal);
   fb = inject(FormBuilder);
   cdr = inject(ChangeDetectorRef);
@@ -44,6 +48,7 @@ export class ClienteDetailComponent implements OnInit, AfterViewInit {
   plicometrie: IPlicometria[] = [];
   pesi: IPesoCliente[] = [];
   circonferenze: ICirconferenza[] = [];
+  diete: IDieta[] = [];
 
   // Tab control
   activeTab = 'peso';
@@ -57,11 +62,13 @@ export class ClienteDetailComponent implements OnInit, AfterViewInit {
   isLoadingPeso = false;
   isLoadingPlic = false;
   isLoadingCirc = false;
+  isLoadingDieta = false;
 
   // Data loading status
   private hasLoadedPeso = false;
   private hasLoadedPlic = false;
   private hasLoadedCirc = false;
+  private hasLoadedDieta = false;
 
   // Pagination
   itemsPerPage = 10;
@@ -119,6 +126,9 @@ export class ClienteDetailComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     // Initialize first tab data
     this.loadInitialData();
+
+    // Carica anche le diete
+    this.loadDieteData();
   }
 
   // Load critical data on init, then queue up background loading of other tabs
@@ -313,6 +323,38 @@ export class ClienteDetailComponent implements OnInit, AfterViewInit {
       });
   }
 
+  // Metodo per caricare le diete
+  loadDieteData(): void {
+    const idCliente = this.cliente()?.id;
+    if (!idCliente) return;
+
+    this.isLoadingDieta = true;
+    this.cdr.markForCheck();
+
+    const queryObject = {
+      'clienteId.equals': idCliente,
+      sort: ['id,desc'],
+    };
+
+    this.dietaSrv
+      .query(queryObject)
+      .pipe(
+        finalize(() => {
+          this.isLoadingDieta = false;
+          this.hasLoadedDieta = true;
+          this.cdr.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: res => {
+          this.diete = res.body || [];
+        },
+        error: () => {
+          this.diete = [];
+        },
+      });
+  }
+
   // Funzioni di paginazione
   navigateToPesoPage(page: number): void {
     this.pesoPage = page;
@@ -354,6 +396,16 @@ export class ClienteDetailComponent implements OnInit, AfterViewInit {
 
     modalRef.closed.pipe(filter((reason: string) => reason === ITEM_DELETED_EVENT)).subscribe(() => {
       this.loadCirconferenzaData();
+    });
+  }
+
+  // Metodo per eliminare una dieta
+  deleteDieta(dieta: IDieta): void {
+    const modalRef = this.modalService.open(DietaDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.dieta = dieta;
+
+    modalRef.closed.pipe(filter((reason: string) => reason === ITEM_DELETED_EVENT)).subscribe(() => {
+      this.loadDieteData();
     });
   }
 
