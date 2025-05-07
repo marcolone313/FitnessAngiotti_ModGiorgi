@@ -1,0 +1,60 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (clienteToLezioneCorso(); as clienteToLezioneCorsoRef) {
+      <div>
+        <h2 data-cy="clienteToLezioneCorsoDetailsHeading">
+          <span jhiTranslate="fitnessAngiottiApp.clienteToLezioneCorso.detail.title">Cliente To Lezione Corso</span>
+        </h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ clienteToLezioneCorsoRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.clienteToLezioneCorso.completato">Completato</span></dt>
+          <dd>
+            <span>{{ clienteToLezioneCorsoRef.completato }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.clienteToLezioneCorso.dataCompletamento">Data Completamento</span></dt>
+          <dd>
+            <span>{{ clienteToLezioneCorsoRef.dataCompletamento | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.clienteToLezioneCorso.cliente">Cliente</span></dt>
+          <dd>
+            @if (clienteToLezioneCorso()!.cliente) {
+              <div>
+                <a [routerLink]="['/cliente', clienteToLezioneCorso()!.cliente?.id, 'view']">{{
+                  clienteToLezioneCorsoRef.cliente?.email
+                }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.clienteToLezioneCorso.lezioneCorso">Lezione Corso</span></dt>
+          <dd>
+            @if (clienteToLezioneCorso()!.lezioneCorso) {
+              <div>
+                <a [routerLink]="['/lezione-corso', clienteToLezioneCorso()!.lezioneCorso?.id, 'view']">{{
+                  clienteToLezioneCorsoRef.lezioneCorso?.titolo
+                }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Indietro</span>
+        </button>
+
+        <button type="button" [routerLink]="['/cliente-to-lezione-corso', clienteToLezioneCorsoRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Modifica</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

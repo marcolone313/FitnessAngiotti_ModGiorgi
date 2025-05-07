@@ -1,0 +1,60 @@
+{
+  "annotations": {
+    "changelogDate": "20241213084630"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "nome",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "tipo",
+      "fieldType": "TipoEsercizio",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "FULLBODY,UPPERBODY,LOWERBODY,CORE,CARDIO,POSTURALE,KOMBAT"
+    },
+    {
+      "fieldName": "videoUrl",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "descrizione",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "foto",
+      "fieldType": "ImageBlob"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Esercizio",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "gym",
+      "otherEntityRelationshipName": "esercizio",
+      "relationshipName": "gym",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "circuitoToEsercizio",
+      "otherEntityRelationshipName": "esercizio",
+      "relationshipName": "circuitoToEsercizio",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    },
+    {
+      "otherEntityName": "passaggioEsercizio",
+      "otherEntityRelationshipName": "esercizio",
+      "relationshipName": "passaggioEsercizio",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

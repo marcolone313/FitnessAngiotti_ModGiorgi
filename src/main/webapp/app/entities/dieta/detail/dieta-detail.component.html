@@ -1,0 +1,58 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (dieta(); as dietaRef) {
+      <div>
+        <h2 data-cy="dietaDetailsHeading"><span jhiTranslate="fitnessAngiottiApp.dieta.detail.title">Dieta</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ dietaRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.dieta.dataCreazione">Data Creazione</span></dt>
+          <dd>
+            <span>{{ dietaRef.dataCreazione | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.dieta.mese">Mese</span></dt>
+          <dd>
+            <span>{{ dietaRef.mese }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.dieta.tipo">Tipo</span></dt>
+          <dd>
+            <span>{{ dietaRef.tipo }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.dieta.macros">Macros</span></dt>
+          <dd>
+            <span>{{ dietaRef.macros }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.dieta.fabbisognoCalorico">Fabbisogno Calorico</span></dt>
+          <dd>
+            <span>{{ dietaRef.fabbisognoCalorico }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.dieta.cliente">Cliente</span></dt>
+          <dd>
+            @if (dieta()!.cliente) {
+              <div>
+                <a [routerLink]="['/cliente', dieta()!.cliente?.id, 'view']">{{ dietaRef.cliente?.email }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Indietro</span>
+        </button>
+
+        <button type="button" [routerLink]="['/dieta', dietaRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Modifica</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

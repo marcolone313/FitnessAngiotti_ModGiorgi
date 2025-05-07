@@ -1,0 +1,276 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-report-settimanale-heading"
+        data-cy="ReportSettimanaleCreateUpdateHeading"
+        jhiTranslate="fitnessAngiottiApp.reportSettimanale.home.createOrEditLabel"
+      >
+        Genera o modifica un Report Settimanale
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="fitnessAngiottiApp.reportSettimanale.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_voto" jhiTranslate="fitnessAngiottiApp.reportSettimanale.voto">Voto</label>
+          <select class="form-control" name="voto" formControlName="voto" id="field_voto" data-cy="voto">
+            <option [ngValue]="null">{{ 'fitnessAngiottiApp.Voto.null' | translate }}</option>
+            @for (voto of votoValues; track $index) {
+              <option [value]="voto">{{ 'fitnessAngiottiApp.Voto.' + voto | translate }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_commentoAllenamento" jhiTranslate="fitnessAngiottiApp.reportSettimanale.commentoAllenamento"
+            >Commento Allenamento</label
+          >
+          <textarea
+            class="form-control"
+            name="commentoAllenamento"
+            id="field_commentoAllenamento"
+            data-cy="commentoAllenamento"
+            formControlName="commentoAllenamento"
+          ></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_giorniDieta" jhiTranslate="fitnessAngiottiApp.reportSettimanale.giorniDieta"
+            >Giorni Dieta</label
+          >
+          <select class="form-control" name="giorniDieta" formControlName="giorniDieta" id="field_giorniDieta" data-cy="giorniDieta">
+            <option [ngValue]="null">{{ 'fitnessAngiottiApp.Voto.null' | translate }}</option>
+            @for (voto of votoValues; track $index) {
+              <option [value]="voto">{{ 'fitnessAngiottiApp.Voto.' + voto | translate }}</option>
+            }
+          </select>
+        </div>
+
+        @let pesoMedioRef = editForm.get('pesoMedio')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_pesoMedio" jhiTranslate="fitnessAngiottiApp.reportSettimanale.pesoMedio">Peso Medio</label>
+          <input type="number" class="form-control" name="pesoMedio" id="field_pesoMedio" data-cy="pesoMedio" formControlName="pesoMedio" />
+          @if (pesoMedioRef.invalid && (pesoMedioRef.dirty || pesoMedioRef.touched)) {
+            <div>
+              @if (editForm.get('pesoMedio')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: '0' }"
+                  >Questo campo dovrebbe essere più di 0.</small
+                >
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('pesoMedio')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >Questo campo dovrebbe essere un numero.</small
+              >
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_qualitaSonno" jhiTranslate="fitnessAngiottiApp.reportSettimanale.qualitaSonno"
+            >Qualita Sonno</label
+          >
+          <select class="form-control" name="qualitaSonno" formControlName="qualitaSonno" id="field_qualitaSonno" data-cy="qualitaSonno">
+            <option [ngValue]="null">{{ 'fitnessAngiottiApp.Voto.null' | translate }}</option>
+            @for (voto of votoValues; track $index) {
+              <option [value]="voto">{{ 'fitnessAngiottiApp.Voto.' + voto | translate }}</option>
+            }
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_mediaOreSonno" jhiTranslate="fitnessAngiottiApp.reportSettimanale.mediaOreSonno"
+            >Media Ore Sonno</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="mediaOreSonno"
+            id="field_mediaOreSonno"
+            data-cy="mediaOreSonno"
+            formControlName="mediaOreSonno"
+          />
+        </div>
+
+        @let dataCreazioneRef = editForm.get('dataCreazione')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_dataCreazione" jhiTranslate="fitnessAngiottiApp.reportSettimanale.dataCreazione"
+            >Data Creazione</label
+          >
+          <div class="input-group">
+            <input
+              id="field_dataCreazione"
+              data-cy="dataCreazione"
+              type="text"
+              class="form-control"
+              name="dataCreazione"
+              ngbDatepicker
+              #dataCreazioneDp="ngbDatepicker"
+              formControlName="dataCreazione"
+            />
+            <button type="button" class="btn btn-secondary" (click)="dataCreazioneDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+          @if (dataCreazioneRef.invalid && (dataCreazioneRef.dirty || dataCreazioneRef.touched)) {
+            <div>
+              @if (editForm.get('dataCreazione')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let dataScadenzaRef = editForm.get('dataScadenza')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_dataScadenza" jhiTranslate="fitnessAngiottiApp.reportSettimanale.dataScadenza"
+            >Data Scadenza</label
+          >
+          <div class="input-group">
+            <input
+              id="field_dataScadenza"
+              data-cy="dataScadenza"
+              type="text"
+              class="form-control"
+              name="dataScadenza"
+              ngbDatepicker
+              #dataScadenzaDp="ngbDatepicker"
+              formControlName="dataScadenza"
+            />
+            <button type="button" class="btn btn-secondary" (click)="dataScadenzaDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+          @if (dataScadenzaRef.invalid && (dataScadenzaRef.dirty || dataScadenzaRef.touched)) {
+            <div>
+              @if (editForm.get('dataScadenza')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_dataCompletamento" jhiTranslate="fitnessAngiottiApp.reportSettimanale.dataCompletamento"
+            >Data Completamento</label
+          >
+          <div class="input-group">
+            <input
+              id="field_dataCompletamento"
+              data-cy="dataCompletamento"
+              type="text"
+              class="form-control"
+              name="dataCompletamento"
+              ngbDatepicker
+              #dataCompletamentoDp="ngbDatepicker"
+              formControlName="dataCompletamento"
+            />
+            <button type="button" class="btn btn-secondary" (click)="dataCompletamentoDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_puntuale" jhiTranslate="fitnessAngiottiApp.reportSettimanale.puntuale">Puntuale</label>
+          <input type="checkbox" class="form-check" name="puntuale" id="field_puntuale" data-cy="puntuale" formControlName="puntuale" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_analisiReport" jhiTranslate="fitnessAngiottiApp.reportSettimanale.analisiReport"
+            >Analisi Report</label
+          >
+          <textarea
+            class="form-control"
+            name="analisiReport"
+            id="field_analisiReport"
+            data-cy="analisiReport"
+            formControlName="analisiReport"
+          ></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_schedaSettimanale" jhiTranslate="fitnessAngiottiApp.reportSettimanale.schedaSettimanale"
+            >Scheda Settimanale</label
+          >
+          <select
+            class="form-control"
+            id="field_schedaSettimanale"
+            data-cy="schedaSettimanale"
+            name="schedaSettimanale"
+            formControlName="schedaSettimanale"
+            [compareWith]="compareSchedaSettimanale"
+          >
+            @if (editForm.get(['schedaSettimanale'])!.value == null) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (schedaSettimanaleOption of schedaSettimanalesCollection; track $index) {
+              <option [ngValue]="schedaSettimanaleOption">{{ schedaSettimanaleOption.id }}</option>
+            }
+          </select>
+        </div>
+        @if (
+          editForm.get(['schedaSettimanale'])!.invalid &&
+          (editForm.get(['schedaSettimanale'])!.dirty || editForm.get(['schedaSettimanale'])!.touched)
+        ) {
+          <div>
+            @if (editForm.get(['schedaSettimanale'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+            }
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_cliente" jhiTranslate="fitnessAngiottiApp.reportSettimanale.cliente">Cliente</label>
+          <select
+            class="form-control"
+            id="field_cliente"
+            data-cy="cliente"
+            name="cliente"
+            formControlName="cliente"
+            [compareWith]="compareCliente"
+          >
+            @if (!editForm.get('cliente')!.value) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (clienteOption of clientesSharedCollection; track $index) {
+              <option [ngValue]="clienteOption">{{ clienteOption.email }}</option>
+            }
+          </select>
+        </div>
+        @if (editForm.get(['cliente'])!.invalid && (editForm.get(['cliente'])!.dirty || editForm.get(['cliente'])!.touched)) {
+          <div>
+            @if (editForm.get(['cliente'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Annulla</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Salva</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

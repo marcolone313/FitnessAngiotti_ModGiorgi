@@ -1,0 +1,72 @@
+## DEV
+- manually delete db from RDS;
+./mvnw -Pprod
+(will recreate all the tables\schema\blablabla)
+
+To update:
+take entities.jdl from repo: https://github.com/dilastuk/_JHI_Pal.git
+subs (starting from entities, not whole project config) : ./jdl/entities.jdl
+jhipster jdl ./jdl/entities.jdl
+
+if porcamadonna: ./mvnw compile liquibase:diff
+
+make a local run via:
+./mvnw -Pprod
+
+## INFO 
+Instance ID
+
+i-023e70485d4c83991 (Fitness_EC2)
+51.20.10.125
+
+Open an SSH client.
+
+Locate your private key file. The key used to launch this instance is Fitness_Ec2_KeyPair.pem
+
+Run this command, if necessary, to ensure your key is not publicly viewable.
+chmod 400 "Fitness_Ec2_KeyPair.pem"
+
+Connect to your instance using its Public DNS:
+ec2-51-20-10-125.eu-north-1.compute.amazonaws.com
+
+Example:
+
+ssh -i "Fitness_Ec2_KeyPair.pem" ec2-user@ec2-51-20-10-125.eu-north-1.compute.amazonaws.com
+
+
+# 0. Resources
+https://bansalanuj.com/https-aws-ec2-without-custom-domain
+
+
+# 1. Docker
+`sudo yum install -y docker`
+`sudo yum update -y`
+`sudo systemctl enable docker`
+`sudo systemctl start docker`
+
+# 2. Build Img
+mvn package -Pprod,no-liquibase jib:dockerBuild -Dmaven.test.skip
+docker save -o fitnessangiotti.tar fitnessangiotti:latest
+scp -i ./_deploy/Fitness_Ec2_KeyPair.pem fitnessangiotti.tar ec2-user@51.20.10.125:~/.   
+ssh ./_deploy/Fitness_Ec2_KeyPair.pem@ec2-user@51.20.10.125
+sudo docker load -i fitnessangiotti.tar 
+
+sudo docker run -d -p 8080:8080 fitnessangiotti:latest
+
+http://51.20.10.125:8080  <3
+
+or:
+https://51.20.10.125.nip.io/
+
+# 3. Caddy
+yum -y install yum-plugin-copr
+yum -y copr enable @caddy/caddy epel-7-$(arch)
+yum -y install caddy
+
+# Caddyfile:
+51.20.10.125.nip.io {
+    reverse_proxy localhost:8080
+}
+
+
+caddy start

@@ -1,0 +1,152 @@
+<div>
+  <h2 id="page-heading" data-cy="DietaHeading">
+    <span jhiTranslate="fitnessAngiottiApp.dieta.home.title">Dietas</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="fitnessAngiottiApp.dieta.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-dieta"
+        [routerLink]="['/dieta/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="fitnessAngiottiApp.dieta.home.createLabel">Genera un nuovo Dieta</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <jhi-filter [filters]="filters"></jhi-filter>
+
+  @if (dietas?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="fitnessAngiottiApp.dieta.home.notFound">No Dietas found</span>
+    </div>
+  }
+
+  @if (dietas && dietas.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [sortState]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dataCreazione">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.dieta.dataCreazione">Data Creazione</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="mese">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.dieta.mese">Mese</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="tipo">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.dieta.tipo">Tipo</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="macros">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.dieta.macros">Macros</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="fabbisognoCalorico">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.dieta.fabbisognoCalorico">Fabbisogno Calorico</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="cliente.email">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.dieta.cliente">Cliente</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (dieta of dietas; track trackId(dieta)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/dieta', dieta.id, 'view']">{{ dieta.id }}</a>
+              </td>
+              <td>{{ dieta.dataCreazione | formatMediumDate }}</td>
+              <td>{{ dieta.mese }}</td>
+              <td>{{ dieta.tipo }}</td>
+              <td>{{ dieta.macros }}</td>
+              <td>{{ dieta.fabbisognoCalorico }}</td>
+              <td>
+                @if (dieta.cliente) {
+                  <div>
+                    <a [routerLink]="['/cliente', dieta.cliente.id, 'view']">{{ dieta.cliente.email }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/dieta', dieta.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Visualizza</span>
+                  </a>
+
+                  <a [routerLink]="['/dieta', dieta.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Modifica</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(dieta)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Elimina</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (dietas && dietas.length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

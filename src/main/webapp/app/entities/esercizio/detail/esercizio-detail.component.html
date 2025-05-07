@@ -1,0 +1,72 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (esercizio(); as esercizioRef) {
+      <div>
+        <h2 data-cy="esercizioDetailsHeading"><span jhiTranslate="fitnessAngiottiApp.esercizio.detail.title">Esercizio</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ esercizioRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.esercizio.nome">Nome</span></dt>
+          <dd>
+            <span>{{ esercizioRef.nome }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.esercizio.tipo">Tipo</span></dt>
+          <dd>
+            <span [jhiTranslate]="'fitnessAngiottiApp.TipoEsercizio.' + (esercizioRef.tipo ?? 'null')">{{
+              {
+                null: '',
+                FULLBODY: 'FULLBODY',
+                UPPERBODY: 'UPPERBODY',
+                LOWERBODY: 'LOWERBODY',
+                CORE: 'CORE',
+                CARDIO: 'CARDIO',
+                POSTURALE: 'POSTURALE',
+                KOMBAT: 'KOMBAT',
+              }[esercizioRef.tipo ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.esercizio.videoUrl">Video Url</span></dt>
+          <dd>
+            <span>{{ esercizioRef.videoUrl }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.esercizio.descrizione">Descrizione</span></dt>
+          <dd>
+            <span>{{ esercizioRef.descrizione }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.esercizio.foto">Foto</span></dt>
+          <dd>
+            @if (esercizioRef.foto) {
+              <div>
+                <a (click)="openFile(esercizioRef.foto ?? '', esercizioRef.fotoContentType)">
+                  <img
+                    [src]="'data:' + esercizioRef.fotoContentType + ';base64,' + esercizioRef.foto"
+                    style="max-width: 100%"
+                    alt="esercizio"
+                  />
+                </a>
+                {{ esercizioRef.fotoContentType }}, {{ byteSize(esercizioRef.foto ?? '') }}
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Indietro</span>
+        </button>
+
+        <button type="button" [routerLink]="['/esercizio', esercizioRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Modifica</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

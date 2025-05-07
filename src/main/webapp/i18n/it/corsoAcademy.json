@@ -1,0 +1,26 @@
+{
+  "fitnessAngiottiApp": {
+    "corsoAcademy": {
+      "home": {
+        "title": "CorsoAcademies",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Genera un nuovo Corso Academy",
+        "createOrEditLabel": "Genera o modifica un Corso Academy",
+        "notFound": "No Corso Academies found"
+      },
+      "created": "&Egrave; stato generato un nuovo Corso Academy con identificatore {{ param }}",
+      "updated": "&Egrave; stato aggiornato Corso Academy identificato da {{ param }}",
+      "deleted": "&Egrave; stato eliminato Corso Academy con identificatore {{ param }}",
+      "delete": {
+        "question": "Sei sicuro di volere eliminare Corso Academy {{ id }}?"
+      },
+      "detail": {
+        "title": "Corso Academy"
+      },
+      "id": "ID",
+      "livello": "Livello",
+      "titolo": "Titolo",
+      "lezioneCorso": "Lezione Corso"
+    }
+  }
+}

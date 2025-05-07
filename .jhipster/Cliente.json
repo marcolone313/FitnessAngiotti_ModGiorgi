@@ -1,0 +1,65 @@
+{
+  "annotations": {
+    "changelogDate": "20241213084626"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "nome",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "cognome",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "dataDiNascita",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "codiceFiscale",
+      "fieldType": "String",
+      "fieldValidateRules": ["minlength", "maxlength", "required", "unique"],
+      "fieldValidateRulesMaxlength": "16",
+      "fieldValidateRulesMinlength": "16"
+    },
+    {
+      "fieldName": "codiceCliente",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "email",
+      "fieldType": "String",
+      "fieldValidateRules": ["required", "unique"]
+    },
+    {
+      "fieldName": "telefono",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "foto",
+      "fieldType": "ImageBlob"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Cliente",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "login",
+      "otherEntityName": "user",
+      "relationshipName": "user",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": "required",
+      "relationshipWithBuiltInEntity": true
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

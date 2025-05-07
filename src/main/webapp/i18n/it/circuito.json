@@ -1,0 +1,32 @@
+{
+  "fitnessAngiottiApp": {
+    "circuito": {
+      "home": {
+        "title": "Circuitos",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Genera un nuovo Circuito",
+        "createOrEditLabel": "Genera o modifica un Circuito",
+        "notFound": "No Circuitos found"
+      },
+      "created": "&Egrave; stato generato un nuovo Circuito con identificatore {{ param }}",
+      "updated": "&Egrave; stato aggiornato Circuito identificato da {{ param }}",
+      "deleted": "&Egrave; stato eliminato Circuito con identificatore {{ param }}",
+      "delete": {
+        "question": "Sei sicuro di volere eliminare Circuito {{ id }}?"
+      },
+      "detail": {
+        "title": "Circuito"
+      },
+      "id": "ID",
+      "tempoLimite": "Tempo Limite",
+      "tempoImpiegato": "Tempo Impiegato",
+      "catenaRipetizioni": "Catena Ripetizioni",
+      "circuitiCompletati": "Circuiti Completati",
+      "svolto": "Svolto",
+      "completato": "Completato",
+      "feedback": "Feedback",
+      "allenamentoGiornaliero": "Allenamento Giornaliero",
+      "circuitoToEsercizio": "Circuito To Esercizio"
+    }
+  }
+}

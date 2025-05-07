@@ -1,0 +1,51 @@
+{
+  "annotations": {
+    "changelogDate": "20241213084637"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "dataCreazione",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "mese",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min", "max", "required"],
+      "fieldValidateRulesMax": "12",
+      "fieldValidateRulesMin": "1"
+    },
+    {
+      "fieldName": "tipo",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "macros",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "fabbisognoCalorico",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Dieta",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "email",
+      "otherEntityName": "cliente",
+      "relationshipName": "cliente",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

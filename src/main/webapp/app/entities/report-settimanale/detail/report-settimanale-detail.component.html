@@ -1,0 +1,106 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (reportSettimanale(); as reportSettimanaleRef) {
+      <div>
+        <h2 data-cy="reportSettimanaleDetailsHeading">
+          <span jhiTranslate="fitnessAngiottiApp.reportSettimanale.detail.title">Report Settimanale</span>
+        </h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ reportSettimanaleRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.reportSettimanale.voto">Voto</span></dt>
+          <dd>
+            <span [jhiTranslate]="'fitnessAngiottiApp.Voto.' + (reportSettimanaleRef.voto ?? 'null')">{{
+              { null: '', INSUFFICIENTE: 'INSUFFICIENTE', SUFFICIENTE: 'SUFFICIENTE', BUONO: 'BUONO', OTTIMO: 'OTTIMO' }[
+                reportSettimanaleRef.voto ?? 'null'
+              ]
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.reportSettimanale.commentoAllenamento">Commento Allenamento</span></dt>
+          <dd>
+            <span>{{ reportSettimanaleRef.commentoAllenamento }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.reportSettimanale.giorniDieta">Giorni Dieta</span></dt>
+          <dd>
+            <span [jhiTranslate]="'fitnessAngiottiApp.Voto.' + (reportSettimanaleRef.giorniDieta ?? 'null')">{{
+              { null: '', INSUFFICIENTE: 'INSUFFICIENTE', SUFFICIENTE: 'SUFFICIENTE', BUONO: 'BUONO', OTTIMO: 'OTTIMO' }[
+                reportSettimanaleRef.giorniDieta ?? 'null'
+              ]
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.reportSettimanale.pesoMedio">Peso Medio</span></dt>
+          <dd>
+            <span>{{ reportSettimanaleRef.pesoMedio }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.reportSettimanale.qualitaSonno">Qualita Sonno</span></dt>
+          <dd>
+            <span [jhiTranslate]="'fitnessAngiottiApp.Voto.' + (reportSettimanaleRef.qualitaSonno ?? 'null')">{{
+              { null: '', INSUFFICIENTE: 'INSUFFICIENTE', SUFFICIENTE: 'SUFFICIENTE', BUONO: 'BUONO', OTTIMO: 'OTTIMO' }[
+                reportSettimanaleRef.qualitaSonno ?? 'null'
+              ]
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.reportSettimanale.mediaOreSonno">Media Ore Sonno</span></dt>
+          <dd>
+            <span>{{ reportSettimanaleRef.mediaOreSonno | duration }} ({{ reportSettimanaleRef.mediaOreSonno }})</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.reportSettimanale.dataCreazione">Data Creazione</span></dt>
+          <dd>
+            <span>{{ reportSettimanaleRef.dataCreazione | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.reportSettimanale.dataScadenza">Data Scadenza</span></dt>
+          <dd>
+            <span>{{ reportSettimanaleRef.dataScadenza | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.reportSettimanale.dataCompletamento">Data Completamento</span></dt>
+          <dd>
+            <span>{{ reportSettimanaleRef.dataCompletamento | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.reportSettimanale.puntuale">Puntuale</span></dt>
+          <dd>
+            <span>{{ reportSettimanaleRef.puntuale }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.reportSettimanale.analisiReport">Analisi Report</span></dt>
+          <dd>
+            <span>{{ reportSettimanaleRef.analisiReport }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.reportSettimanale.schedaSettimanale">Scheda Settimanale</span></dt>
+          <dd>
+            @if (reportSettimanale()!.schedaSettimanale) {
+              <div>
+                <a [routerLink]="['/scheda-settimanale', reportSettimanale()!.schedaSettimanale?.id, 'view']">{{
+                  reportSettimanaleRef.schedaSettimanale?.id
+                }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.reportSettimanale.cliente">Cliente</span></dt>
+          <dd>
+            @if (reportSettimanale()!.cliente) {
+              <div>
+                <a [routerLink]="['/cliente', reportSettimanale()!.cliente?.id, 'view']">{{ reportSettimanaleRef.cliente?.email }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Indietro</span>
+        </button>
+
+        <button type="button" [routerLink]="['/report-settimanale', reportSettimanaleRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Modifica</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

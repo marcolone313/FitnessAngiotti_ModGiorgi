@@ -1,0 +1,33 @@
+{
+  "fitnessAngiottiApp": {
+    "plicometria": {
+      "home": {
+        "title": "Plicometrias",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Genera un nuovo Plicometria",
+        "createOrEditLabel": "Genera o modifica un Plicometria",
+        "notFound": "No Plicometrias found"
+      },
+      "created": "&Egrave; stato generato un nuovo Plicometria con identificatore {{ param }}",
+      "updated": "&Egrave; stato aggiornato Plicometria identificato da {{ param }}",
+      "deleted": "&Egrave; stato eliminato Plicometria con identificatore {{ param }}",
+      "delete": {
+        "question": "Sei sicuro di volere eliminare Plicometria {{ id }}?"
+      },
+      "detail": {
+        "title": "Plicometria"
+      },
+      "id": "ID",
+      "tricipite": "Tricipite",
+      "petto": "Petto",
+      "ascella": "Ascella",
+      "sottoscapolare": "Sottoscapolare",
+      "soprailliaca": "Soprailliaca",
+      "addome": "Addome",
+      "coscia": "Coscia",
+      "mese": "Mese",
+      "dataInserimento": "Data Inserimento",
+      "cliente": "Cliente"
+    }
+  }
+}

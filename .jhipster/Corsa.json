@@ -1,0 +1,44 @@
+{
+  "annotations": {
+    "changelogDate": "20241213084635"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "distanzaDaPercorrere",
+      "fieldType": "Float",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "tempoImpiegato",
+      "fieldType": "Duration"
+    },
+    {
+      "fieldName": "svolto",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "completato",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "feedback",
+      "fieldType": "TextBlob"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Corsa",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "allenamentoGiornaliero",
+      "relationshipName": "allenamentoGiornaliero",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

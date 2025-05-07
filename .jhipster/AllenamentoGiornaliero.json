@@ -1,0 +1,48 @@
+{
+  "annotations": {
+    "changelogDate": "20241213084633"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "tipo",
+      "fieldType": "TipoAllenamento",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "CORSA,GYM,CIRCUITO"
+    },
+    {
+      "fieldName": "giorno",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min", "max", "required"],
+      "fieldValidateRulesMax": "6",
+      "fieldValidateRulesMin": "1"
+    },
+    {
+      "fieldName": "notaTrainer",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "svolto",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "dataAllenamento",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "AllenamentoGiornaliero",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "schedaSettimanale",
+      "relationshipName": "schedaSettimanale",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

@@ -1,0 +1,11 @@
+id;sets;reps;recupero;peso;completato;svolto;feedback;allenamento_giornaliero_id;esercizio_id
+1;12100;9583;31262;9096.82;true;true;../fake-data/blob/hipster.txt;1;1
+2;31884;8535;30078;28651.39;true;false;../fake-data/blob/hipster.txt;2;2
+3;2478;25194;31727;27380.65;false;true;../fake-data/blob/hipster.txt;3;3
+4;2341;27650;24175;21001.09;false;false;../fake-data/blob/hipster.txt;4;4
+5;18122;22894;25866;32292.01;true;true;../fake-data/blob/hipster.txt;5;5
+6;20441;32328;20929;20770.43;false;true;../fake-data/blob/hipster.txt;6;6
+7;15022;28687;30909;12221.5;true;false;../fake-data/blob/hipster.txt;7;7
+8;23917;12079;3294;30486.02;false;false;../fake-data/blob/hipster.txt;8;8
+9;9595;24275;17924;29636.74;false;true;../fake-data/blob/hipster.txt;9;9
+10;25224;23001;2845;10028.43;true;false;../fake-data/blob/hipster.txt;10;10

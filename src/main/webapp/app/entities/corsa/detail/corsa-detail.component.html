@@ -1,0 +1,60 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (corsa(); as corsaRef) {
+      <div>
+        <h2 data-cy="corsaDetailsHeading"><span jhiTranslate="fitnessAngiottiApp.corsa.detail.title">Corsa</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ corsaRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.corsa.distanzaDaPercorrere">Distanza Da Percorrere</span></dt>
+          <dd>
+            <span>{{ corsaRef.distanzaDaPercorrere }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.corsa.tempoImpiegato">Tempo Impiegato</span></dt>
+          <dd>
+            <span>{{ corsaRef.tempoImpiegato | duration }} ({{ corsaRef.tempoImpiegato }})</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.corsa.svolto">Svolto</span></dt>
+          <dd>
+            <span>{{ corsaRef.svolto }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.corsa.completato">Completato</span></dt>
+          <dd>
+            <span>{{ corsaRef.completato }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.corsa.feedback">Feedback</span></dt>
+          <dd>
+            <span>{{ corsaRef.feedback }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.corsa.allenamentoGiornaliero">Allenamento Giornaliero</span></dt>
+          <dd>
+            @if (corsa()!.allenamentoGiornaliero) {
+              <div>
+                <a [routerLink]="['/allenamento-giornaliero', corsa()!.allenamentoGiornaliero?.id, 'view']">{{
+                  corsaRef.allenamentoGiornaliero?.id
+                }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Indietro</span>
+        </button>
+
+        <button type="button" [routerLink]="['/corsa', corsaRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Modifica</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

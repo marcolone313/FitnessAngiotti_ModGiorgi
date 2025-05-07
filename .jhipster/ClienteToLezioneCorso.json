@@ -1,0 +1,40 @@
+{
+  "annotations": {
+    "changelogDate": "20241213084641"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "completato",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "dataCompletamento",
+      "fieldType": "LocalDate"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "ClienteToLezioneCorso",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "email",
+      "otherEntityName": "cliente",
+      "relationshipName": "cliente",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityField": "titolo",
+      "otherEntityName": "lezioneCorso",
+      "relationshipName": "lezioneCorso",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

@@ -1,0 +1,15 @@
+export enum TipoEsercizio {
+  FULLBODY = 'FULLBODY',
+
+  UPPERBODY = 'UPPERBODY',
+
+  LOWERBODY = 'LOWERBODY',
+
+  CORE = 'CORE',
+
+  CARDIO = 'CARDIO',
+
+  POSTURALE = 'POSTURALE',
+
+  KOMBAT = 'KOMBAT',
+}

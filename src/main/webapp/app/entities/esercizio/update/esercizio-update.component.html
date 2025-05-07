@@ -1,0 +1,123 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-esercizio-heading"
+        data-cy="EsercizioCreateUpdateHeading"
+        jhiTranslate="fitnessAngiottiApp.esercizio.home.createOrEditLabel"
+      >
+        Genera o modifica un Esercizio
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="fitnessAngiottiApp.esercizio.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let nomeRef = editForm.get('nome')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_nome" jhiTranslate="fitnessAngiottiApp.esercizio.nome">Nome</label>
+          <input type="text" class="form-control" name="nome" id="field_nome" data-cy="nome" formControlName="nome" />
+          @if (nomeRef.invalid && (nomeRef.dirty || nomeRef.touched)) {
+            <div>
+              @if (editForm.get('nome')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let tipoRef = editForm.get('tipo')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_tipo" jhiTranslate="fitnessAngiottiApp.esercizio.tipo">Tipo</label>
+          <select class="form-control" name="tipo" formControlName="tipo" id="field_tipo" data-cy="tipo">
+            <option [ngValue]="null">{{ 'fitnessAngiottiApp.TipoEsercizio.null' | translate }}</option>
+            @for (tipoEsercizio of tipoEsercizioValues; track $index) {
+              <option [value]="tipoEsercizio">{{ 'fitnessAngiottiApp.TipoEsercizio.' + tipoEsercizio | translate }}</option>
+            }
+          </select>
+          @if (tipoRef.invalid && (tipoRef.dirty || tipoRef.touched)) {
+            <div>
+              @if (editForm.get('tipo')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_videoUrl" jhiTranslate="fitnessAngiottiApp.esercizio.videoUrl">Video Url</label>
+          <input type="text" class="form-control" name="videoUrl" id="field_videoUrl" data-cy="videoUrl" formControlName="videoUrl" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_descrizione" jhiTranslate="fitnessAngiottiApp.esercizio.descrizione">Descrizione</label>
+          <textarea
+            class="form-control"
+            name="descrizione"
+            id="field_descrizione"
+            data-cy="descrizione"
+            formControlName="descrizione"
+          ></textarea>
+        </div>
+
+        @let fotoRef = editForm.get('foto')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_foto" jhiTranslate="fitnessAngiottiApp.esercizio.foto">Foto</label>
+          <div>
+            @if (fotoRef.value) {
+              <img
+                [src]="'data:' + editForm.get('fotoContentType')!.value + ';base64,' + fotoRef.value"
+                style="max-height: 100px"
+                alt="esercizio"
+              />
+            }
+            @if (fotoRef.value) {
+              <div class="form-text text-danger clearfix">
+                <span class="pull-start">{{ editForm.get('fotoContentType')!.value }}, {{ byteSize(fotoRef.value!) }}</span>
+                <button
+                  type="button"
+                  (click)="clearInputImage('foto', 'fotoContentType', 'file_foto')"
+                  class="btn btn-secondary btn-xs pull-end"
+                >
+                  <fa-icon icon="times"></fa-icon>
+                </button>
+              </div>
+            }
+            <input
+              type="file"
+              id="file_foto"
+              data-cy="foto"
+              (change)="setFileData($event, 'foto', true)"
+              accept="image/*"
+              jhiTranslate="entity.action.addimage"
+            />
+          </div>
+          <input type="hidden" class="form-control" name="foto" id="field_foto" data-cy="foto" formControlName="foto" />
+          <input type="hidden" class="form-control" name="fotoContentType" id="field_fotoContentType" formControlName="fotoContentType" />
+        </div>
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Annulla</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Salva</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

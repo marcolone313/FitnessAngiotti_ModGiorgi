@@ -1,0 +1,154 @@
+<div>
+  <h2 id="page-heading" data-cy="CorsaHeading">
+    <span jhiTranslate="fitnessAngiottiApp.corsa.home.title">Corsas</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="fitnessAngiottiApp.corsa.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-corsa"
+        [routerLink]="['/corsa/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="fitnessAngiottiApp.corsa.home.createLabel">Genera un nuovo Corsa</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <jhi-filter [filters]="filters"></jhi-filter>
+
+  @if (corsas?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="fitnessAngiottiApp.corsa.home.notFound">No Corsas found</span>
+    </div>
+  }
+
+  @if (corsas && corsas.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [sortState]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="distanzaDaPercorrere">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.corsa.distanzaDaPercorrere">Distanza Da Percorrere</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="tempoImpiegato">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.corsa.tempoImpiegato">Tempo Impiegato</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="svolto">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.corsa.svolto">Svolto</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="completato">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.corsa.completato">Completato</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="feedback">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.corsa.feedback">Feedback</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="allenamentoGiornaliero.id">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.corsa.allenamentoGiornaliero">Allenamento Giornaliero</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (corsa of corsas; track trackId(corsa)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/corsa', corsa.id, 'view']">{{ corsa.id }}</a>
+              </td>
+              <td>{{ corsa.distanzaDaPercorrere }}</td>
+              <td title="{{ corsa.tempoImpiegato }}">{{ corsa.tempoImpiegato | duration }}</td>
+              <td>{{ corsa.svolto }}</td>
+              <td>{{ corsa.completato }}</td>
+              <td>{{ corsa.feedback }}</td>
+              <td>
+                @if (corsa.allenamentoGiornaliero) {
+                  <div>
+                    <a [routerLink]="['/allenamento-giornaliero', corsa.allenamentoGiornaliero.id, 'view']">{{
+                      corsa.allenamentoGiornaliero.id
+                    }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/corsa', corsa.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Visualizza</span>
+                  </a>
+
+                  <a [routerLink]="['/corsa', corsa.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Modifica</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(corsa)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Elimina</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (corsas && corsas.length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,208 @@
+
+/* Cliente */
+entity Cliente {
+  nome String required,
+  cognome String required,
+  dataDiNascita LocalDate required,
+  codiceFiscale String minlength(16) maxlength(16) required unique,
+  codiceCliente String required unique,
+  email String required unique,
+  telefono String,
+  foto ImageBlob,
+}
+
+entity PesoCliente {
+  peso Float min(0) required,
+  mese Integer min(1) max(12) required,
+  dataInserimento LocalDate required
+}
+
+entity Plicometria {
+  tricipite Float min(0),
+  petto Float min(0),
+  ascella Float min(0),
+  sottoscapolare Float min(0),
+  soprailliaca Float min(0),
+  addome Float min(0),
+  coscia Float min(0),
+  mese Integer min(1) max(12) required,
+  dataInserimento LocalDate required
+}
+
+entity Circonferenza {
+  torace Float min(0),
+  braccio Float min(0),
+  avambraccio Float min(0),
+  ombelico Float min(0),
+  fianchi Float min(0),
+  sottoOmbelico Float min(0),
+  vita Float min(0),
+  coscia Float min(0),
+  mese Integer min(1) max(12) required,
+  dataInserimento LocalDate required
+}
+
+enum TipoEsercizio {
+  FULLBODY,
+  UPPERBODY,
+  LOWERBODY,
+  CORE,
+  CARDIO,
+  POSTURALE,
+  KOMBAT
+}
+
+/* Esercizio Generico */
+entity Esercizio {
+  nome String required,
+  tipo TipoEsercizio required,
+  videoUrl String,
+  descrizione TextBlob,
+  foto ImageBlob,
+}
+
+entity PassaggioEsercizio {
+  indice Integer min(1) required,
+  descrizione TextBlob required
+}
+
+enum TipoAllenamento {
+  CORSA,
+  GYM,
+  CIRCUITO
+}
+
+entity SchedaSettimanale {
+  anno Integer min(0) required,
+  mese Integer min(1) max(12) required,
+  settimana Integer min(1) max(4) required,
+  dataCreazione LocalDate required,
+}
+
+entity AllenamentoGiornaliero {
+  tipo TipoAllenamento required,
+  giorno Integer min(1) max(6) required,
+  notaTrainer TextBlob,
+  svolto Boolean,
+  dataAllenamento LocalDate
+}
+
+entity Circuito {
+  tempoLimite Duration,
+  tempoImpiegato Duration,
+  catenaRipetizioni String,
+  circuitiCompletati Integer,
+  svolto Boolean,
+  completato Boolean,
+  feedback TextBlob
+}
+
+entity CircuitoToEsercizio {
+  reps Integer required,
+}
+
+entity Corsa {
+  distanzaDaPercorrere Float required,
+  tempoImpiegato Duration,
+  svolto Boolean,
+  completato Boolean,
+  feedback TextBlob
+}
+
+entity Gym {
+  sets Integer required,
+  reps Integer required,
+  recupero Duration required,
+  peso Float min(0),
+  completato Boolean,
+  svolto Boolean,
+  feedback TextBlob
+}
+
+entity Dieta {
+  dataCreazione LocalDate required,
+  mese Integer min(1) max(12) required,
+  tipo String required,
+  macros String required,
+  fabbisognoCalorico String required,
+}
+
+enum Voto {
+  INSUFFICIENTE,
+  SUFFICIENTE,
+  BUONO,
+  OTTIMO
+}
+
+entity ReportSettimanale {
+  voto Voto,
+  commentoAllenamento TextBlob,
+  giorniDieta Voto,
+  pesoMedio Float min(0),
+  qualitaSonno Voto,
+  mediaOreSonno Duration,
+  dataCreazione LocalDate required,
+  dataScadenza LocalDate required,
+  dataCompletamento LocalDate,
+  puntuale Boolean,
+  analisiReport TextBlob
+}
+
+enum LivelloCorso {
+  PRINCIPIANTE,
+  INTERMEDIO,
+  AVANZATO,
+  ESPERTO
+}
+
+entity CorsoAcademy {
+  livello LivelloCorso required,
+  titolo String required,
+}
+
+entity LezioneCorso {
+  titolo String required,
+  descrizione TextBlob,
+  puntiFocali TextBlob
+  videoUrl String,
+}
+
+entity ClienteToLezioneCorso {
+  completato Boolean,
+  dataCompletamento LocalDate,
+}
+
+////////////////////////////// RELATIONS //////////////////////////////
+
+relationship OneToOne {
+  Cliente{user(login) required} to User with builtInEntity,
+  Corsa{allenamentoGiornaliero required} to AllenamentoGiornaliero,
+  Circuito{allenamentoGiornaliero required} to AllenamentoGiornaliero,
+  ReportSettimanale{schedaSettimanale required} to SchedaSettimanale,
+}
+
+relationship ManyToOne {
+  Plicometria{cliente(email) required} to Cliente,
+  SchedaSettimanale{cliente(email) required} to Cliente,
+  Circonferenza{cliente(email) required} to Cliente,
+  Gym{allenamentoGiornaliero required} to AllenamentoGiornaliero,
+  AllenamentoGiornaliero{schedaSettimanale required} to SchedaSettimanale,
+  ReportSettimanale{cliente(email) required} to Cliente,
+  Dieta{cliente(email) required} to Cliente,
+  ClienteToLezioneCorso{cliente(email) required} to Cliente,
+  ClienteToLezioneCorso{lezioneCorso(titolo) required} to LezioneCorso,
+  PesoCliente{cliente(email) required} to Cliente,
+}
+
+relationship OneToMany {
+  Esercizio to Gym{esercizio(nome) required},
+  Esercizio to CircuitoToEsercizio{esercizio(nome) required},
+  Esercizio to PassaggioEsercizio{esercizio(nome) required},
+  Circuito to CircuitoToEsercizio{circuito required},
+  CorsoAcademy to LezioneCorso{corsoAcademy(titolo) required},
+}
+
+filter *
+service * with serviceClass
+dto * with mapstruct
+paginate * with pagination

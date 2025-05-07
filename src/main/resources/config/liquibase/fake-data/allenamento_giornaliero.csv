@@ -1,0 +1,11 @@
+id;tipo;giorno;nota_trainer;svolto;data_allenamento;scheda_settimanale_id
+1;CORSA;2;../fake-data/blob/hipster.txt;false;2024-12-12;1
+2;CORSA;6;../fake-data/blob/hipster.txt;false;2024-12-12;2
+3;CIRCUITO;5;../fake-data/blob/hipster.txt;true;2024-12-12;3
+4;CORSA;4;../fake-data/blob/hipster.txt;true;2024-12-13;4
+5;CIRCUITO;1;../fake-data/blob/hipster.txt;true;2024-12-12;5
+6;CIRCUITO;1;../fake-data/blob/hipster.txt;false;2024-12-12;6
+7;GYM;3;../fake-data/blob/hipster.txt;false;2024-12-13;7
+8;GYM;4;../fake-data/blob/hipster.txt;true;2024-12-13;8
+9;CIRCUITO;6;../fake-data/blob/hipster.txt;false;2024-12-13;9
+10;GYM;6;../fake-data/blob/hipster.txt;true;2024-12-12;10

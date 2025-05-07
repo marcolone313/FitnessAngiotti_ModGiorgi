@@ -1,0 +1,10 @@
+{
+  "fitnessAngiottiApp": {
+    "TipoAllenamento": {
+      "null": "",
+      "CORSA": "CORSA",
+      "GYM": "GYM",
+      "CIRCUITO": "CIRCUITO"
+    }
+  }
+}

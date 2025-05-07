@@ -1,0 +1,11 @@
+id;voto;commento_allenamento;giorni_dieta;peso_medio;qualita_sonno;media_ore_sonno;data_creazione;data_scadenza;data_completamento;puntuale;analisi_report;scheda_settimanale_id;cliente_id
+1;OTTIMO;../fake-data/blob/hipster.txt;BUONO;18198.68;SUFFICIENTE;6110;2024-12-12;2024-12-12;2024-12-13;false;../fake-data/blob/hipster.txt;1;1
+2;SUFFICIENTE;../fake-data/blob/hipster.txt;BUONO;11938.98;OTTIMO;25960;2024-12-12;2024-12-13;2024-12-12;true;../fake-data/blob/hipster.txt;2;2
+3;INSUFFICIENTE;../fake-data/blob/hipster.txt;OTTIMO;32231.52;BUONO;12788;2024-12-12;2024-12-13;2024-12-12;true;../fake-data/blob/hipster.txt;3;1
+4;INSUFFICIENTE;../fake-data/blob/hipster.txt;INSUFFICIENTE;7443.84;OTTIMO;19059;2024-12-12;2024-12-13;2024-12-13;true;../fake-data/blob/hipster.txt;4;2
+5;OTTIMO;../fake-data/blob/hipster.txt;OTTIMO;15556.81;INSUFFICIENTE;4623;2024-12-12;2024-12-13;2024-12-12;false;../fake-data/blob/hipster.txt;5;1
+6;OTTIMO;../fake-data/blob/hipster.txt;SUFFICIENTE;18174.53;INSUFFICIENTE;6072;2024-12-12;2024-12-13;2024-12-13;true;../fake-data/blob/hipster.txt;6;1
+7;INSUFFICIENTE;../fake-data/blob/hipster.txt;SUFFICIENTE;31176.15;OTTIMO;3595;2024-12-12;2024-12-12;2024-12-12;false;../fake-data/blob/hipster.txt;7;1
+8;SUFFICIENTE;../fake-data/blob/hipster.txt;INSUFFICIENTE;14248.57;OTTIMO;2620;2024-12-12;2024-12-13;2024-12-13;true;../fake-data/blob/hipster.txt;8;1
+9;BUONO;../fake-data/blob/hipster.txt;SUFFICIENTE;22013.01;BUONO;9217;2024-12-13;2024-12-12;2024-12-12;true;../fake-data/blob/hipster.txt;9;1
+10;SUFFICIENTE;../fake-data/blob/hipster.txt;SUFFICIENTE;8223.11;INSUFFICIENTE;1867;2024-12-12;2024-12-12;2024-12-12;false;../fake-data/blob/hipster.txt;10;1

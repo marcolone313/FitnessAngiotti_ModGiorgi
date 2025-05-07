@@ -1,0 +1,82 @@
+{
+  "annotations": {
+    "changelogDate": "20241213084638"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "voto",
+      "fieldType": "Voto",
+      "fieldValues": "INSUFFICIENTE,SUFFICIENTE,BUONO,OTTIMO"
+    },
+    {
+      "fieldName": "commentoAllenamento",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "giorniDieta",
+      "fieldType": "Voto",
+      "fieldValues": "INSUFFICIENTE,SUFFICIENTE,BUONO,OTTIMO"
+    },
+    {
+      "fieldName": "pesoMedio",
+      "fieldType": "Float",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "qualitaSonno",
+      "fieldType": "Voto",
+      "fieldValues": "INSUFFICIENTE,SUFFICIENTE,BUONO,OTTIMO"
+    },
+    {
+      "fieldName": "mediaOreSonno",
+      "fieldType": "Duration"
+    },
+    {
+      "fieldName": "dataCreazione",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "dataScadenza",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "dataCompletamento",
+      "fieldType": "LocalDate"
+    },
+    {
+      "fieldName": "puntuale",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "analisiReport",
+      "fieldType": "TextBlob"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "ReportSettimanale",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "schedaSettimanale",
+      "relationshipName": "schedaSettimanale",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityField": "email",
+      "otherEntityName": "cliente",
+      "relationshipName": "cliente",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

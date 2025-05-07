@@ -1,0 +1,11 @@
+id;distanza_da_percorrere;tempo_impiegato;svolto;completato;feedback;allenamento_giornaliero_id
+1;10838.47;5625;true;true;../fake-data/blob/hipster.txt;1
+2;3424.73;28760;false;false;../fake-data/blob/hipster.txt;2
+3;21670.51;24439;true;false;../fake-data/blob/hipster.txt;3
+4;31575.87;12543;true;false;../fake-data/blob/hipster.txt;4
+5;27568.69;17902;false;true;../fake-data/blob/hipster.txt;5
+6;12612.92;17119;false;false;../fake-data/blob/hipster.txt;6
+7;10567.48;16672;false;true;../fake-data/blob/hipster.txt;7
+8;4119.81;16460;true;false;../fake-data/blob/hipster.txt;8
+9;31709.58;10920;false;false;../fake-data/blob/hipster.txt;9
+10;17895.07;10369;true;false;../fake-data/blob/hipster.txt;10

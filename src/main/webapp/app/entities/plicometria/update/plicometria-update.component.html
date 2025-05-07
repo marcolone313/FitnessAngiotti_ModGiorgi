@@ -1,0 +1,281 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-plicometria-heading"
+        data-cy="PlicometriaCreateUpdateHeading"
+        jhiTranslate="fitnessAngiottiApp.plicometria.home.createOrEditLabel"
+      >
+        Genera o modifica un Plicometria
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="fitnessAngiottiApp.plicometria.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let tricipiteRef = editForm.get('tricipite')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_tricipite" jhiTranslate="fitnessAngiottiApp.plicometria.tricipite">Tricipite</label>
+          <input type="number" class="form-control" name="tricipite" id="field_tricipite" data-cy="tricipite" formControlName="tricipite" />
+          @if (tricipiteRef.invalid && (tricipiteRef.dirty || tricipiteRef.touched)) {
+            <div>
+              @if (editForm.get('tricipite')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: '0' }"
+                  >Questo campo dovrebbe essere più di 0.</small
+                >
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('tricipite')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >Questo campo dovrebbe essere un numero.</small
+              >
+            </div>
+          }
+        </div>
+
+        @let pettoRef = editForm.get('petto')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_petto" jhiTranslate="fitnessAngiottiApp.plicometria.petto">Petto</label>
+          <input type="number" class="form-control" name="petto" id="field_petto" data-cy="petto" formControlName="petto" />
+          @if (pettoRef.invalid && (pettoRef.dirty || pettoRef.touched)) {
+            <div>
+              @if (editForm.get('petto')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: '0' }"
+                  >Questo campo dovrebbe essere più di 0.</small
+                >
+              }
+              <small class="form-text text-danger" [hidden]="!editForm.get('petto')?.errors?.number" jhiTranslate="entity.validation.number"
+                >Questo campo dovrebbe essere un numero.</small
+              >
+            </div>
+          }
+        </div>
+
+        @let ascellaRef = editForm.get('ascella')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_ascella" jhiTranslate="fitnessAngiottiApp.plicometria.ascella">Ascella</label>
+          <input type="number" class="form-control" name="ascella" id="field_ascella" data-cy="ascella" formControlName="ascella" />
+          @if (ascellaRef.invalid && (ascellaRef.dirty || ascellaRef.touched)) {
+            <div>
+              @if (editForm.get('ascella')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: '0' }"
+                  >Questo campo dovrebbe essere più di 0.</small
+                >
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('ascella')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >Questo campo dovrebbe essere un numero.</small
+              >
+            </div>
+          }
+        </div>
+
+        @let sottoscapolareRef = editForm.get('sottoscapolare')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_sottoscapolare" jhiTranslate="fitnessAngiottiApp.plicometria.sottoscapolare"
+            >Sottoscapolare</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="sottoscapolare"
+            id="field_sottoscapolare"
+            data-cy="sottoscapolare"
+            formControlName="sottoscapolare"
+          />
+          @if (sottoscapolareRef.invalid && (sottoscapolareRef.dirty || sottoscapolareRef.touched)) {
+            <div>
+              @if (editForm.get('sottoscapolare')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: '0' }"
+                  >Questo campo dovrebbe essere più di 0.</small
+                >
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('sottoscapolare')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >Questo campo dovrebbe essere un numero.</small
+              >
+            </div>
+          }
+        </div>
+
+        @let soprailliacaRef = editForm.get('soprailliaca')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_soprailliaca" jhiTranslate="fitnessAngiottiApp.plicometria.soprailliaca">Soprailliaca</label>
+          <input
+            type="number"
+            class="form-control"
+            name="soprailliaca"
+            id="field_soprailliaca"
+            data-cy="soprailliaca"
+            formControlName="soprailliaca"
+          />
+          @if (soprailliacaRef.invalid && (soprailliacaRef.dirty || soprailliacaRef.touched)) {
+            <div>
+              @if (editForm.get('soprailliaca')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: '0' }"
+                  >Questo campo dovrebbe essere più di 0.</small
+                >
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('soprailliaca')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >Questo campo dovrebbe essere un numero.</small
+              >
+            </div>
+          }
+        </div>
+
+        @let addomeRef = editForm.get('addome')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_addome" jhiTranslate="fitnessAngiottiApp.plicometria.addome">Addome</label>
+          <input type="number" class="form-control" name="addome" id="field_addome" data-cy="addome" formControlName="addome" />
+          @if (addomeRef.invalid && (addomeRef.dirty || addomeRef.touched)) {
+            <div>
+              @if (editForm.get('addome')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: '0' }"
+                  >Questo campo dovrebbe essere più di 0.</small
+                >
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('addome')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >Questo campo dovrebbe essere un numero.</small
+              >
+            </div>
+          }
+        </div>
+
+        @let cosciaRef = editForm.get('coscia')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_coscia" jhiTranslate="fitnessAngiottiApp.plicometria.coscia">Coscia</label>
+          <input type="number" class="form-control" name="coscia" id="field_coscia" data-cy="coscia" formControlName="coscia" />
+          @if (cosciaRef.invalid && (cosciaRef.dirty || cosciaRef.touched)) {
+            <div>
+              @if (editForm.get('coscia')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: '0' }"
+                  >Questo campo dovrebbe essere più di 0.</small
+                >
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('coscia')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >Questo campo dovrebbe essere un numero.</small
+              >
+            </div>
+          }
+        </div>
+
+        @let meseRef = editForm.get('mese')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_mese" jhiTranslate="fitnessAngiottiApp.plicometria.mese">Mese</label>
+          <input type="number" class="form-control" name="mese" id="field_mese" data-cy="mese" formControlName="mese" />
+          @if (meseRef.invalid && (meseRef.dirty || meseRef.touched)) {
+            <div>
+              @if (editForm.get('mese')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+              }
+              @if (editForm.get('mese')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: '1' }"
+                  >Questo campo dovrebbe essere più di 1.</small
+                >
+              }
+              @if (editForm.get('mese')?.errors?.max) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.max" [translateValues]="{ max: '12' }"
+                  >Questo campo non può essere superiore a 12.</small
+                >
+              }
+              <small class="form-text text-danger" [hidden]="!editForm.get('mese')?.errors?.number" jhiTranslate="entity.validation.number"
+                >Questo campo dovrebbe essere un numero.</small
+              >
+            </div>
+          }
+        </div>
+
+        @let dataInserimentoRef = editForm.get('dataInserimento')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_dataInserimento" jhiTranslate="fitnessAngiottiApp.plicometria.dataInserimento"
+            >Data Inserimento</label
+          >
+          <div class="input-group">
+            <input
+              id="field_dataInserimento"
+              data-cy="dataInserimento"
+              type="text"
+              class="form-control"
+              name="dataInserimento"
+              ngbDatepicker
+              #dataInserimentoDp="ngbDatepicker"
+              formControlName="dataInserimento"
+            />
+            <button type="button" class="btn btn-secondary" (click)="dataInserimentoDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+          @if (dataInserimentoRef.invalid && (dataInserimentoRef.dirty || dataInserimentoRef.touched)) {
+            <div>
+              @if (editForm.get('dataInserimento')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_cliente" jhiTranslate="fitnessAngiottiApp.plicometria.cliente">Cliente</label>
+          <select
+            class="form-control"
+            id="field_cliente"
+            data-cy="cliente"
+            name="cliente"
+            formControlName="cliente"
+            [compareWith]="compareCliente"
+          >
+            @if (!editForm.get('cliente')!.value) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (clienteOption of clientesSharedCollection; track $index) {
+              <option [ngValue]="clienteOption">{{ clienteOption.email }}</option>
+            }
+          </select>
+        </div>
+        @if (editForm.get(['cliente'])!.invalid && (editForm.get(['cliente'])!.dirty || editForm.get(['cliente'])!.touched)) {
+          <div>
+            @if (editForm.get(['cliente'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Annulla</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Salva</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

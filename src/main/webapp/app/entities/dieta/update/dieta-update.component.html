@@ -1,0 +1,163 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-dieta-heading" data-cy="DietaCreateUpdateHeading" jhiTranslate="fitnessAngiottiApp.dieta.home.createOrEditLabel">
+        Genera o modifica un Dieta
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="fitnessAngiottiApp.dieta.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let dataCreazioneRef = editForm.get('dataCreazione')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_dataCreazione" jhiTranslate="fitnessAngiottiApp.dieta.dataCreazione">Data Creazione</label>
+          <div class="input-group">
+            <input
+              id="field_dataCreazione"
+              data-cy="dataCreazione"
+              type="text"
+              class="form-control"
+              name="dataCreazione"
+              ngbDatepicker
+              #dataCreazioneDp="ngbDatepicker"
+              formControlName="dataCreazione"
+            />
+            <button type="button" class="btn btn-secondary" (click)="dataCreazioneDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+          @if (dataCreazioneRef.invalid && (dataCreazioneRef.dirty || dataCreazioneRef.touched)) {
+            <div>
+              @if (editForm.get('dataCreazione')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let meseRef = editForm.get('mese')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_mese" jhiTranslate="fitnessAngiottiApp.dieta.mese">Mese</label>
+          <input type="number" class="form-control" name="mese" id="field_mese" data-cy="mese" formControlName="mese" />
+          @if (meseRef.invalid && (meseRef.dirty || meseRef.touched)) {
+            <div>
+              @if (editForm.get('mese')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+              }
+              @if (editForm.get('mese')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: '1' }"
+                  >Questo campo dovrebbe essere più di 1.</small
+                >
+              }
+              @if (editForm.get('mese')?.errors?.max) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.max" [translateValues]="{ max: '12' }"
+                  >Questo campo non può essere superiore a 12.</small
+                >
+              }
+              <small class="form-text text-danger" [hidden]="!editForm.get('mese')?.errors?.number" jhiTranslate="entity.validation.number"
+                >Questo campo dovrebbe essere un numero.</small
+              >
+            </div>
+          }
+        </div>
+
+        @let tipoRef = editForm.get('tipo')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_tipo" jhiTranslate="fitnessAngiottiApp.dieta.tipo">Tipo</label>
+          <input type="text" class="form-control" name="tipo" id="field_tipo" data-cy="tipo" formControlName="tipo" />
+          @if (tipoRef.invalid && (tipoRef.dirty || tipoRef.touched)) {
+            <div>
+              @if (editForm.get('tipo')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let macrosRef = editForm.get('macros')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_macros" jhiTranslate="fitnessAngiottiApp.dieta.macros">Macros</label>
+          <input type="text" class="form-control" name="macros" id="field_macros" data-cy="macros" formControlName="macros" />
+          @if (macrosRef.invalid && (macrosRef.dirty || macrosRef.touched)) {
+            <div>
+              @if (editForm.get('macros')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let fabbisognoCaloricoRef = editForm.get('fabbisognoCalorico')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_fabbisognoCalorico" jhiTranslate="fitnessAngiottiApp.dieta.fabbisognoCalorico"
+            >Fabbisogno Calorico</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="fabbisognoCalorico"
+            id="field_fabbisognoCalorico"
+            data-cy="fabbisognoCalorico"
+            formControlName="fabbisognoCalorico"
+          />
+          @if (fabbisognoCaloricoRef.invalid && (fabbisognoCaloricoRef.dirty || fabbisognoCaloricoRef.touched)) {
+            <div>
+              @if (editForm.get('fabbisognoCalorico')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_cliente" jhiTranslate="fitnessAngiottiApp.dieta.cliente">Cliente</label>
+          <select
+            class="form-control"
+            id="field_cliente"
+            data-cy="cliente"
+            name="cliente"
+            formControlName="cliente"
+            [compareWith]="compareCliente"
+          >
+            @if (!editForm.get('cliente')!.value) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (clienteOption of clientesSharedCollection; track $index) {
+              <option [ngValue]="clienteOption">{{ clienteOption.email }}</option>
+            }
+          </select>
+        </div>
+        @if (editForm.get(['cliente'])!.invalid && (editForm.get(['cliente'])!.dirty || editForm.get(['cliente'])!.touched)) {
+          <div>
+            @if (editForm.get(['cliente'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Annulla</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Salva</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

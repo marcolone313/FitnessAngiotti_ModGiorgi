@@ -1,0 +1,41 @@
+{
+  "annotations": {
+    "changelogDate": "20241213084640"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "titolo",
+      "fieldType": "String",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "descrizione",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "puntiFocali",
+      "fieldType": "TextBlob"
+    },
+    {
+      "fieldName": "videoUrl",
+      "fieldType": "String"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "LezioneCorso",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "titolo",
+      "otherEntityName": "corsoAcademy",
+      "relationshipName": "corsoAcademy",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

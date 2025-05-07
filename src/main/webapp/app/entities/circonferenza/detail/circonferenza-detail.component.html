@@ -1,0 +1,80 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (circonferenza(); as circonferenzaRef) {
+      <div>
+        <h2 data-cy="circonferenzaDetailsHeading">
+          <span jhiTranslate="fitnessAngiottiApp.circonferenza.detail.title">Circonferenza</span>
+        </h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ circonferenzaRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.circonferenza.torace">Torace</span></dt>
+          <dd>
+            <span>{{ circonferenzaRef.torace }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.circonferenza.braccio">Braccio</span></dt>
+          <dd>
+            <span>{{ circonferenzaRef.braccio }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.circonferenza.avambraccio">Avambraccio</span></dt>
+          <dd>
+            <span>{{ circonferenzaRef.avambraccio }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.circonferenza.ombelico">Ombelico</span></dt>
+          <dd>
+            <span>{{ circonferenzaRef.ombelico }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.circonferenza.fianchi">Fianchi</span></dt>
+          <dd>
+            <span>{{ circonferenzaRef.fianchi }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.circonferenza.sottoOmbelico">Sotto Ombelico</span></dt>
+          <dd>
+            <span>{{ circonferenzaRef.sottoOmbelico }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.circonferenza.vita">Vita</span></dt>
+          <dd>
+            <span>{{ circonferenzaRef.vita }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.circonferenza.coscia">Coscia</span></dt>
+          <dd>
+            <span>{{ circonferenzaRef.coscia }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.circonferenza.mese">Mese</span></dt>
+          <dd>
+            <span>{{ circonferenzaRef.mese }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.circonferenza.dataInserimento">Data Inserimento</span></dt>
+          <dd>
+            <span>{{ circonferenzaRef.dataInserimento | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.circonferenza.cliente">Cliente</span></dt>
+          <dd>
+            @if (circonferenza()!.cliente) {
+              <div>
+                <a [routerLink]="['/cliente', circonferenza()!.cliente?.id, 'view']">{{ circonferenzaRef.cliente?.email }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Indietro</span>
+        </button>
+
+        <button type="button" [routerLink]="['/circonferenza', circonferenzaRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Modifica</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

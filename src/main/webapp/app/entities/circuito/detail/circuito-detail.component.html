@@ -1,0 +1,68 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (circuito(); as circuitoRef) {
+      <div>
+        <h2 data-cy="circuitoDetailsHeading"><span jhiTranslate="fitnessAngiottiApp.circuito.detail.title">Circuito</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ circuitoRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.circuito.tempoLimite">Tempo Limite</span></dt>
+          <dd>
+            <span>{{ circuitoRef.tempoLimite | duration }} ({{ circuitoRef.tempoLimite }})</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.circuito.tempoImpiegato">Tempo Impiegato</span></dt>
+          <dd>
+            <span>{{ circuitoRef.tempoImpiegato | duration }} ({{ circuitoRef.tempoImpiegato }})</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.circuito.catenaRipetizioni">Catena Ripetizioni</span></dt>
+          <dd>
+            <span>{{ circuitoRef.catenaRipetizioni }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.circuito.circuitiCompletati">Circuiti Completati</span></dt>
+          <dd>
+            <span>{{ circuitoRef.circuitiCompletati }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.circuito.svolto">Svolto</span></dt>
+          <dd>
+            <span>{{ circuitoRef.svolto }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.circuito.completato">Completato</span></dt>
+          <dd>
+            <span>{{ circuitoRef.completato }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.circuito.feedback">Feedback</span></dt>
+          <dd>
+            <span>{{ circuitoRef.feedback }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.circuito.allenamentoGiornaliero">Allenamento Giornaliero</span></dt>
+          <dd>
+            @if (circuito()!.allenamentoGiornaliero) {
+              <div>
+                <a [routerLink]="['/allenamento-giornaliero', circuito()!.allenamentoGiornaliero?.id, 'view']">{{
+                  circuitoRef.allenamentoGiornaliero?.id
+                }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Indietro</span>
+        </button>
+
+        <button type="button" [routerLink]="['/circuito', circuitoRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Modifica</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

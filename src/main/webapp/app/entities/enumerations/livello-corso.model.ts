@@ -1,0 +1,9 @@
+export enum LivelloCorso {
+  PRINCIPIANTE = 'PRINCIPIANTE',
+
+  INTERMEDIO = 'INTERMEDIO',
+
+  AVANZATO = 'AVANZATO',
+
+  ESPERTO = 'ESPERTO',
+}

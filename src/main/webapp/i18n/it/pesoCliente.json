@@ -1,0 +1,27 @@
+{
+  "fitnessAngiottiApp": {
+    "pesoCliente": {
+      "home": {
+        "title": "PesoClientes",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Genera un nuovo Peso Cliente",
+        "createOrEditLabel": "Genera o modifica un Peso Cliente",
+        "notFound": "No Peso Clientes found"
+      },
+      "created": "&Egrave; stato generato un nuovo Peso Cliente con identificatore {{ param }}",
+      "updated": "&Egrave; stato aggiornato Peso Cliente identificato da {{ param }}",
+      "deleted": "&Egrave; stato eliminato Peso Cliente con identificatore {{ param }}",
+      "delete": {
+        "question": "Sei sicuro di volere eliminare Peso Cliente {{ id }}?"
+      },
+      "detail": {
+        "title": "Peso Cliente"
+      },
+      "id": "ID",
+      "peso": "Peso",
+      "mese": "Mese",
+      "dataInserimento": "Data Inserimento",
+      "cliente": "Cliente"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "fitnessAngiottiApp": {
+    "esercizio": {
+      "home": {
+        "title": "Esercizios",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Genera un nuovo Esercizio",
+        "createOrEditLabel": "Genera o modifica un Esercizio",
+        "notFound": "No Esercizios found"
+      },
+      "created": "&Egrave; stato generato un nuovo Esercizio con identificatore {{ param }}",
+      "updated": "&Egrave; stato aggiornato Esercizio identificato da {{ param }}",
+      "deleted": "&Egrave; stato eliminato Esercizio con identificatore {{ param }}",
+      "delete": {
+        "question": "Sei sicuro di volere eliminare Esercizio {{ id }}?"
+      },
+      "detail": {
+        "title": "Esercizio"
+      },
+      "id": "ID",
+      "nome": "Nome",
+      "tipo": "Tipo",
+      "videoUrl": "Video Url",
+      "descrizione": "Descrizione",
+      "foto": "Foto",
+      "gym": "Gym",
+      "circuitoToEsercizio": "Circuito To Esercizio",
+      "passaggioEsercizio": "Passaggio Esercizio"
+    }
+  }
+}

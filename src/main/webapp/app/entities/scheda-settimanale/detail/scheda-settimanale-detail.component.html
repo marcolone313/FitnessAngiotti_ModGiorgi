@@ -1,0 +1,56 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (schedaSettimanale(); as schedaSettimanaleRef) {
+      <div>
+        <h2 data-cy="schedaSettimanaleDetailsHeading">
+          <span jhiTranslate="fitnessAngiottiApp.schedaSettimanale.detail.title">Scheda Settimanale</span>
+        </h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ schedaSettimanaleRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.schedaSettimanale.anno">Anno</span></dt>
+          <dd>
+            <span>{{ schedaSettimanaleRef.anno }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.schedaSettimanale.mese">Mese</span></dt>
+          <dd>
+            <span>{{ schedaSettimanaleRef.mese }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.schedaSettimanale.settimana">Settimana</span></dt>
+          <dd>
+            <span>{{ schedaSettimanaleRef.settimana }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.schedaSettimanale.dataCreazione">Data Creazione</span></dt>
+          <dd>
+            <span>{{ schedaSettimanaleRef.dataCreazione | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.schedaSettimanale.cliente">Cliente</span></dt>
+          <dd>
+            @if (schedaSettimanale()!.cliente) {
+              <div>
+                <a [routerLink]="['/cliente', schedaSettimanale()!.cliente?.id, 'view']">{{ schedaSettimanaleRef.cliente?.email }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Indietro</span>
+        </button>
+
+        <button type="button" [routerLink]="['/scheda-settimanale', schedaSettimanaleRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Modifica</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

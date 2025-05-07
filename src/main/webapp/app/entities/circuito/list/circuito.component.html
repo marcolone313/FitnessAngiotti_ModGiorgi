@@ -1,0 +1,185 @@
+<div>
+  <h2 id="page-heading" data-cy="CircuitoHeading">
+    <span jhiTranslate="fitnessAngiottiApp.circuito.home.title">Circuitos</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="fitnessAngiottiApp.circuito.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-circuito"
+        [routerLink]="['/circuito/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="fitnessAngiottiApp.circuito.home.createLabel">Genera un nuovo Circuito</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <jhi-filter [filters]="filters"></jhi-filter>
+
+  @if (circuitos?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="fitnessAngiottiApp.circuito.home.notFound">No Circuitos found</span>
+    </div>
+  }
+
+  @if (circuitos && circuitos.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [sortState]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="tempoLimite">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.circuito.tempoLimite">Tempo Limite</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="tempoImpiegato">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.circuito.tempoImpiegato">Tempo Impiegato</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="catenaRipetizioni">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.circuito.catenaRipetizioni">Catena Ripetizioni</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="circuitiCompletati">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.circuito.circuitiCompletati">Circuiti Completati</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="svolto">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.circuito.svolto">Svolto</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="completato">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.circuito.completato">Completato</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="feedback">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.circuito.feedback">Feedback</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="allenamentoGiornaliero.id">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.circuito.allenamentoGiornaliero">Allenamento Giornaliero</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (circuito of circuitos; track trackId(circuito)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/circuito', circuito.id, 'view']">{{ circuito.id }}</a>
+              </td>
+              <td title="{{ circuito.tempoLimite }}">{{ circuito.tempoLimite | duration }}</td>
+              <td title="{{ circuito.tempoImpiegato }}">{{ circuito.tempoImpiegato | duration }}</td>
+              <td>{{ circuito.catenaRipetizioni }}</td>
+              <td>{{ circuito.circuitiCompletati }}</td>
+              <td>{{ circuito.svolto }}</td>
+              <td>{{ circuito.completato }}</td>
+              <td>{{ circuito.feedback }}</td>
+              <td>
+                @if (circuito.allenamentoGiornaliero) {
+                  <div>
+                    <a [routerLink]="['/allenamento-giornaliero', circuito.allenamentoGiornaliero.id, 'view']">{{
+                      circuito.allenamentoGiornaliero.id
+                    }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <button
+                    type="submit"
+                    [routerLink]="['/circuito-to-esercizio']"
+                    [queryParams]="{ 'filter[circuitoId.in]': circuito.id }"
+                    class="btn btn-info btn-sm"
+                    data-cy="filterOtherEntityButton"
+                  >
+                    <fa-icon icon="eye"></fa-icon>
+                    <span
+                      class="d-none d-md-inline"
+                      jhiTranslate="entity.action.show"
+                      [translateValues]="{ otherEntity: ('fitnessAngiottiApp.circuito.circuitoToEsercizio' | translate) }"
+                      >Show Circuito To Esercizio</span
+                    >
+                  </button>
+                  <a [routerLink]="['/circuito', circuito.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Visualizza</span>
+                  </a>
+
+                  <a [routerLink]="['/circuito', circuito.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Modifica</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(circuito)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Elimina</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (circuitos && circuitos.length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,64 @@
+{
+  "annotations": {
+    "changelogDate": "20241213084636"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "sets",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "reps",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "recupero",
+      "fieldType": "Duration",
+      "fieldValidateRules": ["required"]
+    },
+    {
+      "fieldName": "peso",
+      "fieldType": "Float",
+      "fieldValidateRules": ["min"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "completato",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "svolto",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "feedback",
+      "fieldType": "TextBlob"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Gym",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "allenamentoGiornaliero",
+      "relationshipName": "allenamentoGiornaliero",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityField": "nome",
+      "otherEntityName": "esercizio",
+      "relationshipName": "esercizio",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

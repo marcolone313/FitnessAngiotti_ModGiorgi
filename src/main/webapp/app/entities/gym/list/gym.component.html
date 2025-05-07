@@ -1,0 +1,183 @@
+<div>
+  <h2 id="page-heading" data-cy="GymHeading">
+    <span jhiTranslate="fitnessAngiottiApp.gym.home.title">Gyms</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="fitnessAngiottiApp.gym.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-gym"
+        [routerLink]="['/gym/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="fitnessAngiottiApp.gym.home.createLabel">Genera un nuovo Gym</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <jhi-filter [filters]="filters"></jhi-filter>
+
+  @if (gyms?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="fitnessAngiottiApp.gym.home.notFound">No Gyms found</span>
+    </div>
+  }
+
+  @if (gyms && gyms.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [sortState]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="sets">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.gym.sets">Sets</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="reps">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.gym.reps">Reps</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="recupero">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.gym.recupero">Recupero</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="peso">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.gym.peso">Peso</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="completato">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.gym.completato">Completato</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="svolto">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.gym.svolto">Svolto</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="feedback">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.gym.feedback">Feedback</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="allenamentoGiornaliero.id">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.gym.allenamentoGiornaliero">Allenamento Giornaliero</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="esercizio.nome">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.gym.esercizio">Esercizio</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (gym of gyms; track trackId(gym)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/gym', gym.id, 'view']">{{ gym.id }}</a>
+              </td>
+              <td>{{ gym.sets }}</td>
+              <td>{{ gym.reps }}</td>
+              <td title="{{ gym.recupero }}">{{ gym.recupero | duration }}</td>
+              <td>{{ gym.peso }}</td>
+              <td>{{ gym.completato }}</td>
+              <td>{{ gym.svolto }}</td>
+              <td>{{ gym.feedback }}</td>
+              <td>
+                @if (gym.allenamentoGiornaliero) {
+                  <div>
+                    <a [routerLink]="['/allenamento-giornaliero', gym.allenamentoGiornaliero.id, 'view']">{{
+                      gym.allenamentoGiornaliero.id
+                    }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (gym.esercizio) {
+                  <div>
+                    <a [routerLink]="['/esercizio', gym.esercizio.id, 'view']">{{ gym.esercizio.nome }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/gym', gym.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Visualizza</span>
+                  </a>
+
+                  <a [routerLink]="['/gym', gym.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Modifica</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(gym)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Elimina</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (gyms && gyms.length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

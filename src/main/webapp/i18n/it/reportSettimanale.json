@@ -1,0 +1,36 @@
+{
+  "fitnessAngiottiApp": {
+    "reportSettimanale": {
+      "home": {
+        "title": "ReportSettimanales",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Genera un nuovo Report Settimanale",
+        "createOrEditLabel": "Genera o modifica un Report Settimanale",
+        "notFound": "No Report Settimanales found"
+      },
+      "created": "&Egrave; stato generato un nuovo Report Settimanale con identificatore {{ param }}",
+      "updated": "&Egrave; stato aggiornato Report Settimanale identificato da {{ param }}",
+      "deleted": "&Egrave; stato eliminato Report Settimanale con identificatore {{ param }}",
+      "delete": {
+        "question": "Sei sicuro di volere eliminare Report Settimanale {{ id }}?"
+      },
+      "detail": {
+        "title": "Report Settimanale"
+      },
+      "id": "ID",
+      "voto": "Voto",
+      "commentoAllenamento": "Commento Allenamento",
+      "giorniDieta": "Giorni Dieta",
+      "pesoMedio": "Peso Medio",
+      "qualitaSonno": "Qualita Sonno",
+      "mediaOreSonno": "Media Ore Sonno",
+      "dataCreazione": "Data Creazione",
+      "dataScadenza": "Data Scadenza",
+      "dataCompletamento": "Data Completamento",
+      "puntuale": "Puntuale",
+      "analisiReport": "Analisi Report",
+      "schedaSettimanale": "Scheda Settimanale",
+      "cliente": "Cliente"
+    }
+  }
+}

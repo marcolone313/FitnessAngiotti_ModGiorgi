@@ -1,0 +1,26 @@
+{
+  "fitnessAngiottiApp": {
+    "circuitoToEsercizio": {
+      "home": {
+        "title": "CircuitoToEsercizios",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Genera un nuovo Circuito To Esercizio",
+        "createOrEditLabel": "Genera o modifica un Circuito To Esercizio",
+        "notFound": "No Circuito To Esercizios found"
+      },
+      "created": "&Egrave; stato generato un nuovo Circuito To Esercizio con identificatore {{ param }}",
+      "updated": "&Egrave; stato aggiornato Circuito To Esercizio identificato da {{ param }}",
+      "deleted": "&Egrave; stato eliminato Circuito To Esercizio con identificatore {{ param }}",
+      "delete": {
+        "question": "Sei sicuro di volere eliminare Circuito To Esercizio {{ id }}?"
+      },
+      "detail": {
+        "title": "Circuito To Esercizio"
+      },
+      "id": "ID",
+      "reps": "Reps",
+      "esercizio": "Esercizio",
+      "circuito": "Circuito"
+    }
+  }
+}

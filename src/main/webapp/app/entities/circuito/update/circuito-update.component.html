@@ -1,0 +1,143 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-circuito-heading" data-cy="CircuitoCreateUpdateHeading" jhiTranslate="fitnessAngiottiApp.circuito.home.createOrEditLabel">
+        Genera o modifica un Circuito
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="fitnessAngiottiApp.circuito.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_tempoLimite" jhiTranslate="fitnessAngiottiApp.circuito.tempoLimite">Tempo Limite</label>
+          <input
+            type="text"
+            class="form-control"
+            name="tempoLimite"
+            id="field_tempoLimite"
+            data-cy="tempoLimite"
+            formControlName="tempoLimite"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_tempoImpiegato" jhiTranslate="fitnessAngiottiApp.circuito.tempoImpiegato"
+            >Tempo Impiegato</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="tempoImpiegato"
+            id="field_tempoImpiegato"
+            data-cy="tempoImpiegato"
+            formControlName="tempoImpiegato"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_catenaRipetizioni" jhiTranslate="fitnessAngiottiApp.circuito.catenaRipetizioni"
+            >Catena Ripetizioni</label
+          >
+          <input
+            type="text"
+            class="form-control"
+            name="catenaRipetizioni"
+            id="field_catenaRipetizioni"
+            data-cy="catenaRipetizioni"
+            formControlName="catenaRipetizioni"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_circuitiCompletati" jhiTranslate="fitnessAngiottiApp.circuito.circuitiCompletati"
+            >Circuiti Completati</label
+          >
+          <input
+            type="number"
+            class="form-control"
+            name="circuitiCompletati"
+            id="field_circuitiCompletati"
+            data-cy="circuitiCompletati"
+            formControlName="circuitiCompletati"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_svolto" jhiTranslate="fitnessAngiottiApp.circuito.svolto">Svolto</label>
+          <input type="checkbox" class="form-check" name="svolto" id="field_svolto" data-cy="svolto" formControlName="svolto" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_completato" jhiTranslate="fitnessAngiottiApp.circuito.completato">Completato</label>
+          <input
+            type="checkbox"
+            class="form-check"
+            name="completato"
+            id="field_completato"
+            data-cy="completato"
+            formControlName="completato"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_feedback" jhiTranslate="fitnessAngiottiApp.circuito.feedback">Feedback</label>
+          <textarea class="form-control" name="feedback" id="field_feedback" data-cy="feedback" formControlName="feedback"></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_allenamentoGiornaliero" jhiTranslate="fitnessAngiottiApp.circuito.allenamentoGiornaliero"
+            >Allenamento Giornaliero</label
+          >
+          <select
+            class="form-control"
+            id="field_allenamentoGiornaliero"
+            data-cy="allenamentoGiornaliero"
+            name="allenamentoGiornaliero"
+            formControlName="allenamentoGiornaliero"
+            [compareWith]="compareAllenamentoGiornaliero"
+          >
+            @if (editForm.get(['allenamentoGiornaliero'])!.value == null) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (allenamentoGiornalieroOption of allenamentoGiornalierosCollection; track $index) {
+              <option [ngValue]="allenamentoGiornalieroOption">{{ allenamentoGiornalieroOption.id }}</option>
+            }
+          </select>
+        </div>
+        @if (
+          editForm.get(['allenamentoGiornaliero'])!.invalid &&
+          (editForm.get(['allenamentoGiornaliero'])!.dirty || editForm.get(['allenamentoGiornaliero'])!.touched)
+        ) {
+          <div>
+            @if (editForm.get(['allenamentoGiornaliero'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Annulla</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Salva</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

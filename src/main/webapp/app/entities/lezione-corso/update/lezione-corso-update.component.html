@@ -1,0 +1,110 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-lezione-corso-heading"
+        data-cy="LezioneCorsoCreateUpdateHeading"
+        jhiTranslate="fitnessAngiottiApp.lezioneCorso.home.createOrEditLabel"
+      >
+        Genera o modifica un Lezione Corso
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="fitnessAngiottiApp.lezioneCorso.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let titoloRef = editForm.get('titolo')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_titolo" jhiTranslate="fitnessAngiottiApp.lezioneCorso.titolo">Titolo</label>
+          <input type="text" class="form-control" name="titolo" id="field_titolo" data-cy="titolo" formControlName="titolo" />
+          @if (titoloRef.invalid && (titoloRef.dirty || titoloRef.touched)) {
+            <div>
+              @if (editForm.get('titolo')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_descrizione" jhiTranslate="fitnessAngiottiApp.lezioneCorso.descrizione">Descrizione</label>
+          <textarea
+            class="form-control"
+            name="descrizione"
+            id="field_descrizione"
+            data-cy="descrizione"
+            formControlName="descrizione"
+          ></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_puntiFocali" jhiTranslate="fitnessAngiottiApp.lezioneCorso.puntiFocali">Punti Focali</label>
+          <textarea
+            class="form-control"
+            name="puntiFocali"
+            id="field_puntiFocali"
+            data-cy="puntiFocali"
+            formControlName="puntiFocali"
+          ></textarea>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_videoUrl" jhiTranslate="fitnessAngiottiApp.lezioneCorso.videoUrl">Video Url</label>
+          <input type="text" class="form-control" name="videoUrl" id="field_videoUrl" data-cy="videoUrl" formControlName="videoUrl" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_corsoAcademy" jhiTranslate="fitnessAngiottiApp.lezioneCorso.corsoAcademy"
+            >Corso Academy</label
+          >
+          <select
+            class="form-control"
+            id="field_corsoAcademy"
+            data-cy="corsoAcademy"
+            name="corsoAcademy"
+            formControlName="corsoAcademy"
+            [compareWith]="compareCorsoAcademy"
+          >
+            @if (editForm.get(['corsoAcademy'])!.value == null) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (corsoAcademyOption of corsoAcademiesSharedCollection; track $index) {
+              <option [ngValue]="corsoAcademyOption">{{ corsoAcademyOption.titolo }}</option>
+            }
+          </select>
+        </div>
+        @if (
+          editForm.get(['corsoAcademy'])!.invalid && (editForm.get(['corsoAcademy'])!.dirty || editForm.get(['corsoAcademy'])!.touched)
+        ) {
+          <div>
+            @if (editForm.get(['corsoAcademy'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Annulla</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Salva</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

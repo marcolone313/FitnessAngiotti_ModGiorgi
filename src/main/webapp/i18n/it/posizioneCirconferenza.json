@@ -1,0 +1,15 @@
+{
+  "fitnessAngiottiApp": {
+    "PosizioneCirconferenza": {
+      "null": "",
+      "TORACE": "TORACE",
+      "BRACCIO": "BRACCIO",
+      "AVAMBRACCIO": "AVAMBRACCIO",
+      "OMBELICO": "OMBELICO",
+      "FIANCHI": "FIANCHI",
+      "SOTTO_OMBELICO": "SOTTO_OMBELICO",
+      "VITA": "VITA",
+      "COSCIA": "COSCIA"
+    }
+  }
+}

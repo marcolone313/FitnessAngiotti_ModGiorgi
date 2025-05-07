@@ -1,0 +1,35 @@
+{
+  "annotations": {
+    "changelogDate": "20241213084631"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "indice",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min", "required"],
+      "fieldValidateRulesMin": "1"
+    },
+    {
+      "fieldName": "descrizione",
+      "fieldType": "TextBlob",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "PassaggioEsercizio",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "nome",
+      "otherEntityName": "esercizio",
+      "relationshipName": "esercizio",
+      "relationshipSide": "right",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

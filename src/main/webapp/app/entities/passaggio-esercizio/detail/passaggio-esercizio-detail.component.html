@@ -1,0 +1,50 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (passaggioEsercizio(); as passaggioEsercizioRef) {
+      <div>
+        <h2 data-cy="passaggioEsercizioDetailsHeading">
+          <span jhiTranslate="fitnessAngiottiApp.passaggioEsercizio.detail.title">Passaggio Esercizio</span>
+        </h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ passaggioEsercizioRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.passaggioEsercizio.indice">Indice</span></dt>
+          <dd>
+            <span>{{ passaggioEsercizioRef.indice }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.passaggioEsercizio.descrizione">Descrizione</span></dt>
+          <dd>
+            <span>{{ passaggioEsercizioRef.descrizione }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.passaggioEsercizio.esercizio">Esercizio</span></dt>
+          <dd>
+            @if (passaggioEsercizio()!.esercizio) {
+              <div>
+                <a [routerLink]="['/esercizio', passaggioEsercizio()!.esercizio?.id, 'view']">{{
+                  passaggioEsercizioRef.esercizio?.nome
+                }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Indietro</span>
+        </button>
+
+        <button type="button" [routerLink]="['/passaggio-esercizio', passaggioEsercizioRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Modifica</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

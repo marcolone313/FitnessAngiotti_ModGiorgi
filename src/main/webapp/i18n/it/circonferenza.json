@@ -1,0 +1,34 @@
+{
+  "fitnessAngiottiApp": {
+    "circonferenza": {
+      "home": {
+        "title": "Circonferenzas",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Genera un nuovo Circonferenza",
+        "createOrEditLabel": "Genera o modifica un Circonferenza",
+        "notFound": "No Circonferenzas found"
+      },
+      "created": "&Egrave; stato generato un nuovo Circonferenza con identificatore {{ param }}",
+      "updated": "&Egrave; stato aggiornato Circonferenza identificato da {{ param }}",
+      "deleted": "&Egrave; stato eliminato Circonferenza con identificatore {{ param }}",
+      "delete": {
+        "question": "Sei sicuro di volere eliminare Circonferenza {{ id }}?"
+      },
+      "detail": {
+        "title": "Circonferenza"
+      },
+      "id": "ID",
+      "torace": "Torace",
+      "braccio": "Braccio",
+      "avambraccio": "Avambraccio",
+      "ombelico": "Ombelico",
+      "fianchi": "Fianchi",
+      "sottoOmbelico": "Sotto Ombelico",
+      "vita": "Vita",
+      "coscia": "Coscia",
+      "mese": "Mese",
+      "dataInserimento": "Data Inserimento",
+      "cliente": "Cliente"
+    }
+  }
+}

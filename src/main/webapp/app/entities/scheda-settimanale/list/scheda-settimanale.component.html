@@ -1,0 +1,152 @@
+<div>
+  <h2 id="page-heading" data-cy="SchedaSettimanaleHeading">
+    <span jhiTranslate="fitnessAngiottiApp.schedaSettimanale.home.title">SchedaSettimanales</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="fitnessAngiottiApp.schedaSettimanale.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-scheda-settimanale"
+        [routerLink]="['/scheda-settimanale/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="fitnessAngiottiApp.schedaSettimanale.home.createLabel">Genera un nuovo Scheda Settimanale</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <jhi-filter [filters]="filters"></jhi-filter>
+
+  @if (schedaSettimanales?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="fitnessAngiottiApp.schedaSettimanale.home.notFound">No Scheda Settimanales found</span>
+    </div>
+  }
+
+  @if (schedaSettimanales && schedaSettimanales.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [sortState]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="anno">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.schedaSettimanale.anno">Anno</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="mese">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.schedaSettimanale.mese">Mese</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="settimana">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.schedaSettimanale.settimana">Settimana</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dataCreazione">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.schedaSettimanale.dataCreazione">Data Creazione</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="cliente.email">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.schedaSettimanale.cliente">Cliente</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (schedaSettimanale of schedaSettimanales; track trackId(schedaSettimanale)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/scheda-settimanale', schedaSettimanale.id, 'view']">{{ schedaSettimanale.id }}</a>
+              </td>
+              <td>{{ schedaSettimanale.anno }}</td>
+              <td>{{ schedaSettimanale.mese }}</td>
+              <td>{{ schedaSettimanale.settimana }}</td>
+              <td>{{ schedaSettimanale.dataCreazione | formatMediumDate }}</td>
+              <td>
+                @if (schedaSettimanale.cliente) {
+                  <div>
+                    <a [routerLink]="['/cliente', schedaSettimanale.cliente.id, 'view']">{{ schedaSettimanale.cliente.email }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a
+                    [routerLink]="['/scheda-settimanale', schedaSettimanale.id, 'view']"
+                    class="btn btn-info btn-sm"
+                    data-cy="entityDetailsButton"
+                  >
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Visualizza</span>
+                  </a>
+
+                  <a
+                    [routerLink]="['/scheda-settimanale', schedaSettimanale.id, 'edit']"
+                    class="btn btn-primary btn-sm"
+                    data-cy="entityEditButton"
+                  >
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Modifica</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(schedaSettimanale)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Elimina</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (schedaSettimanales && schedaSettimanales.length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

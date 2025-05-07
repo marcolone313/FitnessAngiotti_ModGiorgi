@@ -1,0 +1,192 @@
+<div>
+  <h2 id="page-heading" data-cy="CirconferenzaHeading">
+    <span jhiTranslate="fitnessAngiottiApp.circonferenza.home.title">Circonferenzas</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="fitnessAngiottiApp.circonferenza.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-circonferenza"
+        [routerLink]="['/circonferenza/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="fitnessAngiottiApp.circonferenza.home.createLabel">Genera un nuovo Circonferenza</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <jhi-filter [filters]="filters"></jhi-filter>
+
+  @if (circonferenzas?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="fitnessAngiottiApp.circonferenza.home.notFound">No Circonferenzas found</span>
+    </div>
+  }
+
+  @if (circonferenzas && circonferenzas.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [sortState]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="torace">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.circonferenza.torace">Torace</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="braccio">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.circonferenza.braccio">Braccio</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="avambraccio">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.circonferenza.avambraccio">Avambraccio</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="ombelico">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.circonferenza.ombelico">Ombelico</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="fianchi">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.circonferenza.fianchi">Fianchi</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="sottoOmbelico">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.circonferenza.sottoOmbelico">Sotto Ombelico</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="vita">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.circonferenza.vita">Vita</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="coscia">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.circonferenza.coscia">Coscia</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="mese">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.circonferenza.mese">Mese</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dataInserimento">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.circonferenza.dataInserimento">Data Inserimento</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="cliente.email">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.circonferenza.cliente">Cliente</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (circonferenza of circonferenzas; track trackId(circonferenza)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/circonferenza', circonferenza.id, 'view']">{{ circonferenza.id }}</a>
+              </td>
+              <td>{{ circonferenza.torace }}</td>
+              <td>{{ circonferenza.braccio }}</td>
+              <td>{{ circonferenza.avambraccio }}</td>
+              <td>{{ circonferenza.ombelico }}</td>
+              <td>{{ circonferenza.fianchi }}</td>
+              <td>{{ circonferenza.sottoOmbelico }}</td>
+              <td>{{ circonferenza.vita }}</td>
+              <td>{{ circonferenza.coscia }}</td>
+              <td>{{ circonferenza.mese }}</td>
+              <td>{{ circonferenza.dataInserimento | formatMediumDate }}</td>
+              <td>
+                @if (circonferenza.cliente) {
+                  <div>
+                    <a [routerLink]="['/cliente', circonferenza.cliente.id, 'view']">{{ circonferenza.cliente.email }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/circonferenza', circonferenza.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Visualizza</span>
+                  </a>
+
+                  <a [routerLink]="['/circonferenza', circonferenza.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Modifica</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(circonferenza)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Elimina</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (circonferenzas && circonferenzas.length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,74 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (plicometria(); as plicometriaRef) {
+      <div>
+        <h2 data-cy="plicometriaDetailsHeading"><span jhiTranslate="fitnessAngiottiApp.plicometria.detail.title">Plicometria</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ plicometriaRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.plicometria.tricipite">Tricipite</span></dt>
+          <dd>
+            <span>{{ plicometriaRef.tricipite }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.plicometria.petto">Petto</span></dt>
+          <dd>
+            <span>{{ plicometriaRef.petto }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.plicometria.ascella">Ascella</span></dt>
+          <dd>
+            <span>{{ plicometriaRef.ascella }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.plicometria.sottoscapolare">Sottoscapolare</span></dt>
+          <dd>
+            <span>{{ plicometriaRef.sottoscapolare }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.plicometria.soprailliaca">Soprailliaca</span></dt>
+          <dd>
+            <span>{{ plicometriaRef.soprailliaca }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.plicometria.addome">Addome</span></dt>
+          <dd>
+            <span>{{ plicometriaRef.addome }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.plicometria.coscia">Coscia</span></dt>
+          <dd>
+            <span>{{ plicometriaRef.coscia }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.plicometria.mese">Mese</span></dt>
+          <dd>
+            <span>{{ plicometriaRef.mese }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.plicometria.dataInserimento">Data Inserimento</span></dt>
+          <dd>
+            <span>{{ plicometriaRef.dataInserimento | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.plicometria.cliente">Cliente</span></dt>
+          <dd>
+            @if (plicometria()!.cliente) {
+              <div>
+                <a [routerLink]="['/cliente', plicometria()!.cliente?.id, 'view']">{{ plicometriaRef.cliente?.email }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Indietro</span>
+        </button>
+
+        <button type="button" [routerLink]="['/plicometria', plicometriaRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Modifica</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

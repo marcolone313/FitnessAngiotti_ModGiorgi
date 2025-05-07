@@ -1,0 +1,111 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-passaggio-esercizio-heading"
+        data-cy="PassaggioEsercizioCreateUpdateHeading"
+        jhiTranslate="fitnessAngiottiApp.passaggioEsercizio.home.createOrEditLabel"
+      >
+        Genera o modifica un Passaggio Esercizio
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="fitnessAngiottiApp.passaggioEsercizio.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let indiceRef = editForm.get('indice')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_indice" jhiTranslate="fitnessAngiottiApp.passaggioEsercizio.indice">Indice</label>
+          <input type="number" class="form-control" name="indice" id="field_indice" data-cy="indice" formControlName="indice" />
+          @if (indiceRef.invalid && (indiceRef.dirty || indiceRef.touched)) {
+            <div>
+              @if (editForm.get('indice')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+              }
+              @if (editForm.get('indice')?.errors?.min) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.min" [translateValues]="{ min: '1' }"
+                  >Questo campo dovrebbe essere più di 1.</small
+                >
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('indice')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >Questo campo dovrebbe essere un numero.</small
+              >
+            </div>
+          }
+        </div>
+
+        @let descrizioneRef = editForm.get('descrizione')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_descrizione" jhiTranslate="fitnessAngiottiApp.passaggioEsercizio.descrizione"
+            >Descrizione</label
+          >
+          <textarea
+            class="form-control"
+            name="descrizione"
+            id="field_descrizione"
+            data-cy="descrizione"
+            formControlName="descrizione"
+          ></textarea>
+          @if (descrizioneRef.invalid && (descrizioneRef.dirty || descrizioneRef.touched)) {
+            <div>
+              @if (editForm.get('descrizione')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_esercizio" jhiTranslate="fitnessAngiottiApp.passaggioEsercizio.esercizio">Esercizio</label>
+          <select
+            class="form-control"
+            id="field_esercizio"
+            data-cy="esercizio"
+            name="esercizio"
+            formControlName="esercizio"
+            [compareWith]="compareEsercizio"
+          >
+            @if (editForm.get(['esercizio'])!.value == null) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (esercizioOption of eserciziosSharedCollection; track $index) {
+              <option [ngValue]="esercizioOption">{{ esercizioOption.nome }}</option>
+            }
+          </select>
+        </div>
+        @if (editForm.get(['esercizio'])!.invalid && (editForm.get(['esercizio'])!.dirty || editForm.get(['esercizio'])!.touched)) {
+          <div>
+            @if (editForm.get(['esercizio'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Annulla</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Salva</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

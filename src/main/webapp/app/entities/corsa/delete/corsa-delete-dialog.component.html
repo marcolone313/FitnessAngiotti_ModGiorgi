@@ -1,0 +1,26 @@
+@if (corsa) {
+  <form name="deleteForm" (ngSubmit)="confirmDelete(corsa.id!)">
+    <div class="modal-header">
+      <h4 class="modal-title" data-cy="corsaDeleteDialogHeading" jhiTranslate="entity.delete.title">
+        Conferma operazione di cancellazione
+      </h4>
+    </div>
+
+    <div class="modal-body">
+      <jhi-alert-error></jhi-alert-error>
+      <p id="jhi-delete-corsa-heading" jhiTranslate="fitnessAngiottiApp.corsa.delete.question" [translateValues]="{ id: corsa.id }">
+        Sei sicuro di volere eliminare Corsa {{ corsa.id }}?
+      </p>
+    </div>
+
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()">
+        <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Annulla</span>
+      </button>
+
+      <button id="jhi-confirm-delete-corsa" data-cy="entityConfirmDeleteButton" type="submit" class="btn btn-danger">
+        <fa-icon icon="times"></fa-icon>&nbsp;<span jhiTranslate="entity.action.delete">Elimina</span>
+      </button>
+    </div>
+  </form>
+}

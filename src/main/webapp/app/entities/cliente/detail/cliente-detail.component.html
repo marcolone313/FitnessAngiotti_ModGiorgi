@@ -1,0 +1,107 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (cliente(); as clienteRef) {
+      <div>
+        <h2 data-cy="clienteDetailsHeading"><span jhiTranslate="fitnessAngiottiApp.cliente.detail.title">Cliente</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ clienteRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.cliente.nome">Nome</span></dt>
+          <dd>
+            <span>{{ clienteRef.nome }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.cliente.cognome">Cognome</span></dt>
+          <dd>
+            <span>{{ clienteRef.cognome }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.cliente.dataDiNascita">Data Di Nascita</span></dt>
+          <dd>
+            <span>{{ clienteRef.dataDiNascita | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.cliente.codiceFiscale">Codice Fiscale</span></dt>
+          <dd>
+            <span>{{ clienteRef.codiceFiscale }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.cliente.codiceCliente">Codice Cliente</span></dt>
+          <dd>
+            <span>{{ clienteRef.codiceCliente }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.cliente.email">Email</span></dt>
+          <dd>
+            <span>{{ clienteRef.email }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.cliente.telefono">Telefono</span></dt>
+          <dd>
+            <span>{{ clienteRef.telefono }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.cliente.foto">Foto</span></dt>
+          <dd>
+            @if (clienteRef.foto) {
+              <div>
+                <a (click)="openFile(clienteRef.foto ?? '', clienteRef.fotoContentType)">
+                  <img [src]="'data:' + clienteRef.fotoContentType + ';base64,' + clienteRef.foto" style="max-width: 100%" alt="cliente" />
+                </a>
+                {{ clienteRef.fotoContentType }}, {{ byteSize(clienteRef.foto ?? '') }}
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.cliente.user">User</span></dt>
+          <dd>
+            <span>{{ clienteRef.user?.login }}</span>
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Indietro</span>
+        </button>
+
+        <button type="button" [routerLink]="['/cliente', clienteRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Modifica</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>
+
+<div class="d-flex justify-content-center">
+  <div class="col-10">
+    <h2>Plicometrie Cliente</h2>
+    <!-- get all detail from Plicometria where id_cliente==cliente.id_cliente-->
+
+    <!-- show a table like this:
+        "tricipite": 134.0,
+        "petto": 12.0,
+        "ascella": 133.0,
+        "sottoscapolare": 1212.0,
+        "soprailliaca": 1331.0,
+        "addome": 3131.0,
+        "coscia": 13.0,
+        "mese": 1,
+        -->
+    <div class="row">
+      @for (key of plicometrieKeys; track $index) {
+        <div class="col-1">
+          <p>{{ key }}</p>
+        </div>
+      }
+    </div>
+    @for (item of this.plicometrie; track $index) {
+      <div class="row">
+        @for (PlicoKey of this.plicometrieKeys; track $index) {
+          <div class="col-1">
+            <p>{{ getKeys(item, PlicoKey) }}</p>
+          </div>
+        }
+      </div>
+    }
+  </div>
+</div>

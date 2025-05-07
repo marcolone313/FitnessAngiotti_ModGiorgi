@@ -1,0 +1,179 @@
+<div>
+  <h2 id="page-heading" data-cy="ClienteHeading">
+    <span jhiTranslate="fitnessAngiottiApp.cliente.home.title">Clientes</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="fitnessAngiottiApp.cliente.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-cliente"
+        [routerLink]="['/cliente/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="fitnessAngiottiApp.cliente.home.createLabel">Genera un nuovo Cliente</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <jhi-filter [filters]="filters"></jhi-filter>
+
+  @if (clientes?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="fitnessAngiottiApp.cliente.home.notFound">No Clientes found</span>
+    </div>
+  }
+
+  @if (clientes && clientes.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [sortState]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="nome">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.cliente.nome">Nome</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="cognome">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.cliente.cognome">Cognome</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dataDiNascita">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.cliente.dataDiNascita">Data Di Nascita</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="codiceFiscale">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.cliente.codiceFiscale">Codice Fiscale</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="codiceCliente">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.cliente.codiceCliente">Codice Cliente</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="email">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.cliente.email">Email</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="telefono">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.cliente.telefono">Telefono</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="foto">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.cliente.foto">Foto</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="user.login">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.cliente.user">User</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (cliente of clientes; track trackId(cliente)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/cliente', cliente.id, 'view']">{{ cliente.id }}</a>
+              </td>
+              <td>{{ cliente.nome }}</td>
+              <td>{{ cliente.cognome }}</td>
+              <td>{{ cliente.dataDiNascita | formatMediumDate }}</td>
+              <td>{{ cliente.codiceFiscale }}</td>
+              <td>{{ cliente.codiceCliente }}</td>
+              <td>{{ cliente.email }}</td>
+              <td>{{ cliente.telefono }}</td>
+              <td>
+                @if (cliente.foto) {
+                  <a (click)="openFile(cliente.foto, cliente.fotoContentType)">
+                    <img [src]="'data:' + cliente.fotoContentType + ';base64,' + cliente.foto" style="max-height: 30px" alt="cliente" />
+                  </a>
+                  <span>{{ cliente.fotoContentType }}, {{ byteSize(cliente.foto) }}</span>
+                }
+              </td>
+              <td>
+                {{ cliente.user?.login }}
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a [routerLink]="['/cliente', cliente.id, 'view']" class="btn btn-info btn-sm" data-cy="entityDetailsButton">
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Visualizza</span>
+                  </a>
+
+                  <a [routerLink]="['/cliente', cliente.id, 'edit']" class="btn btn-primary btn-sm" data-cy="entityEditButton">
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Modifica</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(cliente)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Elimina</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (clientes && clientes.length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

@@ -1,0 +1,27 @@
+{
+  "fitnessAngiottiApp": {
+    "clienteToLezioneCorso": {
+      "home": {
+        "title": "ClienteToLezioneCorsos",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Genera un nuovo Cliente To Lezione Corso",
+        "createOrEditLabel": "Genera o modifica un Cliente To Lezione Corso",
+        "notFound": "No Cliente To Lezione Corsos found"
+      },
+      "created": "&Egrave; stato generato un nuovo Cliente To Lezione Corso con identificatore {{ param }}",
+      "updated": "&Egrave; stato aggiornato Cliente To Lezione Corso identificato da {{ param }}",
+      "deleted": "&Egrave; stato eliminato Cliente To Lezione Corso con identificatore {{ param }}",
+      "delete": {
+        "question": "Sei sicuro di volere eliminare Cliente To Lezione Corso {{ id }}?"
+      },
+      "detail": {
+        "title": "Cliente To Lezione Corso"
+      },
+      "id": "ID",
+      "completato": "Completato",
+      "dataCompletamento": "Data Completamento",
+      "cliente": "Cliente",
+      "lezioneCorso": "Lezione Corso"
+    }
+  }
+}

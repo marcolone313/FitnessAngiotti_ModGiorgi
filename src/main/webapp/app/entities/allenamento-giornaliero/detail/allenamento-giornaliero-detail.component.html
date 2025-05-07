@@ -1,0 +1,64 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (allenamentoGiornaliero(); as allenamentoGiornalieroRef) {
+      <div>
+        <h2 data-cy="allenamentoGiornalieroDetailsHeading">
+          <span jhiTranslate="fitnessAngiottiApp.allenamentoGiornaliero.detail.title">Allenamento Giornaliero</span>
+        </h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ allenamentoGiornalieroRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.allenamentoGiornaliero.tipo">Tipo</span></dt>
+          <dd>
+            <span [jhiTranslate]="'fitnessAngiottiApp.TipoAllenamento.' + (allenamentoGiornalieroRef.tipo ?? 'null')">{{
+              { null: '', CORSA: 'CORSA', GYM: 'GYM', CIRCUITO: 'CIRCUITO' }[allenamentoGiornalieroRef.tipo ?? 'null']
+            }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.allenamentoGiornaliero.giorno">Giorno</span></dt>
+          <dd>
+            <span>{{ allenamentoGiornalieroRef.giorno }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.allenamentoGiornaliero.notaTrainer">Nota Trainer</span></dt>
+          <dd>
+            <span>{{ allenamentoGiornalieroRef.notaTrainer }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.allenamentoGiornaliero.svolto">Svolto</span></dt>
+          <dd>
+            <span>{{ allenamentoGiornalieroRef.svolto }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.allenamentoGiornaliero.dataAllenamento">Data Allenamento</span></dt>
+          <dd>
+            <span>{{ allenamentoGiornalieroRef.dataAllenamento | formatMediumDate }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.allenamentoGiornaliero.schedaSettimanale">Scheda Settimanale</span></dt>
+          <dd>
+            @if (allenamentoGiornaliero()!.schedaSettimanale) {
+              <div>
+                <a [routerLink]="['/scheda-settimanale', allenamentoGiornaliero()!.schedaSettimanale?.id, 'view']">{{
+                  allenamentoGiornalieroRef.schedaSettimanale?.id
+                }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Indietro</span>
+        </button>
+
+        <button type="button" [routerLink]="['/allenamento-giornaliero', allenamentoGiornalieroRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Modifica</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

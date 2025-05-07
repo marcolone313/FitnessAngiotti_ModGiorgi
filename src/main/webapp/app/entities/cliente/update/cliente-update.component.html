@@ -1,0 +1,214 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2 id="jhi-cliente-heading" data-cy="ClienteCreateUpdateHeading" jhiTranslate="fitnessAngiottiApp.cliente.home.createOrEditLabel">
+        Genera o modifica un Cliente
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="fitnessAngiottiApp.cliente.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        @let nomeRef = editForm.get('nome')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_nome" jhiTranslate="fitnessAngiottiApp.cliente.nome">Nome</label>
+          <input type="text" class="form-control" name="nome" id="field_nome" data-cy="nome" formControlName="nome" />
+          @if (nomeRef.invalid && (nomeRef.dirty || nomeRef.touched)) {
+            <div>
+              @if (editForm.get('nome')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let cognomeRef = editForm.get('cognome')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_cognome" jhiTranslate="fitnessAngiottiApp.cliente.cognome">Cognome</label>
+          <input type="text" class="form-control" name="cognome" id="field_cognome" data-cy="cognome" formControlName="cognome" />
+          @if (cognomeRef.invalid && (cognomeRef.dirty || cognomeRef.touched)) {
+            <div>
+              @if (editForm.get('cognome')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let dataDiNascitaRef = editForm.get('dataDiNascita')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_dataDiNascita" jhiTranslate="fitnessAngiottiApp.cliente.dataDiNascita"
+            >Data Di Nascita</label
+          >
+          <div class="input-group">
+            <input
+              id="field_dataDiNascita"
+              data-cy="dataDiNascita"
+              type="text"
+              class="form-control"
+              name="dataDiNascita"
+              ngbDatepicker
+              #dataDiNascitaDp="ngbDatepicker"
+              formControlName="dataDiNascita"
+            />
+            <button type="button" class="btn btn-secondary" (click)="dataDiNascitaDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+          @if (dataDiNascitaRef.invalid && (dataDiNascitaRef.dirty || dataDiNascitaRef.touched)) {
+            <div>
+              @if (editForm.get('dataDiNascita')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let codiceFiscaleRef = editForm.get('codiceFiscale')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_codiceFiscale" jhiTranslate="fitnessAngiottiApp.cliente.codiceFiscale">Codice Fiscale</label>
+          <input
+            type="text"
+            class="form-control"
+            name="codiceFiscale"
+            id="field_codiceFiscale"
+            data-cy="codiceFiscale"
+            formControlName="codiceFiscale"
+          />
+          @if (codiceFiscaleRef.invalid && (codiceFiscaleRef.dirty || codiceFiscaleRef.touched)) {
+            <div>
+              @if (editForm.get('codiceFiscale')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+              }
+              @if (editForm.get('codiceFiscale')?.errors?.minlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.minlength" [translateValues]="{ min: '16' }"
+                  >Questo campo deve essere di almeno 16 caratteri.</small
+                >
+              }
+              @if (editForm.get('codiceFiscale')?.errors?.maxlength) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.maxlength" [translateValues]="{ max: '16' }"
+                  >Questo campo non può essere più di 16 caratteri.</small
+                >
+              }
+            </div>
+          }
+        </div>
+
+        @let codiceClienteRef = editForm.get('codiceCliente')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_codiceCliente" jhiTranslate="fitnessAngiottiApp.cliente.codiceCliente">Codice Cliente</label>
+          <input
+            type="text"
+            class="form-control"
+            name="codiceCliente"
+            id="field_codiceCliente"
+            data-cy="codiceCliente"
+            formControlName="codiceCliente"
+          />
+          @if (codiceClienteRef.invalid && (codiceClienteRef.dirty || codiceClienteRef.touched)) {
+            <div>
+              @if (editForm.get('codiceCliente')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+              }
+            </div>
+          }
+        </div>
+
+        @let emailRef = editForm.get('email')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_email" jhiTranslate="fitnessAngiottiApp.cliente.email">Email</label>
+          <input type="text" class="form-control" name="email" id="field_email" data-cy="email" formControlName="email" />
+          @if (emailRef.invalid && (emailRef.dirty || emailRef.touched)) {
+            <div>
+              @if (editForm.get('email')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+              }
+            </div>
+          }
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_telefono" jhiTranslate="fitnessAngiottiApp.cliente.telefono">Telefono</label>
+          <input type="text" class="form-control" name="telefono" id="field_telefono" data-cy="telefono" formControlName="telefono" />
+        </div>
+
+        @let fotoRef = editForm.get('foto')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_foto" jhiTranslate="fitnessAngiottiApp.cliente.foto">Foto</label>
+          <div>
+            @if (fotoRef.value) {
+              <img
+                [src]="'data:' + editForm.get('fotoContentType')!.value + ';base64,' + fotoRef.value"
+                style="max-height: 100px"
+                alt="cliente"
+              />
+            }
+            @if (fotoRef.value) {
+              <div class="form-text text-danger clearfix">
+                <span class="pull-start">{{ editForm.get('fotoContentType')!.value }}, {{ byteSize(fotoRef.value!) }}</span>
+                <button
+                  type="button"
+                  (click)="clearInputImage('foto', 'fotoContentType', 'file_foto')"
+                  class="btn btn-secondary btn-xs pull-end"
+                >
+                  <fa-icon icon="times"></fa-icon>
+                </button>
+              </div>
+            }
+            <input
+              type="file"
+              id="file_foto"
+              data-cy="foto"
+              (change)="setFileData($event, 'foto', true)"
+              accept="image/*"
+              jhiTranslate="entity.action.addimage"
+            />
+          </div>
+          <input type="hidden" class="form-control" name="foto" id="field_foto" data-cy="foto" formControlName="foto" />
+          <input type="hidden" class="form-control" name="fotoContentType" id="field_fotoContentType" formControlName="fotoContentType" />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_user" jhiTranslate="fitnessAngiottiApp.cliente.user">User</label>
+          <select class="form-control" id="field_user" data-cy="user" name="user" formControlName="user" [compareWith]="compareUser">
+            @if (!editForm.get('user')!.value) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (userOption of usersSharedCollection; track $index) {
+              <option [ngValue]="userOption">{{ userOption.login }}</option>
+            }
+          </select>
+        </div>
+        @if (editForm.get(['user'])!.invalid && (editForm.get(['user'])!.dirty || editForm.get(['user'])!.touched)) {
+          <div>
+            @if (editForm.get(['user'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Annulla</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Salva</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

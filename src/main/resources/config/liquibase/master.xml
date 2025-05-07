@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <property name="now" value="now()" dbms="mysql"/>
+    <property name="floatType" value="float" dbms="mysql"/>
+    <property name="clobType" value="clob" dbms="mysql"/>
+    <property name="blobType" value="longblob" dbms="mysql"/>
+    <property name="uuidType" value="varchar(36)" dbms="mysql"/>
+    <property name="datetimeType" value="datetime(6)" dbms="mysql"/>
+
+    <include file="config/liquibase/changelog/00000000000000_initial_schema.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084626_added_entity_Cliente.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084627_added_entity_PesoCliente.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084628_added_entity_Plicometria.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084629_added_entity_Circonferenza.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084630_added_entity_Esercizio.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084631_added_entity_PassaggioEsercizio.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084632_added_entity_SchedaSettimanale.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084633_added_entity_AllenamentoGiornaliero.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084634_added_entity_Circuito.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084635_added_entity_Corsa.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084636_added_entity_Gym.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084637_added_entity_Dieta.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084638_added_entity_ReportSettimanale.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084639_added_entity_CorsoAcademy.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084640_added_entity_LezioneCorso.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084641_added_entity_ClienteToLezioneCorso.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250205085413_added_entity_CircuitoToEsercizio.xml" relativeToChangelogFile="false"/>
+    <!-- jhipster-needle-liquibase-add-changelog - JHipster will add liquibase changelogs here -->
+    <include file="config/liquibase/changelog/20241213084626_added_entity_constraints_Cliente.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084627_added_entity_constraints_PesoCliente.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084628_added_entity_constraints_Plicometria.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084629_added_entity_constraints_Circonferenza.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084631_added_entity_constraints_PassaggioEsercizio.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084632_added_entity_constraints_SchedaSettimanale.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084633_added_entity_constraints_AllenamentoGiornaliero.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084634_added_entity_constraints_Circuito.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084635_added_entity_constraints_Corsa.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084636_added_entity_constraints_Gym.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084637_added_entity_constraints_Dieta.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084638_added_entity_constraints_ReportSettimanale.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084640_added_entity_constraints_LezioneCorso.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20241213084641_added_entity_constraints_ClienteToLezioneCorso.xml" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20250205085413_added_entity_constraints_CircuitoToEsercizio.xml" relativeToChangelogFile="false"/>
+    <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
+    <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
+</databaseChangeLog>

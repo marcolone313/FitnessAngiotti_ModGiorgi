@@ -1,0 +1,58 @@
+{
+  "annotations": {
+    "changelogDate": "20241213084634"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "tempoLimite",
+      "fieldType": "Duration"
+    },
+    {
+      "fieldName": "tempoImpiegato",
+      "fieldType": "Duration"
+    },
+    {
+      "fieldName": "catenaRipetizioni",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "circuitiCompletati",
+      "fieldType": "Integer"
+    },
+    {
+      "fieldName": "svolto",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "completato",
+      "fieldType": "Boolean"
+    },
+    {
+      "fieldName": "feedback",
+      "fieldType": "TextBlob"
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "Circuito",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityName": "allenamentoGiornaliero",
+      "relationshipName": "allenamentoGiornaliero",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-one",
+      "relationshipValidateRules": "required"
+    },
+    {
+      "otherEntityName": "circuitoToEsercizio",
+      "otherEntityRelationshipName": "circuito",
+      "relationshipName": "circuitoToEsercizio",
+      "relationshipSide": "left",
+      "relationshipType": "one-to-many"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

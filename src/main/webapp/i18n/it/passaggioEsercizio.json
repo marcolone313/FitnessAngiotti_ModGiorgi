@@ -1,0 +1,26 @@
+{
+  "fitnessAngiottiApp": {
+    "passaggioEsercizio": {
+      "home": {
+        "title": "PassaggioEsercizios",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Genera un nuovo Passaggio Esercizio",
+        "createOrEditLabel": "Genera o modifica un Passaggio Esercizio",
+        "notFound": "No Passaggio Esercizios found"
+      },
+      "created": "&Egrave; stato generato un nuovo Passaggio Esercizio con identificatore {{ param }}",
+      "updated": "&Egrave; stato aggiornato Passaggio Esercizio identificato da {{ param }}",
+      "deleted": "&Egrave; stato eliminato Passaggio Esercizio con identificatore {{ param }}",
+      "delete": {
+        "question": "Sei sicuro di volere eliminare Passaggio Esercizio {{ id }}?"
+      },
+      "detail": {
+        "title": "Passaggio Esercizio"
+      },
+      "id": "ID",
+      "indice": "Indice",
+      "descrizione": "Descrizione",
+      "esercizio": "Esercizio"
+    }
+  }
+}

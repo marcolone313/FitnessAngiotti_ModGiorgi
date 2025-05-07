@@ -1,0 +1,9 @@
+export enum Voto {
+  INSUFFICIENTE = 'INSUFFICIENTE',
+
+  SUFFICIENTE = 'SUFFICIENTE',
+
+  BUONO = 'BUONO',
+
+  OTTIMO = 'OTTIMO',
+}

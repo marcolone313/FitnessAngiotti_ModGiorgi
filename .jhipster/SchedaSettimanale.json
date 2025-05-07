@@ -1,0 +1,49 @@
+{
+  "annotations": {
+    "changelogDate": "20241213084632"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "anno",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min", "required"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "mese",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min", "max", "required"],
+      "fieldValidateRulesMax": "12",
+      "fieldValidateRulesMin": "1"
+    },
+    {
+      "fieldName": "settimana",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min", "max", "required"],
+      "fieldValidateRulesMax": "4",
+      "fieldValidateRulesMin": "1"
+    },
+    {
+      "fieldName": "dataCreazione",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "SchedaSettimanale",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "email",
+      "otherEntityName": "cliente",
+      "relationshipName": "cliente",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

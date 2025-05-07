@@ -1,0 +1,131 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    <form name="editForm" novalidate (ngSubmit)="save()" [formGroup]="editForm">
+      <h2
+        id="jhi-cliente-to-lezione-corso-heading"
+        data-cy="ClienteToLezioneCorsoCreateUpdateHeading"
+        jhiTranslate="fitnessAngiottiApp.clienteToLezioneCorso.home.createOrEditLabel"
+      >
+        Genera o modifica un Cliente To Lezione Corso
+      </h2>
+
+      <div>
+        <jhi-alert-error></jhi-alert-error>
+
+        @if (editForm.controls.id.value !== null) {
+          <div class="mb-3">
+            <label class="form-label" for="field_id" jhiTranslate="fitnessAngiottiApp.clienteToLezioneCorso.id">ID</label>
+            <input type="number" class="form-control" name="id" id="field_id" data-cy="id" formControlName="id" [readonly]="true" />
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_completato" jhiTranslate="fitnessAngiottiApp.clienteToLezioneCorso.completato"
+            >Completato</label
+          >
+          <input
+            type="checkbox"
+            class="form-check"
+            name="completato"
+            id="field_completato"
+            data-cy="completato"
+            formControlName="completato"
+          />
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_dataCompletamento" jhiTranslate="fitnessAngiottiApp.clienteToLezioneCorso.dataCompletamento"
+            >Data Completamento</label
+          >
+          <div class="input-group">
+            <input
+              id="field_dataCompletamento"
+              data-cy="dataCompletamento"
+              type="text"
+              class="form-control"
+              name="dataCompletamento"
+              ngbDatepicker
+              #dataCompletamentoDp="ngbDatepicker"
+              formControlName="dataCompletamento"
+            />
+            <button type="button" class="btn btn-secondary" (click)="dataCompletamentoDp.toggle()">
+              <fa-icon icon="calendar-alt"></fa-icon>
+            </button>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label" for="field_cliente" jhiTranslate="fitnessAngiottiApp.clienteToLezioneCorso.cliente">Cliente</label>
+          <select
+            class="form-control"
+            id="field_cliente"
+            data-cy="cliente"
+            name="cliente"
+            formControlName="cliente"
+            [compareWith]="compareCliente"
+          >
+            @if (!editForm.get('cliente')!.value) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (clienteOption of clientesSharedCollection; track $index) {
+              <option [ngValue]="clienteOption">{{ clienteOption.email }}</option>
+            }
+          </select>
+        </div>
+        @if (editForm.get(['cliente'])!.invalid && (editForm.get(['cliente'])!.dirty || editForm.get(['cliente'])!.touched)) {
+          <div>
+            @if (editForm.get(['cliente'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+            }
+          </div>
+        }
+
+        <div class="mb-3">
+          <label class="form-label" for="field_lezioneCorso" jhiTranslate="fitnessAngiottiApp.clienteToLezioneCorso.lezioneCorso"
+            >Lezione Corso</label
+          >
+          <select
+            class="form-control"
+            id="field_lezioneCorso"
+            data-cy="lezioneCorso"
+            name="lezioneCorso"
+            formControlName="lezioneCorso"
+            [compareWith]="compareLezioneCorso"
+          >
+            @if (!editForm.get('lezioneCorso')!.value) {
+              <option [ngValue]="null" selected></option>
+            }
+            @for (lezioneCorsoOption of lezioneCorsosSharedCollection; track $index) {
+              <option [ngValue]="lezioneCorsoOption">{{ lezioneCorsoOption.titolo }}</option>
+            }
+          </select>
+        </div>
+        @if (
+          editForm.get(['lezioneCorso'])!.invalid && (editForm.get(['lezioneCorso'])!.dirty || editForm.get(['lezioneCorso'])!.touched)
+        ) {
+          <div>
+            @if (editForm.get(['lezioneCorso'])?.errors?.required) {
+              <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+            }
+          </div>
+        }
+      </div>
+
+      <div>
+        <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" (click)="previousState()">
+          <fa-icon icon="ban"></fa-icon>&nbsp;<span jhiTranslate="entity.action.cancel">Annulla</span>
+        </button>
+
+        <button
+          type="submit"
+          id="save-entity"
+          data-cy="entityCreateSaveButton"
+          [disabled]="editForm.invalid || isSaving"
+          class="btn btn-primary"
+        >
+          <fa-icon icon="save"></fa-icon>&nbsp;<span jhiTranslate="entity.action.save">Salva</span>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

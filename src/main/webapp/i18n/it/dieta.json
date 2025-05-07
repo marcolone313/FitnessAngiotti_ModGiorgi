@@ -1,0 +1,29 @@
+{
+  "fitnessAngiottiApp": {
+    "dieta": {
+      "home": {
+        "title": "Dietas",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Genera un nuovo Dieta",
+        "createOrEditLabel": "Genera o modifica un Dieta",
+        "notFound": "No Dietas found"
+      },
+      "created": "&Egrave; stato generato un nuovo Dieta con identificatore {{ param }}",
+      "updated": "&Egrave; stato aggiornato Dieta identificato da {{ param }}",
+      "deleted": "&Egrave; stato eliminato Dieta con identificatore {{ param }}",
+      "delete": {
+        "question": "Sei sicuro di volere eliminare Dieta {{ id }}?"
+      },
+      "detail": {
+        "title": "Dieta"
+      },
+      "id": "ID",
+      "dataCreazione": "Data Creazione",
+      "mese": "Mese",
+      "tipo": "Tipo",
+      "macros": "Macros",
+      "fabbisognoCalorico": "Fabbisogno Calorico",
+      "cliente": "Cliente"
+    }
+  }
+}

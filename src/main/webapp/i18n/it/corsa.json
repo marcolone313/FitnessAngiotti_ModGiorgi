@@ -1,0 +1,29 @@
+{
+  "fitnessAngiottiApp": {
+    "corsa": {
+      "home": {
+        "title": "Corsas",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Genera un nuovo Corsa",
+        "createOrEditLabel": "Genera o modifica un Corsa",
+        "notFound": "No Corsas found"
+      },
+      "created": "&Egrave; stato generato un nuovo Corsa con identificatore {{ param }}",
+      "updated": "&Egrave; stato aggiornato Corsa identificato da {{ param }}",
+      "deleted": "&Egrave; stato eliminato Corsa con identificatore {{ param }}",
+      "delete": {
+        "question": "Sei sicuro di volere eliminare Corsa {{ id }}?"
+      },
+      "detail": {
+        "title": "Corsa"
+      },
+      "id": "ID",
+      "distanzaDaPercorrere": "Distanza Da Percorrere",
+      "tempoImpiegato": "Tempo Impiegato",
+      "svolto": "Svolto",
+      "completato": "Completato",
+      "feedback": "Feedback",
+      "allenamentoGiornaliero": "Allenamento Giornaliero"
+    }
+  }
+}

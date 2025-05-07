@@ -1,0 +1,484 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog" xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext" xmlns:pro="http://www.liquibase.org/xml/ns/pro" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-latest.xsd http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
+    <changeSet author="depaloantonio (generated)" id="1738746005573-1">
+        <createTable tableName="allenamento_giornaliero">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="allenamento_giornalieroPK"/>
+            </column>
+            <column name="data_allenamento" type="date"/>
+            <column name="giorno" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="nota_trainer" type="TINYTEXT"/>
+            <column name="svolto" type="BIT"/>
+            <column name="tipo" type="ENUM">
+                <constraints nullable="false"/>
+            </column>
+            <column name="scheda_settimanale_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-2">
+        <createTable tableName="circonferenza">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="circonferenzaPK"/>
+            </column>
+            <column name="avambraccio" type="FLOAT(23)"/>
+            <column name="braccio" type="FLOAT(23)"/>
+            <column name="coscia" type="FLOAT(23)"/>
+            <column name="data_inserimento" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fianchi" type="FLOAT(23)"/>
+            <column name="mese" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="ombelico" type="FLOAT(23)"/>
+            <column name="sotto_ombelico" type="FLOAT(23)"/>
+            <column name="torace" type="FLOAT(23)"/>
+            <column name="vita" type="FLOAT(23)"/>
+            <column name="cliente_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-3">
+        <createTable tableName="circuito">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="circuitoPK"/>
+            </column>
+            <column name="catena_ripetizioni" type="VARCHAR(255)"/>
+            <column name="circuiti_completati" type="INT"/>
+            <column name="completato" type="BIT"/>
+            <column name="feedback" type="TINYTEXT"/>
+            <column name="svolto" type="BIT"/>
+            <column name="tempo_impiegato" type="DECIMAL(21, 0)"/>
+            <column name="tempo_limite" type="DECIMAL(21, 0)"/>
+            <column name="allenamento_giornaliero_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-4">
+        <createTable tableName="circuito_to_esercizio">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="circuito_to_esercizioPK"/>
+            </column>
+            <column name="reps" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="circuito_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="esercizio_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-5">
+        <createTable tableName="cliente">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="clientePK"/>
+            </column>
+            <column name="codice_cliente" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="codice_fiscale" type="VARCHAR(16)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cognome" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data_di_nascita" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="email" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="foto" type="TINYBLOB"/>
+            <column name="foto_content_type" type="VARCHAR(255)"/>
+            <column name="nome" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="telefono" type="VARCHAR(255)"/>
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-6">
+        <createTable tableName="cliente_to_lezione_corso">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="cliente_to_lezione_corsoPK"/>
+            </column>
+            <column name="completato" type="BIT"/>
+            <column name="data_completamento" type="date"/>
+            <column name="cliente_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="lezione_corso_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-7">
+        <createTable tableName="corsa">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="corsaPK"/>
+            </column>
+            <column name="completato" type="BIT"/>
+            <column name="distanza_da_percorrere" type="FLOAT(23)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="feedback" type="TINYTEXT"/>
+            <column name="svolto" type="BIT"/>
+            <column name="tempo_impiegato" type="DECIMAL(21, 0)"/>
+            <column name="allenamento_giornaliero_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-8">
+        <createTable tableName="corso_academy">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="corso_academyPK"/>
+            </column>
+            <column name="livello" type="ENUM">
+                <constraints nullable="false"/>
+            </column>
+            <column name="titolo" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-9">
+        <createTable tableName="dieta">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="dietaPK"/>
+            </column>
+            <column name="data_creazione" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="fabbisogno_calorico" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="macros" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mese" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tipo" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cliente_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-10">
+        <createTable tableName="esercizio">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="esercizioPK"/>
+            </column>
+            <column name="descrizione" type="TINYTEXT"/>
+            <column name="foto" type="TINYBLOB"/>
+            <column name="foto_content_type" type="VARCHAR(255)"/>
+            <column name="nome" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="tipo" type="ENUM">
+                <constraints nullable="false"/>
+            </column>
+            <column name="video_url" type="VARCHAR(255)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-11">
+        <createTable tableName="gym">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="gymPK"/>
+            </column>
+            <column name="completato" type="BIT"/>
+            <column name="feedback" type="TINYTEXT"/>
+            <column name="peso" type="FLOAT(23)"/>
+            <column name="recupero" type="DECIMAL(21, 0)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reps" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="sets" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="svolto" type="BIT"/>
+            <column name="allenamento_giornaliero_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="esercizio_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-12">
+        <createTable tableName="jhi_authority">
+            <column name="name" type="VARCHAR(50)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="jhi_authorityPK"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-13">
+        <createTable tableName="jhi_user">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="jhi_userPK"/>
+            </column>
+            <column name="created_by" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_date" type="datetime(6)"/>
+            <column name="last_modified_by" type="VARCHAR(50)"/>
+            <column name="last_modified_date" type="datetime(6)"/>
+            <column name="activated" type="BIT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="activation_key" type="VARCHAR(20)"/>
+            <column name="email" type="VARCHAR(254)"/>
+            <column name="first_name" type="VARCHAR(50)"/>
+            <column name="image_url" type="VARCHAR(256)"/>
+            <column name="lang_key" type="VARCHAR(10)"/>
+            <column name="last_name" type="VARCHAR(50)"/>
+            <column name="login" type="VARCHAR(50)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="password_hash" type="VARCHAR(60)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="reset_date" type="datetime(6)"/>
+            <column name="reset_key" type="VARCHAR(20)"/>
+        </createTable>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-14">
+        <createTable tableName="jhi_user_authority">
+            <column name="user_id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="jhi_user_authorityPK"/>
+            </column>
+            <column name="authority_name" type="VARCHAR(50)">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="jhi_user_authorityPK"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-15">
+        <createTable tableName="lezione_corso">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="lezione_corsoPK"/>
+            </column>
+            <column name="descrizione" type="TINYTEXT"/>
+            <column name="punti_focali" type="TINYTEXT"/>
+            <column name="titolo" type="VARCHAR(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="video_url" type="VARCHAR(255)"/>
+            <column name="corso_academy_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-16">
+        <createTable tableName="passaggio_esercizio">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="passaggio_esercizioPK"/>
+            </column>
+            <column name="descrizione" type="TINYTEXT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="indice" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="esercizio_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-17">
+        <createTable tableName="peso_cliente">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="peso_clientePK"/>
+            </column>
+            <column name="data_inserimento" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mese" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="peso" type="FLOAT(23)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cliente_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-18">
+        <createTable tableName="plicometria">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="plicometriaPK"/>
+            </column>
+            <column name="addome" type="FLOAT(23)"/>
+            <column name="ascella" type="FLOAT(23)"/>
+            <column name="coscia" type="FLOAT(23)"/>
+            <column name="data_inserimento" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mese" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="petto" type="FLOAT(23)"/>
+            <column name="soprailliaca" type="FLOAT(23)"/>
+            <column name="sottoscapolare" type="FLOAT(23)"/>
+            <column name="tricipite" type="FLOAT(23)"/>
+            <column name="cliente_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-19">
+        <createTable tableName="report_settimanale">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="report_settimanalePK"/>
+            </column>
+            <column name="analisi_report" type="TINYTEXT"/>
+            <column name="commento_allenamento" type="TINYTEXT"/>
+            <column name="data_completamento" type="date"/>
+            <column name="data_creazione" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data_scadenza" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="giorni_dieta" type="ENUM"/>
+            <column name="media_ore_sonno" type="DECIMAL(21, 0)"/>
+            <column name="peso_medio" type="FLOAT(23)"/>
+            <column name="puntuale" type="BIT"/>
+            <column name="qualita_sonno" type="ENUM"/>
+            <column name="voto" type="ENUM"/>
+            <column name="cliente_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="scheda_settimanale_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-20">
+        <createTable tableName="scheda_settimanale">
+            <column autoIncrement="true" name="id" type="BIGINT">
+                <constraints nullable="false" primaryKey="true" primaryKeyName="scheda_settimanalePK"/>
+            </column>
+            <column name="anno" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data_creazione" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="mese" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="settimana" type="INT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="cliente_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-21">
+        <addUniqueConstraint columnNames="allenamento_giornaliero_id" constraintName="UC_CIRCUITOALLENAMENTO_GIORNALIERO_ID_COL" tableName="circuito"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-22">
+        <addUniqueConstraint columnNames="codice_cliente" constraintName="UC_CLIENTECODICE_CLIENTE_COL" tableName="cliente"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-23">
+        <addUniqueConstraint columnNames="codice_fiscale" constraintName="UC_CLIENTECODICE_FISCALE_COL" tableName="cliente"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-24">
+        <addUniqueConstraint columnNames="email" constraintName="UC_CLIENTEEMAIL_COL" tableName="cliente"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-25">
+        <addUniqueConstraint columnNames="user_id" constraintName="UC_CLIENTEUSER_ID_COL" tableName="cliente"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-26">
+        <addUniqueConstraint columnNames="allenamento_giornaliero_id" constraintName="UC_CORSAALLENAMENTO_GIORNALIERO_ID_COL" tableName="corsa"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-27">
+        <addUniqueConstraint columnNames="email" constraintName="UC_JHI_USEREMAIL_COL" tableName="jhi_user"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-28">
+        <addUniqueConstraint columnNames="login" constraintName="UC_JHI_USERLOGIN_COL" tableName="jhi_user"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-29">
+        <addUniqueConstraint columnNames="scheda_settimanale_id" constraintName="UC_REPORT_SETTIMANALESCHEDA_SETTIMANALE_ID_COL" tableName="report_settimanale"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-30">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="jhi_user_authority" constraintName="FK290okww5jujghp4el5i7mgwu0" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="jhi_user" validate="true"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-31">
+        <addForeignKeyConstraint baseColumnNames="corso_academy_id" baseTableName="lezione_corso" constraintName="FK2g67oyeao2tim99ghuly3pky6" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="corso_academy" validate="true"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-32">
+        <addForeignKeyConstraint baseColumnNames="cliente_id" baseTableName="peso_cliente" constraintName="FK3vi2m257jl9wyo1rltul8wttp" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="cliente" validate="true"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-33">
+        <addForeignKeyConstraint baseColumnNames="authority_name" baseTableName="jhi_user_authority" constraintName="FK4psxl0jtx6nr7rhqbynr6itoc" deferrable="false" initiallyDeferred="false" referencedColumnNames="name" referencedTableName="jhi_authority" validate="true"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-34">
+        <addForeignKeyConstraint baseColumnNames="allenamento_giornaliero_id" baseTableName="gym" constraintName="FK5ifygmbom0bc1dx6t94m17vkj" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="allenamento_giornaliero" validate="true"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-35">
+        <addForeignKeyConstraint baseColumnNames="esercizio_id" baseTableName="passaggio_esercizio" constraintName="FK64qq6dknh33xce8sxodym1pdo" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="esercizio" validate="true"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-36">
+        <addForeignKeyConstraint baseColumnNames="cliente_id" baseTableName="plicometria" constraintName="FK6fy3eor8uygcbe5cb8b5bv7li" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="cliente" validate="true"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-37">
+        <addForeignKeyConstraint baseColumnNames="cliente_id" baseTableName="dieta" constraintName="FK74sqt789roxdcmscoo3aekffy" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="cliente" validate="true"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-38">
+        <addForeignKeyConstraint baseColumnNames="allenamento_giornaliero_id" baseTableName="circuito" constraintName="FK9r3t9t2ytkxjwmuqw22cbne4e" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="allenamento_giornaliero" validate="true"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-39">
+        <addForeignKeyConstraint baseColumnNames="esercizio_id" baseTableName="gym" constraintName="FKbj8l2lk1l8a1ryt4l6on3oqom" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="esercizio" validate="true"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-40">
+        <addForeignKeyConstraint baseColumnNames="lezione_corso_id" baseTableName="cliente_to_lezione_corso" constraintName="FKekhcfy1jo8clmlfkn4ytib9li" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="lezione_corso" validate="true"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-41">
+        <addForeignKeyConstraint baseColumnNames="cliente_id" baseTableName="cliente_to_lezione_corso" constraintName="FKg9rx0dfv5wpy2g1l32eg6wc7x" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="cliente" validate="true"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-42">
+        <addForeignKeyConstraint baseColumnNames="cliente_id" baseTableName="circonferenza" constraintName="FKi41udnfyb8epoaa6b2upeufje" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="cliente" validate="true"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-43">
+        <addForeignKeyConstraint baseColumnNames="user_id" baseTableName="cliente" constraintName="FKj7d5cx2d20ln5b3txdpex8e41" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="jhi_user" validate="true"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-44">
+        <addForeignKeyConstraint baseColumnNames="esercizio_id" baseTableName="circuito_to_esercizio" constraintName="FKj9qqftl6orfykrb7h4pooyy8f" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="esercizio" validate="true"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-45">
+        <addForeignKeyConstraint baseColumnNames="allenamento_giornaliero_id" baseTableName="corsa" constraintName="FKk2c5aophfllqrjndu74rmjyx5" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="allenamento_giornaliero" validate="true"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-46">
+        <addForeignKeyConstraint baseColumnNames="cliente_id" baseTableName="scheda_settimanale" constraintName="FKm2nn9r66vegdwpb5h2ejbq2sb" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="cliente" validate="true"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-47">
+        <addForeignKeyConstraint baseColumnNames="circuito_id" baseTableName="circuito_to_esercizio" constraintName="FKmswj69bsxdknaj17c9vaoq6yw" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="circuito" validate="true"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-48">
+        <addForeignKeyConstraint baseColumnNames="cliente_id" baseTableName="report_settimanale" constraintName="FKpbkt5y78fdc5ij0fmbokwadii" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="cliente" validate="true"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-49">
+        <addForeignKeyConstraint baseColumnNames="scheda_settimanale_id" baseTableName="report_settimanale" constraintName="FKpv2a7opn1bad4ctrqqd4guowc" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="scheda_settimanale" validate="true"/>
+    </changeSet>
+    <changeSet author="depaloantonio (generated)" id="1738746005573-50">
+        <addForeignKeyConstraint baseColumnNames="scheda_settimanale_id" baseTableName="allenamento_giornaliero" constraintName="FKtdf2j6ewtd9wkv3u0qvdrb7e4" deferrable="false" initiallyDeferred="false" referencedColumnNames="id" referencedTableName="scheda_settimanale" validate="true"/>
+    </changeSet>
+</databaseChangeLog>

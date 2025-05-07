@@ -1,0 +1,241 @@
+<div>
+  <h2 id="page-heading" data-cy="ReportSettimanaleHeading">
+    <span jhiTranslate="fitnessAngiottiApp.reportSettimanale.home.title">ReportSettimanales</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [animation]="isLoading ? 'spin' : undefined"></fa-icon>
+        <span jhiTranslate="fitnessAngiottiApp.reportSettimanale.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-report-settimanale"
+        [routerLink]="['/report-settimanale/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span jhiTranslate="fitnessAngiottiApp.reportSettimanale.home.createLabel">Genera un nuovo Report Settimanale</span>
+      </button>
+    </div>
+  </h2>
+
+  <jhi-alert-error></jhi-alert-error>
+
+  <jhi-alert></jhi-alert>
+
+  <jhi-filter [filters]="filters"></jhi-filter>
+
+  @if (reportSettimanales?.length === 0) {
+    <div class="alert alert-warning" id="no-result">
+      <span jhiTranslate="fitnessAngiottiApp.reportSettimanale.home.notFound">No Report Settimanales found</span>
+    </div>
+  }
+
+  @if (reportSettimanales && reportSettimanales.length > 0) {
+    <div class="table-responsive table-entities" id="entities">
+      <table class="table table-striped" aria-describedby="page-heading">
+        <thead>
+          <tr jhiSort [sortState]="sortState" (sortChange)="navigateToWithComponentValues($event)">
+            <th scope="col" jhiSortBy="id">
+              <div class="d-flex">
+                <span jhiTranslate="global.field.id">ID</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="voto">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.reportSettimanale.voto">Voto</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="commentoAllenamento">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.reportSettimanale.commentoAllenamento">Commento Allenamento</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="giorniDieta">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.reportSettimanale.giorniDieta">Giorni Dieta</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="pesoMedio">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.reportSettimanale.pesoMedio">Peso Medio</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="qualitaSonno">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.reportSettimanale.qualitaSonno">Qualita Sonno</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="mediaOreSonno">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.reportSettimanale.mediaOreSonno">Media Ore Sonno</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dataCreazione">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.reportSettimanale.dataCreazione">Data Creazione</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dataScadenza">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.reportSettimanale.dataScadenza">Data Scadenza</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="dataCompletamento">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.reportSettimanale.dataCompletamento">Data Completamento</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="puntuale">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.reportSettimanale.puntuale">Puntuale</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="analisiReport">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.reportSettimanale.analisiReport">Analisi Report</span>
+
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="schedaSettimanale.id">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.reportSettimanale.schedaSettimanale">Scheda Settimanale</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col" jhiSortBy="cliente.email">
+              <div class="d-flex">
+                <span jhiTranslate="fitnessAngiottiApp.reportSettimanale.cliente">Cliente</span>
+                <fa-icon class="p-1" icon="sort"></fa-icon>
+              </div>
+            </th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (reportSettimanale of reportSettimanales; track trackId(reportSettimanale)) {
+            <tr data-cy="entityTable">
+              <td>
+                <a [routerLink]="['/report-settimanale', reportSettimanale.id, 'view']">{{ reportSettimanale.id }}</a>
+              </td>
+              <td [jhiTranslate]="'fitnessAngiottiApp.Voto.' + (reportSettimanale.voto ?? 'null')">
+                {{
+                  { null: '', INSUFFICIENTE: 'INSUFFICIENTE', SUFFICIENTE: 'SUFFICIENTE', BUONO: 'BUONO', OTTIMO: 'OTTIMO' }[
+                    reportSettimanale.voto ?? 'null'
+                  ]
+                }}
+              </td>
+              <td>{{ reportSettimanale.commentoAllenamento }}</td>
+              <td [jhiTranslate]="'fitnessAngiottiApp.Voto.' + (reportSettimanale.giorniDieta ?? 'null')">
+                {{
+                  { null: '', INSUFFICIENTE: 'INSUFFICIENTE', SUFFICIENTE: 'SUFFICIENTE', BUONO: 'BUONO', OTTIMO: 'OTTIMO' }[
+                    reportSettimanale.giorniDieta ?? 'null'
+                  ]
+                }}
+              </td>
+              <td>{{ reportSettimanale.pesoMedio }}</td>
+              <td [jhiTranslate]="'fitnessAngiottiApp.Voto.' + (reportSettimanale.qualitaSonno ?? 'null')">
+                {{
+                  { null: '', INSUFFICIENTE: 'INSUFFICIENTE', SUFFICIENTE: 'SUFFICIENTE', BUONO: 'BUONO', OTTIMO: 'OTTIMO' }[
+                    reportSettimanale.qualitaSonno ?? 'null'
+                  ]
+                }}
+              </td>
+              <td title="{{ reportSettimanale.mediaOreSonno }}">{{ reportSettimanale.mediaOreSonno | duration }}</td>
+              <td>{{ reportSettimanale.dataCreazione | formatMediumDate }}</td>
+              <td>{{ reportSettimanale.dataScadenza | formatMediumDate }}</td>
+              <td>{{ reportSettimanale.dataCompletamento | formatMediumDate }}</td>
+              <td>{{ reportSettimanale.puntuale }}</td>
+              <td>{{ reportSettimanale.analisiReport }}</td>
+              <td>
+                @if (reportSettimanale.schedaSettimanale) {
+                  <div>
+                    <a [routerLink]="['/scheda-settimanale', reportSettimanale.schedaSettimanale.id, 'view']">{{
+                      reportSettimanale.schedaSettimanale.id
+                    }}</a>
+                  </div>
+                }
+              </td>
+              <td>
+                @if (reportSettimanale.cliente) {
+                  <div>
+                    <a [routerLink]="['/cliente', reportSettimanale.cliente.id, 'view']">{{ reportSettimanale.cliente.email }}</a>
+                  </div>
+                }
+              </td>
+              <td class="text-end">
+                <div class="btn-group">
+                  <a
+                    [routerLink]="['/report-settimanale', reportSettimanale.id, 'view']"
+                    class="btn btn-info btn-sm"
+                    data-cy="entityDetailsButton"
+                  >
+                    <fa-icon icon="eye"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Visualizza</span>
+                  </a>
+
+                  <a
+                    [routerLink]="['/report-settimanale', reportSettimanale.id, 'edit']"
+                    class="btn btn-primary btn-sm"
+                    data-cy="entityEditButton"
+                  >
+                    <fa-icon icon="pencil-alt"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Modifica</span>
+                  </a>
+
+                  <button type="submit" (click)="delete(reportSettimanale)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                    <fa-icon icon="times"></fa-icon>
+                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Elimina</span>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
+  @if (reportSettimanales && reportSettimanales.length > 0) {
+    <div>
+      <div class="d-flex justify-content-center">
+        <jhi-item-count [params]="{ page: page, totalItems: totalItems, itemsPerPage: itemsPerPage }"></jhi-item-count>
+      </div>
+
+      <div class="d-flex justify-content-center">
+        <ngb-pagination
+          [collectionSize]="totalItems"
+          [page]="page"
+          [pageSize]="itemsPerPage"
+          [maxSize]="5"
+          [rotate]="true"
+          [boundaryLinks]="true"
+          (pageChange)="navigateToPage($event)"
+        ></ngb-pagination>
+      </div>
+    </div>
+  }
+</div>

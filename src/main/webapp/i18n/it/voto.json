@@ -1,0 +1,11 @@
+{
+  "fitnessAngiottiApp": {
+    "Voto": {
+      "null": "",
+      "INSUFFICIENTE": "INSUFFICIENTE",
+      "SUFFICIENTE": "SUFFICIENTE",
+      "BUONO": "BUONO",
+      "OTTIMO": "OTTIMO"
+    }
+  }
+}

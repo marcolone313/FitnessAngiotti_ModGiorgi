@@ -1,0 +1,42 @@
+{
+  "annotations": {
+    "changelogDate": "20241213084627"
+  },
+  "applications": "*",
+  "dto": "mapstruct",
+  "fields": [
+    {
+      "fieldName": "peso",
+      "fieldType": "Float",
+      "fieldValidateRules": ["min", "required"],
+      "fieldValidateRulesMin": "0"
+    },
+    {
+      "fieldName": "mese",
+      "fieldType": "Integer",
+      "fieldValidateRules": ["min", "max", "required"],
+      "fieldValidateRulesMax": "12",
+      "fieldValidateRulesMin": "1"
+    },
+    {
+      "fieldName": "dataInserimento",
+      "fieldType": "LocalDate",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "jpaMetamodelFiltering": true,
+  "name": "PesoCliente",
+  "pagination": "pagination",
+  "relationships": [
+    {
+      "otherEntityField": "email",
+      "otherEntityName": "cliente",
+      "relationshipName": "cliente",
+      "relationshipSide": "left",
+      "relationshipType": "many-to-one",
+      "relationshipValidateRules": "required"
+    }
+  ],
+  "searchEngine": "no",
+  "service": "serviceClass"
+}

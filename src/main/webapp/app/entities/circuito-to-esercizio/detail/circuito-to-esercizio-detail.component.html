@@ -1,0 +1,54 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (circuitoToEsercizio(); as circuitoToEsercizioRef) {
+      <div>
+        <h2 data-cy="circuitoToEsercizioDetailsHeading">
+          <span jhiTranslate="fitnessAngiottiApp.circuitoToEsercizio.detail.title">Circuito To Esercizio</span>
+        </h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ circuitoToEsercizioRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.circuitoToEsercizio.reps">Reps</span></dt>
+          <dd>
+            <span>{{ circuitoToEsercizioRef.reps }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.circuitoToEsercizio.esercizio">Esercizio</span></dt>
+          <dd>
+            @if (circuitoToEsercizio()!.esercizio) {
+              <div>
+                <a [routerLink]="['/esercizio', circuitoToEsercizio()!.esercizio?.id, 'view']">{{
+                  circuitoToEsercizioRef.esercizio?.nome
+                }}</a>
+              </div>
+            }
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.circuitoToEsercizio.circuito">Circuito</span></dt>
+          <dd>
+            @if (circuitoToEsercizio()!.circuito) {
+              <div>
+                <a [routerLink]="['/circuito', circuitoToEsercizio()!.circuito?.id, 'view']">{{ circuitoToEsercizioRef.circuito?.id }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Indietro</span>
+        </button>
+
+        <button type="button" [routerLink]="['/circuito-to-esercizio', circuitoToEsercizioRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Modifica</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>

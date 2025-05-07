@@ -1,0 +1,29 @@
+{
+  "fitnessAngiottiApp": {
+    "schedaSettimanale": {
+      "home": {
+        "title": "SchedaSettimanales",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Genera un nuovo Scheda Settimanale",
+        "createOrEditLabel": "Genera o modifica un Scheda Settimanale",
+        "notFound": "No Scheda Settimanales found"
+      },
+      "created": "&Egrave; stato generato un nuovo Scheda Settimanale con identificatore {{ param }}",
+      "updated": "&Egrave; stato aggiornato Scheda Settimanale identificato da {{ param }}",
+      "deleted": "&Egrave; stato eliminato Scheda Settimanale con identificatore {{ param }}",
+      "delete": {
+        "question": "Sei sicuro di volere eliminare Scheda Settimanale {{ id }}?"
+      },
+      "detail": {
+        "title": "Scheda Settimanale"
+      },
+      "id": "ID",
+      "anno": "Anno",
+      "mese": "Mese",
+      "settimana": "Settimana",
+      "dataCreazione": "Data Creazione",
+      "cliente": "Cliente",
+      "reportSettimanale": "Report Settimanale"
+    }
+  }
+}

@@ -1,0 +1,56 @@
+<div class="d-flex justify-content-center">
+  <div class="col-8">
+    @if (lezioneCorso(); as lezioneCorsoRef) {
+      <div>
+        <h2 data-cy="lezioneCorsoDetailsHeading"><span jhiTranslate="fitnessAngiottiApp.lezioneCorso.detail.title">Lezione Corso</span></h2>
+
+        <hr />
+
+        <jhi-alert-error></jhi-alert-error>
+
+        <jhi-alert></jhi-alert>
+
+        <dl class="row-md jh-entity-details">
+          <dt><span jhiTranslate="global.field.id">ID</span></dt>
+          <dd>
+            <span>{{ lezioneCorsoRef.id }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.lezioneCorso.titolo">Titolo</span></dt>
+          <dd>
+            <span>{{ lezioneCorsoRef.titolo }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.lezioneCorso.descrizione">Descrizione</span></dt>
+          <dd>
+            <span>{{ lezioneCorsoRef.descrizione }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.lezioneCorso.puntiFocali">Punti Focali</span></dt>
+          <dd>
+            <span>{{ lezioneCorsoRef.puntiFocali }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.lezioneCorso.videoUrl">Video Url</span></dt>
+          <dd>
+            <span>{{ lezioneCorsoRef.videoUrl }}</span>
+          </dd>
+          <dt><span jhiTranslate="fitnessAngiottiApp.lezioneCorso.corsoAcademy">Corso Academy</span></dt>
+          <dd>
+            @if (lezioneCorso()!.corsoAcademy) {
+              <div>
+                <a [routerLink]="['/corso-academy', lezioneCorso()!.corsoAcademy?.id, 'view']">{{
+                  lezioneCorsoRef.corsoAcademy?.titolo
+                }}</a>
+              </div>
+            }
+          </dd>
+        </dl>
+
+        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Indietro</span>
+        </button>
+
+        <button type="button" [routerLink]="['/lezione-corso', lezioneCorsoRef.id, 'edit']" class="btn btn-primary">
+          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Modifica</span>
+        </button>
+      </div>
+    }
+  </div>
+</div>
