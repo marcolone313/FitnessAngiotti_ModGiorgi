@@ -1,106 +1,562 @@
 <div class="d-flex justify-content-center">
-  <div class="col-8">
+  <div class="col-10">
     @if (cliente(); as clienteRef) {
       <div>
-        <h2 data-cy="clienteDetailsHeading"><span jhiTranslate="fitnessAngiottiApp.cliente.detail.title">Cliente</span></h2>
+        <h2 data-cy="clienteDetailsHeading">
+          <span jhiTranslate="fitnessAngiottiApp.cliente.detail.title">Cliente</span> - {{ clienteRef.nome }} {{ clienteRef.cognome }}
+        </h2>
 
         <hr />
 
         <jhi-alert-error></jhi-alert-error>
-
         <jhi-alert></jhi-alert>
 
-        <dl class="row-md jh-entity-details">
-          <dt><span jhiTranslate="global.field.id">ID</span></dt>
-          <dd>
-            <span>{{ clienteRef.id }}</span>
-          </dd>
-          <dt><span jhiTranslate="fitnessAngiottiApp.cliente.nome">Nome</span></dt>
-          <dd>
-            <span>{{ clienteRef.nome }}</span>
-          </dd>
-          <dt><span jhiTranslate="fitnessAngiottiApp.cliente.cognome">Cognome</span></dt>
-          <dd>
-            <span>{{ clienteRef.cognome }}</span>
-          </dd>
-          <dt><span jhiTranslate="fitnessAngiottiApp.cliente.dataDiNascita">Data Di Nascita</span></dt>
-          <dd>
-            <span>{{ clienteRef.dataDiNascita | formatMediumDate }}</span>
-          </dd>
-          <dt><span jhiTranslate="fitnessAngiottiApp.cliente.codiceFiscale">Codice Fiscale</span></dt>
-          <dd>
-            <span>{{ clienteRef.codiceFiscale }}</span>
-          </dd>
-          <dt><span jhiTranslate="fitnessAngiottiApp.cliente.codiceCliente">Codice Cliente</span></dt>
-          <dd>
-            <span>{{ clienteRef.codiceCliente }}</span>
-          </dd>
-          <dt><span jhiTranslate="fitnessAngiottiApp.cliente.email">Email</span></dt>
-          <dd>
-            <span>{{ clienteRef.email }}</span>
-          </dd>
-          <dt><span jhiTranslate="fitnessAngiottiApp.cliente.telefono">Telefono</span></dt>
-          <dd>
-            <span>{{ clienteRef.telefono }}</span>
-          </dd>
-          <dt><span jhiTranslate="fitnessAngiottiApp.cliente.foto">Foto</span></dt>
-          <dd>
-            @if (clienteRef.foto) {
-              <div>
-                <a (click)="openFile(clienteRef.foto ?? '', clienteRef.fotoContentType)">
-                  <img [src]="'data:' + clienteRef.fotoContentType + ';base64,' + clienteRef.foto" style="max-width: 100%" alt="cliente" />
+        <!-- Cliente details -->
+        <div class="card mb-4">
+          <div class="card-header">
+            <h4>Informazioni Anagrafiche</h4>
+          </div>
+          <div class="card-body">
+            <dl class="row-md jh-entity-details">
+              <dt><span jhiTranslate="global.field.id">ID</span></dt>
+              <dd>
+                <span>{{ clienteRef.id }}</span>
+              </dd>
+
+              <dt><span jhiTranslate="fitnessAngiottiApp.cliente.nome">Nome</span></dt>
+              <dd>
+                <span>{{ clienteRef.nome }}</span>
+              </dd>
+
+              <dt><span jhiTranslate="fitnessAngiottiApp.cliente.cognome">Cognome</span></dt>
+              <dd>
+                <span>{{ clienteRef.cognome }}</span>
+              </dd>
+
+              <dt><span jhiTranslate="fitnessAngiottiApp.cliente.dataDiNascita">Data Di Nascita</span></dt>
+              <dd>
+                <span>{{ clienteRef.dataDiNascita | formatMediumDate }}</span>
+              </dd>
+
+              <dt><span jhiTranslate="fitnessAngiottiApp.cliente.codiceFiscale">Codice Fiscale</span></dt>
+              <dd>
+                <span>{{ clienteRef.codiceFiscale }}</span>
+              </dd>
+
+              <dt><span jhiTranslate="fitnessAngiottiApp.cliente.codiceCliente">Codice Cliente</span></dt>
+              <dd>
+                <span>{{ clienteRef.codiceCliente }}</span>
+              </dd>
+
+              <dt><span jhiTranslate="fitnessAngiottiApp.cliente.email">Email</span></dt>
+              <dd>
+                <span>{{ clienteRef.email }}</span>
+              </dd>
+
+              <dt><span jhiTranslate="fitnessAngiottiApp.cliente.telefono">Telefono</span></dt>
+              <dd>
+                <span>{{ clienteRef.telefono }}</span>
+              </dd>
+
+              <dt><span jhiTranslate="fitnessAngiottiApp.cliente.foto">Foto</span></dt>
+              <dd>
+                @if (clienteRef.foto) {
+                  <div>
+                    <a (click)="openFile(clienteRef.foto, clienteRef.fotoContentType)">
+                      <img
+                        [src]="'data:' + clienteRef.fotoContentType + ';base64,' + clienteRef.foto"
+                        style="max-width: 100%"
+                        alt="cliente"
+                      />
+                    </a>
+                    {{ clienteRef.fotoContentType }}, {{ byteSize(clienteRef.foto) }}
+                  </div>
+                }
+              </dd>
+
+              <dt><span jhiTranslate="fitnessAngiottiApp.cliente.user">User</span></dt>
+              <dd>
+                <span>{{ clienteRef.user?.login }}</span>
+              </dd>
+            </dl>
+          </div>
+          <div class="card-footer">
+            <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+              <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Indietro</span>
+            </button>
+
+            <button type="button" [routerLink]="['/cliente', clienteRef.id, 'edit']" class="btn btn-primary">
+              <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Modifica</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Measurements Tabs -->
+        <div class="card">
+          <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs">
+              <li class="nav-item">
+                <a class="nav-link" [class.active]="activeTab === 'peso'" (click)="setActiveTab('peso')">
+                  <fa-icon icon="balance-scale"></fa-icon> Peso
                 </a>
-                {{ clienteRef.fotoContentType }}, {{ byteSize(clienteRef.foto ?? '') }}
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" [class.active]="activeTab === 'plicometria'" (click)="setActiveTab('plicometria')">
+                  <fa-icon icon="chart-bar"></fa-icon> Plicometria
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" [class.active]="activeTab === 'circonferenza'" (click)="setActiveTab('circonferenza')">
+                  <fa-icon icon="circle"></fa-icon> Circonferenze
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card-body">
+            <!-- Peso Tab Content -->
+            @if (activeTab === 'peso') {
+              <div class="row mb-4">
+                <div class="col-md-12">
+                  <h4>Misurazioni Peso</h4>
+                  @if (isLoadingPeso) {
+                    <div class="d-flex justify-content-center">
+                      <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Caricamento...</span>
+                      </div>
+                    </div>
+                  } @else if (pesi.length === 0) {
+                    <div class="alert alert-info">Nessuna misurazione del peso disponibile per questo cliente.</div>
+                  } @else {
+                    <div class="table-responsive">
+                      <table class="table table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Peso (kg)</th>
+                            <th>Mese</th>
+                            <th>Data Inserimento</th>
+                            <th>Azioni</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @for (peso of pesi; track peso.id) {
+                            <tr>
+                              <td>{{ peso.id }}</td>
+                              <td>
+                                <strong>{{ peso.peso }}</strong>
+                              </td>
+                              <td>{{ peso.mese }}</td>
+                              <td>{{ peso.dataInserimento | formatMediumDate }}</td>
+                              <td>
+                                <div class="btn-group">
+                                  <button class="btn btn-primary btn-sm" (click)="editPeso(peso)">
+                                    <fa-icon icon="pencil-alt"></fa-icon>
+                                  </button>
+                                  <button class="btn btn-danger btn-sm" (click)="deletePeso(peso)">
+                                    <fa-icon icon="times"></fa-icon>
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <!-- Quick Add Peso Form -->
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="card">
+                    <div class="card-header">
+                      <h5>Aggiungi Nuova Misurazione Peso</h5>
+                    </div>
+                    <div class="card-body">
+                      <form [formGroup]="pesoForm" (ngSubmit)="addNewPeso()">
+                        <div class="row">
+                          <div class="col-md-4 mb-3">
+                            <label class="form-label" for="peso">Peso (kg)</label>
+                            <input type="number" class="form-control" id="peso" formControlName="peso" />
+                            @if (pesoForm.get('peso')?.invalid && pesoForm.get('peso')?.touched) {
+                              <div class="invalid-feedback d-block">
+                                @if (pesoForm.get('peso')?.errors?.required) {
+                                  <small>Il peso è obbligatorio</small>
+                                }
+                                @if (pesoForm.get('peso')?.errors?.min) {
+                                  <small>Il peso deve essere maggiore di 0</small>
+                                }
+                              </div>
+                            }
+                          </div>
+
+                          <div class="col-md-4 mb-3">
+                            <label class="form-label" for="mese">Mese</label>
+                            <input type="number" class="form-control" id="mese" formControlName="mese" />
+                            @if (pesoForm.get('mese')?.invalid && pesoForm.get('mese')?.touched) {
+                              <div class="invalid-feedback d-block">
+                                @if (pesoForm.get('mese')?.errors?.required) {
+                                  <small>Il mese è obbligatorio</small>
+                                }
+                                @if (pesoForm.get('mese')?.errors?.min || pesoForm.get('mese')?.errors?.max) {
+                                  <small>Il mese deve essere compreso tra 1 e 12</small>
+                                }
+                              </div>
+                            }
+                          </div>
+
+                          <div class="col-md-4 mb-3">
+                            <label class="form-label" for="pesoDataInserimento">Data Inserimento</label>
+                            <div class="input-group">
+                              <input
+                                id="pesoDataInserimento"
+                                type="text"
+                                class="form-control"
+                                ngbDatepicker
+                                #pesoDataDp="ngbDatepicker"
+                                formControlName="dataInserimento"
+                              />
+                              <button type="button" class="btn btn-secondary" (click)="pesoDataDp.toggle()">
+                                <fa-icon icon="calendar-alt"></fa-icon>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                          <button type="submit" class="btn btn-success" [disabled]="pesoForm.invalid || isLoadingPeso">
+                            <fa-icon icon="save"></fa-icon>&nbsp;Salva Nuovo Peso
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
               </div>
             }
-          </dd>
-          <dt><span jhiTranslate="fitnessAngiottiApp.cliente.user">User</span></dt>
-          <dd>
-            <span>{{ clienteRef.user?.login }}</span>
-          </dd>
-        </dl>
 
-        <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Indietro</span>
-        </button>
+            <!-- Plicometria Tab Content -->
+            @if (activeTab === 'plicometria') {
+              <div class="row mb-4">
+                <div class="col-md-12">
+                  <h4>Misurazioni Plicometria</h4>
+                  @if (isLoadingPlic) {
+                    <div class="d-flex justify-content-center">
+                      <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Caricamento...</span>
+                      </div>
+                    </div>
+                  } @else if (plicometrie.length === 0) {
+                    <div class="alert alert-info">Nessuna misurazione plicometrica disponibile per questo cliente.</div>
+                  } @else {
+                    <div class="table-responsive">
+                      <table class="table table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Tricipite</th>
+                            <th>Petto</th>
+                            <th>Ascella</th>
+                            <th>Sottoscapolare</th>
+                            <th>Soprailliaca</th>
+                            <th>Addome</th>
+                            <th>Coscia</th>
+                            <th>Mese</th>
+                            <th>Data</th>
+                            <th>Azioni</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @for (plic of plicometrie; track plic.id) {
+                            <tr>
+                              <td>{{ plic.id }}</td>
+                              <td>{{ plic.tricipite }}</td>
+                              <td>{{ plic.petto }}</td>
+                              <td>{{ plic.ascella }}</td>
+                              <td>{{ plic.sottoscapolare }}</td>
+                              <td>{{ plic.soprailliaca }}</td>
+                              <td>{{ plic.addome }}</td>
+                              <td>{{ plic.coscia }}</td>
+                              <td>{{ plic.mese }}</td>
+                              <td>{{ plic.dataInserimento | formatMediumDate }}</td>
+                              <td>
+                                <div class="btn-group">
+                                  <button class="btn btn-primary btn-sm" (click)="editPlicometria(plic)">
+                                    <fa-icon icon="pencil-alt"></fa-icon>
+                                  </button>
+                                  <button class="btn btn-danger btn-sm" (click)="deletePlicometria(plic)">
+                                    <fa-icon icon="times"></fa-icon>
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                  }
+                </div>
+              </div>
 
-        <button type="button" [routerLink]="['/cliente', clienteRef.id, 'edit']" class="btn btn-primary">
-          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Modifica</span>
-        </button>
-      </div>
-    }
-  </div>
-</div>
+              <!-- Quick Add Plicometria Form -->
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="card">
+                    <div class="card-header">
+                      <h5>Aggiungi Nuova Misurazione Plicometrica</h5>
+                    </div>
+                    <div class="card-body">
+                      <form [formGroup]="plicometriaForm" (ngSubmit)="addNewPlicometria()">
+                        <div class="row">
+                          <div class="col-md-3 mb-3">
+                            <label class="form-label" for="tricipite">Tricipite</label>
+                            <input type="number" class="form-control" id="tricipite" formControlName="tricipite" />
+                          </div>
 
-<div class="d-flex justify-content-center">
-  <div class="col-10">
-    <h2>Plicometrie Cliente</h2>
-    <!-- get all detail from Plicometria where id_cliente==cliente.id_cliente-->
+                          <div class="col-md-3 mb-3">
+                            <label class="form-label" for="petto">Petto</label>
+                            <input type="number" class="form-control" id="petto" formControlName="petto" />
+                          </div>
 
-    <!-- show a table like this:
-        "tricipite": 134.0,
-        "petto": 12.0,
-        "ascella": 133.0,
-        "sottoscapolare": 1212.0,
-        "soprailliaca": 1331.0,
-        "addome": 3131.0,
-        "coscia": 13.0,
-        "mese": 1,
-        -->
-    <div class="row">
-      @for (key of plicometrieKeys; track $index) {
-        <div class="col-1">
-          <p>{{ key }}</p>
-        </div>
-      }
-    </div>
-    @for (item of this.plicometrie; track $index) {
-      <div class="row">
-        @for (PlicoKey of this.plicometrieKeys; track $index) {
-          <div class="col-1">
-            <p>{{ getKeys(item, PlicoKey) }}</p>
+                          <div class="col-md-3 mb-3">
+                            <label class="form-label" for="ascella">Ascella</label>
+                            <input type="number" class="form-control" id="ascella" formControlName="ascella" />
+                          </div>
+
+                          <div class="col-md-3 mb-3">
+                            <label class="form-label" for="sottoscapolare">Sottoscapolare</label>
+                            <input type="number" class="form-control" id="sottoscapolare" formControlName="sottoscapolare" />
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-3 mb-3">
+                            <label class="form-label" for="soprailliaca">Soprailliaca</label>
+                            <input type="number" class="form-control" id="soprailliaca" formControlName="soprailliaca" />
+                          </div>
+
+                          <div class="col-md-3 mb-3">
+                            <label class="form-label" for="addome">Addome</label>
+                            <input type="number" class="form-control" id="addome" formControlName="addome" />
+                          </div>
+
+                          <div class="col-md-2 mb-3">
+                            <label class="form-label" for="coscia">Coscia</label>
+                            <input type="number" class="form-control" id="coscia" formControlName="coscia" />
+                          </div>
+
+                          <div class="col-md-2 mb-3">
+                            <label class="form-label" for="plicMese">Mese</label>
+                            <input type="number" class="form-control" id="plicMese" formControlName="mese" />
+                            @if (plicometriaForm.get('mese')?.invalid && plicometriaForm.get('mese')?.touched) {
+                              <div class="invalid-feedback d-block">
+                                @if (plicometriaForm.get('mese')?.errors?.required) {
+                                  <small>Il mese è obbligatorio</small>
+                                }
+                                @if (plicometriaForm.get('mese')?.errors?.min || plicometriaForm.get('mese')?.errors?.max) {
+                                  <small>Il mese deve essere compreso tra 1 e 12</small>
+                                }
+                              </div>
+                            }
+                          </div>
+
+                          <div class="col-md-2 mb-3">
+                            <label class="form-label" for="plicDataInserimento">Data</label>
+                            <div class="input-group">
+                              <input
+                                id="plicDataInserimento"
+                                type="text"
+                                class="form-control"
+                                ngbDatepicker
+                                #plicDataDp="ngbDatepicker"
+                                formControlName="dataInserimento"
+                              />
+                              <button type="button" class="btn btn-secondary" (click)="plicDataDp.toggle()">
+                                <fa-icon icon="calendar-alt"></fa-icon>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                          <button type="submit" class="btn btn-success" [disabled]="plicometriaForm.invalid || isLoadingPlic">
+                            <fa-icon icon="save"></fa-icon>&nbsp;Salva Nuova Plicometria
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
+
+            <!-- Circonferenza Tab Content -->
+            @if (activeTab === 'circonferenza') {
+              <div class="row mb-4">
+                <div class="col-md-12">
+                  <h4>Misurazioni Circonferenze</h4>
+                  @if (isLoadingCirc) {
+                    <div class="d-flex justify-content-center">
+                      <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Caricamento...</span>
+                      </div>
+                    </div>
+                  } @else if (circonferenze.length === 0) {
+                    <div class="alert alert-info">Nessuna misurazione delle circonferenze disponibile per questo cliente.</div>
+                  } @else {
+                    <div class="table-responsive">
+                      <table class="table table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Torace</th>
+                            <th>Braccio</th>
+                            <th>Avambraccio</th>
+                            <th>Ombelico</th>
+                            <th>Fianchi</th>
+                            <th>Sotto Ombelico</th>
+                            <th>Vita</th>
+                            <th>Coscia</th>
+                            <th>Mese</th>
+                            <th>Data</th>
+                            <th>Azioni</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @for (circ of circonferenze; track circ.id) {
+                            <tr>
+                              <td>{{ circ.id }}</td>
+                              <td>{{ circ.torace }}</td>
+                              <td>{{ circ.braccio }}</td>
+                              <td>{{ circ.avambraccio }}</td>
+                              <td>{{ circ.ombelico }}</td>
+                              <td>{{ circ.fianchi }}</td>
+                              <td>{{ circ.sottoOmbelico }}</td>
+                              <td>{{ circ.vita }}</td>
+                              <td>{{ circ.coscia }}</td>
+                              <td>{{ circ.mese }}</td>
+                              <td>{{ circ.dataInserimento | formatMediumDate }}</td>
+                              <td>
+                                <div class="btn-group">
+                                  <button class="btn btn-primary btn-sm" (click)="editCirconferenza(circ)">
+                                    <fa-icon icon="pencil-alt"></fa-icon>
+                                  </button>
+                                  <button class="btn btn-danger btn-sm" (click)="deleteCirconferenza(circ)">
+                                    <fa-icon icon="times"></fa-icon>
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <!-- Quick Add Circonferenza Form -->
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="card">
+                    <div class="card-header">
+                      <h5>Aggiungi Nuova Misurazione Circonferenze</h5>
+                    </div>
+                    <div class="card-body">
+                      <form [formGroup]="circonferenzaForm" (ngSubmit)="addNewCirconferenza()">
+                        <div class="row">
+                          <div class="col-md-3 mb-3">
+                            <label class="form-label" for="torace">Torace</label>
+                            <input type="number" class="form-control" id="torace" formControlName="torace" />
+                          </div>
+
+                          <div class="col-md-3 mb-3">
+                            <label class="form-label" for="braccio">Braccio</label>
+                            <input type="number" class="form-control" id="braccio" formControlName="braccio" />
+                          </div>
+
+                          <div class="col-md-3 mb-3">
+                            <label class="form-label" for="avambraccio">Avambraccio</label>
+                            <input type="number" class="form-control" id="avambraccio" formControlName="avambraccio" />
+                          </div>
+
+                          <div class="col-md-3 mb-3">
+                            <label class="form-label" for="ombelico">Ombelico</label>
+                            <input type="number" class="form-control" id="ombelico" formControlName="ombelico" />
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-3 mb-3">
+                            <label class="form-label" for="fianchi">Fianchi</label>
+                            <input type="number" class="form-control" id="fianchi" formControlName="fianchi" />
+                          </div>
+
+                          <div class="col-md-3 mb-3">
+                            <label class="form-label" for="sottoOmbelico">Sotto Ombelico</label>
+                            <input type="number" class="form-control" id="sottoOmbelico" formControlName="sottoOmbelico" />
+                          </div>
+
+                          <div class="col-md-2 mb-3">
+                            <label class="form-label" for="vita">Vita</label>
+                            <input type="number" class="form-control" id="vita" formControlName="vita" />
+                          </div>
+
+                          <div class="col-md-2 mb-3">
+                            <label class="form-label" for="cosciaCir">Coscia</label>
+                            <input type="number" class="form-control" id="cosciaCir" formControlName="coscia" />
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-md-6 mb-3">
+                            <label class="form-label" for="circMese">Mese</label>
+                            <input type="number" class="form-control" id="circMese" formControlName="mese" />
+                            @if (circonferenzaForm.get('mese')?.invalid && circonferenzaForm.get('mese')?.touched) {
+                              <div class="invalid-feedback d-block">
+                                @if (circonferenzaForm.get('mese')?.errors?.required) {
+                                  <small>Il mese è obbligatorio</small>
+                                }
+                                @if (circonferenzaForm.get('mese')?.errors?.min || circonferenzaForm.get('mese')?.errors?.max) {
+                                  <small>Il mese deve essere compreso tra 1 e 12</small>
+                                }
+                              </div>
+                            }
+                          </div>
+
+                          <div class="col-md-6 mb-3">
+                            <label class="form-label" for="circDataInserimento">Data</label>
+                            <div class="input-group">
+                              <input
+                                id="circDataInserimento"
+                                type="text"
+                                class="form-control"
+                                ngbDatepicker
+                                #circDataDp="ngbDatepicker"
+                                formControlName="dataInserimento"
+                              />
+                              <button type="button" class="btn btn-secondary" (click)="circDataDp.toggle()">
+                                <fa-icon icon="calendar-alt"></fa-icon>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                          <button type="submit" class="btn btn-success" [disabled]="circonferenzaForm.invalid || isLoadingCirc">
+                            <fa-icon icon="save"></fa-icon>&nbsp;Salva Nuove Circonferenze
+                          </button>
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            }
           </div>
-        }
+        </div>
       </div>
     }
   </div>
