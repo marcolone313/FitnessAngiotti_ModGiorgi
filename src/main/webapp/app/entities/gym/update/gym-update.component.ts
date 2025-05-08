@@ -31,6 +31,10 @@ export class GymUpdateComponent implements OnInit {
   allenamentoGiornalierosSharedCollection: IAllenamentoGiornaliero[] = [];
   eserciziosSharedCollection: IEsercizio[] = [];
 
+  //mod inserimento tempi limite
+  recuperoMinutes = 0;
+  recuperoSeconds = 0;
+
   protected dataUtils = inject(DataUtils);
   protected eventManager = inject(EventManager);
   protected gymService = inject(GymService);
@@ -47,6 +51,7 @@ export class GymUpdateComponent implements OnInit {
 
   compareEsercizio = (o1: IEsercizio | null, o2: IEsercizio | null): boolean => this.esercizioService.compareEsercizio(o1, o2);
 
+  /*Mod inserimento tempo limite
   ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ gym }) => {
       this.gym = gym;
@@ -56,6 +61,69 @@ export class GymUpdateComponent implements OnInit {
 
       this.loadRelationshipsOptions();
     });
+  }*/
+
+  ngOnInit(): void {
+    this.activatedRoute.data.subscribe(({ gym }) => {
+      this.gym = gym;
+      if (gym) {
+        this.updateForm(gym);
+
+        // Analizza la durata esistente se presente
+        if (gym.recupero) {
+          this.parseDuration(gym.recupero);
+        }
+      }
+
+      this.loadRelationshipsOptions();
+    });
+  }
+
+  // Metodo per analizzare una Duration esistente
+  parseDuration(durationStr: string): void {
+    try {
+      // Rimuovi PT all'inizio
+      let cleanStr = durationStr.replace(/^PT/, '');
+
+      // Estrai minuti e secondi
+      const minutesMatch = cleanStr.match(/(\d+)M/);
+      let minutes = 0;
+      if (minutesMatch) {
+        minutes = parseInt(minutesMatch[1], 10);
+        cleanStr = cleanStr.replace(/\d+M/, '');
+      }
+
+      let seconds = 0;
+      const secondsMatch = cleanStr.match(/(\d+)S/);
+      if (secondsMatch) {
+        seconds = parseInt(secondsMatch[1], 10);
+      }
+
+      this.recuperoMinutes = minutes;
+      this.recuperoSeconds = seconds;
+    } catch (error) {
+      console.error(`Error parsing duration: ${durationStr}`, error);
+    }
+  }
+
+  updateRecuperoValue(): void {
+    // Calcola la durata in formato ISO
+    let durationStr = '';
+
+    if (this.recuperoMinutes > 0 || this.recuperoSeconds > 0) {
+      durationStr = 'PT';
+      if (this.recuperoMinutes > 0) {
+        durationStr += `${this.recuperoMinutes}M`;
+      }
+      if (this.recuperoSeconds > 0) {
+        durationStr += `${this.recuperoSeconds}S`;
+      }
+    }
+
+    // Aggiorna il FormControl
+    this.editForm.get('recupero')?.setValue(durationStr);
+    this.editForm.get('recupero')?.markAsDirty();
+    this.editForm.get('recupero')?.updateValueAndValidity();
   }
 
   byteSize(base64String: string): string {
@@ -77,9 +145,44 @@ export class GymUpdateComponent implements OnInit {
     window.history.back();
   }
 
+  /*Mod tempo limite
   save(): void {
     this.isSaving = true;
     const gym = this.gymFormService.getGym(this.editForm);
+    
+    // Converti i campi di durata in formato ISO
+    if (gym.recupero && !gym.recupero.startsWith('PT')) {
+      gym.recupero = `PT${gym.recupero}S`;
+    }
+    
+    if (gym.id !== null) {
+      this.subscribeToSaveResponse(this.gymService.update(gym));
+    } else {
+      this.subscribeToSaveResponse(this.gymService.create(gym));
+    }
+  }*/
+
+  save(): void {
+    this.isSaving = true;
+    const gym = this.gymFormService.getGym(this.editForm);
+
+    // Converti i campi di minuti e secondi in durate ISO 8601
+    const totalRecuperoSeconds = this.recuperoMinutes * 60 + this.recuperoSeconds;
+
+    if (totalRecuperoSeconds > 0) {
+      if (this.recuperoSeconds > 0 && this.recuperoMinutes > 0) {
+        gym.recupero = `PT${this.recuperoMinutes}M${this.recuperoSeconds}S`;
+      } else if (this.recuperoMinutes > 0) {
+        gym.recupero = `PT${this.recuperoMinutes}M`;
+      } else if (this.recuperoSeconds > 0) {
+        gym.recupero = `PT${this.recuperoSeconds}S`;
+      } else {
+        gym.recupero = null;
+      }
+    } else {
+      gym.recupero = null;
+    }
+
     if (gym.id !== null) {
       this.subscribeToSaveResponse(this.gymService.update(gym));
     } else {

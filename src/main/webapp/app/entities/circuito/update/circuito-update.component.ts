@@ -26,6 +26,10 @@ export class CircuitoUpdateComponent implements OnInit {
   isSaving = false;
   circuito: ICircuito | null = null;
 
+  //mod tempo limite
+  tempoLimiteMinutes = 0;
+  tempoLimiteSeconds = 0;
+
   allenamentoGiornalierosCollection: IAllenamentoGiornaliero[] = [];
 
   protected dataUtils = inject(DataUtils);
@@ -41,7 +45,7 @@ export class CircuitoUpdateComponent implements OnInit {
   compareAllenamentoGiornaliero = (o1: IAllenamentoGiornaliero | null, o2: IAllenamentoGiornaliero | null): boolean =>
     this.allenamentoGiornalieroService.compareAllenamentoGiornaliero(o1, o2);
 
-  ngOnInit(): void {
+  /*ngOnInit(): void {
     this.activatedRoute.data.subscribe(({ circuito }) => {
       this.circuito = circuito;
       if (circuito) {
@@ -50,6 +54,49 @@ export class CircuitoUpdateComponent implements OnInit {
 
       this.loadRelationshipsOptions();
     });
+  }*/
+
+  ngOnInit(): void {
+    this.activatedRoute.data.subscribe(({ circuito }) => {
+      this.circuito = circuito;
+      if (circuito) {
+        this.updateForm(circuito);
+
+        // Analizza la durata esistente per il tempo limite
+        if (circuito.tempoLimite) {
+          this.parseDuration(circuito.tempoLimite);
+        }
+      }
+
+      this.loadRelationshipsOptions();
+    });
+  }
+
+  // Metodo per analizzare una Duration esistente
+  parseDuration(durationStr: string): void {
+    // Per durate nel formato PT1M30S o solo PT90S
+    try {
+      // Rimuovi PT all'inizio e S alla fine
+      let cleanStr = durationStr.replace(/^PT/, '').replace(/S$/, '');
+
+      // Estrai minuti e secondi
+      const minutesMatch = cleanStr.match(/(\d+)M/);
+      let minutes = 0;
+      if (minutesMatch) {
+        minutes = parseInt(minutesMatch[1], 10);
+        cleanStr = cleanStr.replace(/\d+M/, '');
+      }
+
+      let seconds = 0;
+      if (cleanStr) {
+        seconds = parseInt(cleanStr, 10);
+      }
+
+      this.tempoLimiteMinutes = minutes;
+      this.tempoLimiteSeconds = seconds;
+    } catch (error) {
+      console.error(`Error parsing duration: ${durationStr}`, error);
+    }
   }
 
   byteSize(base64String: string): string {
@@ -71,9 +118,47 @@ export class CircuitoUpdateComponent implements OnInit {
     window.history.back();
   }
 
+  /*save(): void {
+    this.isSaving = true;
+    const circuito = this.circuitoFormService.getCircuito(this.editForm);
+    
+    // Converti i campi di durata in formato ISO
+    if (circuito.tempoLimite && !circuito.tempoLimite.startsWith('PT')) {
+      circuito.tempoLimite = `PT${circuito.tempoLimite}S`;
+    }
+    
+    if (circuito.tempoImpiegato && !circuito.tempoImpiegato.startsWith('PT')) {
+      circuito.tempoImpiegato = `PT${circuito.tempoImpiegato}S`;
+    }
+    
+    if (circuito.id !== null) {
+      this.subscribeToSaveResponse(this.circuitoService.update(circuito));
+    } else {
+      this.subscribeToSaveResponse(this.circuitoService.create(circuito));
+    }
+  }*/
+
   save(): void {
     this.isSaving = true;
     const circuito = this.circuitoFormService.getCircuito(this.editForm);
+
+    // Converti i campi di minuti e secondi in durate ISO 8601 solo per tempoLimite
+    const totalTempoLimiteSeconds = this.tempoLimiteMinutes * 60 + this.tempoLimiteSeconds;
+
+    if (totalTempoLimiteSeconds > 0) {
+      if (this.tempoLimiteSeconds > 0 && this.tempoLimiteMinutes > 0) {
+        circuito.tempoLimite = `PT${this.tempoLimiteMinutes}M${this.tempoLimiteSeconds}S`;
+      } else if (this.tempoLimiteMinutes > 0) {
+        circuito.tempoLimite = `PT${this.tempoLimiteMinutes}M`;
+      } else if (this.tempoLimiteSeconds > 0) {
+        circuito.tempoLimite = `PT${this.tempoLimiteSeconds}S`;
+      } else {
+        circuito.tempoLimite = null;
+      }
+    } else {
+      circuito.tempoLimite = null;
+    }
+
     if (circuito.id !== null) {
       this.subscribeToSaveResponse(this.circuitoService.update(circuito));
     } else {

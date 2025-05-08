@@ -15,7 +15,7 @@
           </div>
         }
 
-        <div class="mb-3">
+        <!--<div class="mb-3">
           <label class="form-label" for="field_tempoLimite" jhiTranslate="fitnessAngiottiApp.circuito.tempoLimite">Tempo Limite</label>
           <input
             type="text"
@@ -25,6 +25,43 @@
             data-cy="tempoLimite"
             formControlName="tempoLimite"
           />
+        </div>-->
+
+        <div class="mb-3">
+          <label class="form-label" jhiTranslate="fitnessAngiottiApp.circuito.tempoLimite">Tempo Limite</label>
+          <div class="d-flex align-items-center">
+            <div class="me-2" style="width: 70px">
+              <!-- Stessa larghezza fissa per entrambi -->
+              <input
+                type="number"
+                class="form-control"
+                name="tempoLimiteMinutes"
+                id="field_tempoLimite_minutes"
+                min="0"
+                [(ngModel)]="tempoLimiteMinutes"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </div>
+            <div class="me-2">
+              <label for="field_tempoLimite_minutes">m :</label>
+            </div>
+            <div class="me-2" style="width: 70px">
+              <!-- Stessa larghezza fissa per entrambi -->
+              <input
+                type="number"
+                class="form-control"
+                name="tempoLimiteSeconds"
+                id="field_tempoLimite_seconds"
+                min="0"
+                max="59"
+                [(ngModel)]="tempoLimiteSeconds"
+                [ngModelOptions]="{ standalone: true }"
+              />
+            </div>
+            <div>
+              <label for="field_tempoLimite_seconds">s</label>
+            </div>
+          </div>
         </div>
 
         <div class="mb-3">

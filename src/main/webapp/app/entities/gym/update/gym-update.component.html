@@ -47,10 +47,68 @@
           }
         </div>
 
-        @let recuperoRef = editForm.get('recupero')!;
+        <!--@let recuperoRef = editForm.get('recupero')!;
         <div class="mb-3">
           <label class="form-label" for="field_recupero" jhiTranslate="fitnessAngiottiApp.gym.recupero">Recupero</label>
           <input type="text" class="form-control" name="recupero" id="field_recupero" data-cy="recupero" formControlName="recupero" />
+          @if (recuperoRef.invalid && (recuperoRef.dirty || recuperoRef.touched)) {
+            <div>
+              @if (editForm.get('recupero')?.errors?.required) {
+                <small class="form-text text-danger" jhiTranslate="entity.validation.required">Questo campo è obbligatorio.</small>
+              }
+              <small
+                class="form-text text-danger"
+                [hidden]="!editForm.get('recupero')?.errors?.number"
+                jhiTranslate="entity.validation.number"
+                >Questo campo dovrebbe essere un numero.</small
+              >
+            </div>
+          }
+        </div>-->
+
+        @let recuperoRef = editForm.get('recupero')!;
+        <div class="mb-3">
+          <label class="form-label" for="field_recupero" jhiTranslate="fitnessAngiottiApp.gym.recupero">Recupero</label>
+
+          <!-- Campo nascosto che contiene il valore effettivo per il form -->
+          <input type="hidden" class="form-control" name="recupero" id="field_recupero" data-cy="recupero" formControlName="recupero" />
+
+          <!-- Nuova interfaccia utente con minuti e secondi -->
+          <div class="d-flex align-items-center">
+            <div class="me-2" style="width: 70px">
+              <input
+                type="number"
+                class="form-control"
+                name="recuperoMinutes"
+                id="field_recupero_minutes"
+                min="0"
+                [(ngModel)]="recuperoMinutes"
+                [ngModelOptions]="{ standalone: true }"
+                (ngModelChange)="updateRecuperoValue()"
+              />
+            </div>
+            <div class="me-2">
+              <label for="field_recupero_minutes">m :</label>
+            </div>
+            <div class="me-2" style="width: 70px">
+              <input
+                type="number"
+                class="form-control"
+                name="recuperoSeconds"
+                id="field_recupero_seconds"
+                min="0"
+                max="59"
+                [(ngModel)]="recuperoSeconds"
+                [ngModelOptions]="{ standalone: true }"
+                (ngModelChange)="updateRecuperoValue()"
+              />
+            </div>
+            <div>
+              <label for="field_recupero_seconds">s</label>
+            </div>
+          </div>
+
+          <!-- Mantenere la validazione esistente -->
           @if (recuperoRef.invalid && (recuperoRef.dirty || recuperoRef.touched)) {
             <div>
               @if (editForm.get('recupero')?.errors?.required) {
