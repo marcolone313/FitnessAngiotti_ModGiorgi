@@ -11,8 +11,6 @@ import { PesoClienteService } from 'app/entities/peso-cliente/service/peso-clien
 import { IPesoCliente, NewPesoCliente } from 'app/entities/peso-cliente/peso-cliente.model';
 import { CirconferenzaService } from 'app/entities/circonferenza/service/circonferenza.service';
 import { ICirconferenza, NewCirconferenza } from 'app/entities/circonferenza/circonferenza.model';
-import { DietaService } from 'app/entities/dieta/service/dieta.service';
-import { IDieta } from 'app/entities/dieta/dieta.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import dayjs from 'dayjs/esm';
@@ -20,6 +18,14 @@ import { ITEM_DELETED_EVENT } from 'app/config/navigation.constants';
 import { PesoClienteDeleteDialogComponent } from 'app/entities/peso-cliente/delete/peso-cliente-delete-dialog.component';
 import { PlicometriaDeleteDialogComponent } from 'app/entities/plicometria/delete/plicometria-delete-dialog.component';
 import { CirconferenzaDeleteDialogComponent } from 'app/entities/circonferenza/delete/circonferenza-delete-dialog.component';
+import { SchedaSettimanaleService } from 'app/entities/scheda-settimanale/service/scheda-settimanale.service';
+import { ISchedaSettimanale } from 'app/entities/scheda-settimanale/scheda-settimanale.model';
+import { ReportSettimanaleService } from 'app/entities/report-settimanale/service/report-settimanale.service';
+import { IReportSettimanale } from 'app/entities/report-settimanale/report-settimanale.model';
+import { SchedaSettimanaleDeleteDialogComponent } from 'app/entities/scheda-settimanale/delete/scheda-settimanale-delete-dialog.component';
+import { ReportSettimanaleDeleteDialogComponent } from 'app/entities/report-settimanale/delete/report-settimanale-delete-dialog.component';
+import { DietaService } from 'app/entities/dieta/service/dieta.service';
+import { IDieta } from 'app/entities/dieta/dieta.model';
 import { DietaDeleteDialogComponent } from 'app/entities/dieta/delete/dieta-delete-dialog.component';
 import { filter, finalize } from 'rxjs/operators';
 import { forkJoin, of } from 'rxjs';
@@ -39,7 +45,9 @@ export class ClienteDetailComponent implements OnInit, AfterViewInit {
   plicometriaSrv = inject(PlicometriaService);
   pesoSrv = inject(PesoClienteService);
   circonferenzaSrv = inject(CirconferenzaService);
-  dietaSrv = inject(DietaService);
+  schedaSettimanaleService = inject(SchedaSettimanaleService);
+  reportSettimanaleService = inject(ReportSettimanaleService);
+  dietaService = inject(DietaService);
   modalService = inject(NgbModal);
   fb = inject(FormBuilder);
   cdr = inject(ChangeDetectorRef);
@@ -48,6 +56,8 @@ export class ClienteDetailComponent implements OnInit, AfterViewInit {
   plicometrie: IPlicometria[] = [];
   pesi: IPesoCliente[] = [];
   circonferenze: ICirconferenza[] = [];
+  schedeSettimanali: ISchedaSettimanale[] = [];
+  reportSettimanali: IReportSettimanale[] = [];
   diete: IDieta[] = [];
 
   // Tab control
@@ -62,19 +72,26 @@ export class ClienteDetailComponent implements OnInit, AfterViewInit {
   isLoadingPeso = false;
   isLoadingPlic = false;
   isLoadingCirc = false;
-  isLoadingDieta = false;
+  isLoadingSchede = false;
+  isLoadingReport = false;
+  isLoadingDiete = false;
 
   // Data loading status
   private hasLoadedPeso = false;
   private hasLoadedPlic = false;
   private hasLoadedCirc = false;
-  private hasLoadedDieta = false;
+  private hasLoadedSchede = false;
+  private hasLoadedReport = false;
+  private hasLoadedDiete = false;
 
   // Pagination
   itemsPerPage = 10;
   pesoPage = 1;
   plicPage = 1;
   circPage = 1;
+  schedePage = 1;
+  reportPage = 1;
+  dietaPage = 1;
 
   // Form getters with lazy initialization
   get pesoForm(): FormGroup {
@@ -126,9 +143,6 @@ export class ClienteDetailComponent implements OnInit, AfterViewInit {
   ngOnInit(): void {
     // Initialize first tab data
     this.loadInitialData();
-
-    // Carica anche le diete
-    this.loadDieteData();
   }
 
   // Load critical data on init, then queue up background loading of other tabs
@@ -155,12 +169,15 @@ export class ClienteDetailComponent implements OnInit, AfterViewInit {
       sort: ['id,desc'], // Ordinamento per ID invece che per data
     };
 
-    // Load both other data types in parallel using forkJoin
+    // Load all data types in parallel using forkJoin
     forkJoin([
       !this.hasLoadedPlic ? this.plicometriaSrv.query({ ...queryObject, page: this.plicPage - 1 }) : of(null),
       !this.hasLoadedCirc ? this.circonferenzaSrv.query({ ...queryObject, page: this.circPage - 1 }) : of(null),
+      !this.hasLoadedSchede ? this.schedaSettimanaleService.query({ ...queryObject, page: this.schedePage - 1 }) : of(null),
+      !this.hasLoadedReport ? this.reportSettimanaleService.query({ ...queryObject, page: this.reportPage - 1 }) : of(null),
+      !this.hasLoadedDiete ? this.dietaService.query({ ...queryObject, page: this.dietaPage - 1 }) : of(null),
     ]).subscribe({
-      next: ([plicRes, circRes]) => {
+      next: ([plicRes, circRes, schedeRes, reportRes, dieteRes]) => {
         // Process plicometria data if it was loaded
         if (plicRes) {
           this.plicometrie = plicRes.body || [];
@@ -171,6 +188,24 @@ export class ClienteDetailComponent implements OnInit, AfterViewInit {
         if (circRes) {
           this.circonferenze = circRes.body || [];
           this.hasLoadedCirc = true;
+        }
+
+        // Process schede settimanali data if it was loaded
+        if (schedeRes) {
+          this.schedeSettimanali = schedeRes.body || [];
+          this.hasLoadedSchede = true;
+        }
+
+        // Process report settimanali data if it was loaded
+        if (reportRes) {
+          this.reportSettimanali = reportRes.body || [];
+          this.hasLoadedReport = true;
+        }
+
+        // Process diete data if it was loaded
+        if (dieteRes) {
+          this.diete = dieteRes.body || [];
+          this.hasLoadedDiete = true;
         }
 
         // Update the view
@@ -198,6 +233,21 @@ export class ClienteDetailComponent implements OnInit, AfterViewInit {
         case 'circonferenza':
           if (!this.hasLoadedCirc) {
             this.loadCirconferenzaData();
+          }
+          break;
+        case 'dieta':
+          if (!this.hasLoadedDiete) {
+            this.loadDieteData();
+          }
+          break;
+        case 'schedaSettimanale':
+          if (!this.hasLoadedSchede) {
+            this.loadSchedeSettimanaliData();
+          }
+          break;
+        case 'reportSettimanale':
+          if (!this.hasLoadedReport) {
+            this.loadReportSettimanaliData();
           }
           break;
       }
@@ -255,7 +305,6 @@ export class ClienteDetailComponent implements OnInit, AfterViewInit {
       });
   }
 
-  // Modifica del metodo loadPlicometriaData
   loadPlicometriaData(): void {
     const idCliente = this.cliente()?.id;
     if (!idCliente) return;
@@ -289,7 +338,6 @@ export class ClienteDetailComponent implements OnInit, AfterViewInit {
       });
   }
 
-  // Modifica del metodo loadCirconferenzaData
   loadCirconferenzaData(): void {
     const idCliente = this.cliente()?.id;
     if (!idCliente) return;
@@ -323,25 +371,26 @@ export class ClienteDetailComponent implements OnInit, AfterViewInit {
       });
   }
 
-  // Metodo per caricare le diete
   loadDieteData(): void {
     const idCliente = this.cliente()?.id;
     if (!idCliente) return;
 
-    this.isLoadingDieta = true;
+    this.isLoadingDiete = true;
     this.cdr.markForCheck();
 
     const queryObject = {
       'clienteId.equals': idCliente,
+      page: this.dietaPage - 1,
+      size: this.itemsPerPage,
       sort: ['id,desc'],
     };
 
-    this.dietaSrv
+    this.dietaService
       .query(queryObject)
       .pipe(
         finalize(() => {
-          this.isLoadingDieta = false;
-          this.hasLoadedDieta = true;
+          this.isLoadingDiete = false;
+          this.hasLoadedDiete = true;
           this.cdr.markForCheck();
         }),
       )
@@ -351,6 +400,72 @@ export class ClienteDetailComponent implements OnInit, AfterViewInit {
         },
         error: () => {
           this.diete = [];
+        },
+      });
+  }
+
+  loadSchedeSettimanaliData(): void {
+    const idCliente = this.cliente()?.id;
+    if (!idCliente) return;
+
+    this.isLoadingSchede = true;
+    this.cdr.markForCheck();
+
+    const queryObject = {
+      'clienteId.equals': idCliente,
+      page: this.schedePage - 1,
+      size: this.itemsPerPage,
+      sort: ['id,desc'],
+    };
+
+    this.schedaSettimanaleService
+      .query(queryObject)
+      .pipe(
+        finalize(() => {
+          this.isLoadingSchede = false;
+          this.hasLoadedSchede = true;
+          this.cdr.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: res => {
+          this.schedeSettimanali = res.body || [];
+        },
+        error: () => {
+          this.schedeSettimanali = [];
+        },
+      });
+  }
+
+  loadReportSettimanaliData(): void {
+    const idCliente = this.cliente()?.id;
+    if (!idCliente) return;
+
+    this.isLoadingReport = true;
+    this.cdr.markForCheck();
+
+    const queryObject = {
+      'clienteId.equals': idCliente,
+      page: this.reportPage - 1,
+      size: this.itemsPerPage,
+      sort: ['id,desc'],
+    };
+
+    this.reportSettimanaleService
+      .query(queryObject)
+      .pipe(
+        finalize(() => {
+          this.isLoadingReport = false;
+          this.hasLoadedReport = true;
+          this.cdr.markForCheck();
+        }),
+      )
+      .subscribe({
+        next: res => {
+          this.reportSettimanali = res.body || [];
+        },
+        error: () => {
+          this.reportSettimanali = [];
         },
       });
   }
@@ -369,6 +484,21 @@ export class ClienteDetailComponent implements OnInit, AfterViewInit {
   navigateToCircPage(page: number): void {
     this.circPage = page;
     this.loadCirconferenzaData();
+  }
+
+  navigateToDietaPage(page: number): void {
+    this.dietaPage = page;
+    this.loadDieteData();
+  }
+
+  navigateToSchedePage(page: number): void {
+    this.schedePage = page;
+    this.loadSchedeSettimanaliData();
+  }
+
+  navigateToReportPage(page: number): void {
+    this.reportPage = page;
+    this.loadReportSettimanaliData();
   }
 
   // Delete operations
@@ -399,13 +529,30 @@ export class ClienteDetailComponent implements OnInit, AfterViewInit {
     });
   }
 
-  // Metodo per eliminare una dieta
   deleteDieta(dieta: IDieta): void {
     const modalRef = this.modalService.open(DietaDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
     modalRef.componentInstance.dieta = dieta;
 
     modalRef.closed.pipe(filter((reason: string) => reason === ITEM_DELETED_EVENT)).subscribe(() => {
       this.loadDieteData();
+    });
+  }
+
+  deleteSchedaSettimanale(schedaSettimanale: ISchedaSettimanale): void {
+    const modalRef = this.modalService.open(SchedaSettimanaleDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.schedaSettimanale = schedaSettimanale;
+
+    modalRef.closed.pipe(filter((reason: string) => reason === ITEM_DELETED_EVENT)).subscribe(() => {
+      this.loadSchedeSettimanaliData();
+    });
+  }
+
+  deleteReportSettimanale(reportSettimanale: IReportSettimanale): void {
+    const modalRef = this.modalService.open(ReportSettimanaleDeleteDialogComponent, { size: 'lg', backdrop: 'static' });
+    modalRef.componentInstance.reportSettimanale = reportSettimanale;
+
+    modalRef.closed.pipe(filter((reason: string) => reason === ITEM_DELETED_EVENT)).subscribe(() => {
+      this.loadReportSettimanaliData();
     });
   }
 

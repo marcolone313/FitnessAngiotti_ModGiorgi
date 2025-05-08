@@ -100,7 +100,7 @@
             </button>
           </div>
           <div class="card-body">
-            @if (isLoadingDieta) {
+            @if (isLoadingDiete) {
               <div class="d-flex justify-content-center">
                 <div class="spinner-border text-primary" role="status">
                   <span class="visually-hidden">Caricamento...</span>
@@ -169,6 +169,21 @@
                   <fa-icon icon="circle"></fa-icon> Circonferenze
                 </a>
               </li>
+              <li class="nav-item">
+                <a class="nav-link" [class.active]="activeTab === 'dieta'" (click)="setActiveTab('dieta')">
+                  <fa-icon icon="utensils"></fa-icon> Diete
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" [class.active]="activeTab === 'schedaSettimanale'" (click)="setActiveTab('schedaSettimanale')">
+                  <fa-icon icon="calendar-week"></fa-icon> Schede Settimanali
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" [class.active]="activeTab === 'reportSettimanale'" (click)="setActiveTab('reportSettimanale')">
+                  <fa-icon icon="file-alt"></fa-icon> Report Settimanali
+                </a>
+              </li>
             </ul>
           </div>
 
@@ -177,7 +192,7 @@
             @if (activeTab === 'peso') {
               <div class="row mb-4">
                 <div class="col-md-12">
-                  <h4>Pesi</h4>
+                  <h4>Misurazioni Peso</h4>
                   @if (isLoadingPeso) {
                     <div class="d-flex justify-content-center">
                       <div class="spinner-border text-primary" role="status">
@@ -610,6 +625,307 @@
                         </div>
                       </form>
                     </div>
+                  </div>
+                </div>
+              </div>
+            }
+
+            <!-- Diete Tab Content -->
+            @if (activeTab === 'dieta') {
+              <div class="row mb-4">
+                <div class="col-md-12">
+                  <h4>Diete</h4>
+                  @if (isLoadingDiete) {
+                    <div class="d-flex justify-content-center">
+                      <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Caricamento...</span>
+                      </div>
+                    </div>
+                  } @else if (diete.length === 0) {
+                    <div class="alert alert-info">Nessuna dieta disponibile per questo cliente.</div>
+                  } @else {
+                    <div class="table-responsive">
+                      <table class="table table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Tipo</th>
+                            <th>Data Inizio</th>
+                            <th>Data Fine</th>
+                            <th>Calorie Giornaliere</th>
+                            <th>Descrizione</th>
+                            <th>Azioni</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @for (dieta of diete; track dieta.id) {
+                            <tr>
+                              <td>
+                                <a [routerLink]="['/dieta', dieta.id, 'view']">{{ dieta.id }}</a>
+                              </td>
+                              <td>
+                                <span [jhiTranslate]="'fitnessAngiottiApp.TipoDieta.' + (dieta.tipo ?? 'null')">
+                                  {{
+                                    {
+                                      null: '',
+                                      IPOCALORICA: 'IPOCALORICA',
+                                      NORMOCALORICA: 'NORMOCALORICA',
+                                      IPERCALORICA: 'IPERCALORICA',
+                                      CHETOGENICA: 'CHETOGENICA',
+                                      MEDITERRANEA: 'MEDITERRANEA',
+                                      PALEOLITICA: 'PALEOLITICA',
+                                      VEGETARIANA: 'VEGETARIANA',
+                                      VEGANA: 'VEGANA',
+                                    }[dieta.tipo ?? 'null']
+                                  }}
+                                </span>
+                              </td>
+                              <td>{{ dieta.inizioDieta | formatMediumDate }}</td>
+                              <td>{{ dieta.fineDieta | formatMediumDate }}</td>
+                              <td>{{ dieta.calorie }}</td>
+                              <td>{{ dieta.note }}</td>
+                              <td>
+                                <div class="btn-group">
+                                  <a [routerLink]="['/dieta', dieta.id, 'view']" class="btn btn-info btn-sm">
+                                    <fa-icon icon="eye"></fa-icon>
+                                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Visualizza</span>
+                                  </a>
+                                  <a [routerLink]="['/dieta', dieta.id, 'edit']" class="btn btn-primary btn-sm">
+                                    <fa-icon icon="pencil-alt"></fa-icon>
+                                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Modifica</span>
+                                  </a>
+                                  <button class="btn btn-danger btn-sm" (click)="deleteDieta(dieta)">
+                                    <fa-icon icon="times"></fa-icon>
+                                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Elimina</span>
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="d-flex justify-content-center mt-3">
+                      <ngb-pagination
+                        [collectionSize]="diete.length"
+                        [page]="dietaPage"
+                        [pageSize]="itemsPerPage"
+                        [maxSize]="5"
+                        [rotate]="true"
+                        [boundaryLinks]="true"
+                        (pageChange)="navigateToDietaPage($event)"
+                      ></ngb-pagination>
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="d-grid gap-2">
+                    <a [routerLink]="['/dieta/new']" [queryParams]="{ clienteId: cliente()?.id }" class="btn btn-success">
+                      <fa-icon icon="plus"></fa-icon>&nbsp;Crea Nuova Dieta
+                    </a>
+                  </div>
+                </div>
+              </div>
+            }
+
+            <!-- Schede Settimanali Tab Content -->
+            @if (activeTab === 'schedaSettimanale') {
+              <div class="row mb-4">
+                <div class="col-md-12">
+                  <h4>Schede Settimanali</h4>
+                  @if (isLoadingSchede) {
+                    <div class="d-flex justify-content-center">
+                      <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Caricamento...</span>
+                      </div>
+                    </div>
+                  } @else if (schedeSettimanali.length === 0) {
+                    <div class="alert alert-info">Nessuna scheda settimanale disponibile per questo cliente.</div>
+                  } @else {
+                    <div class="table-responsive">
+                      <table class="table table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Anno</th>
+                            <th>Mese</th>
+                            <th>Settimana</th>
+                            <th>Data Creazione</th>
+                            <th>Azioni</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @for (scheda of schedeSettimanali; track scheda.id) {
+                            <tr>
+                              <td>
+                                <a [routerLink]="['/scheda-settimanale', scheda.id, 'view']">{{ scheda.id }}</a>
+                              </td>
+                              <td>{{ scheda.anno }}</td>
+                              <td>{{ scheda.mese }}</td>
+                              <td>{{ scheda.settimana }}</td>
+                              <td>{{ scheda.dataCreazione | formatMediumDate }}</td>
+                              <td>
+                                <div class="btn-group">
+                                  <a [routerLink]="['/scheda-settimanale', scheda.id, 'view']" class="btn btn-info btn-sm">
+                                    <fa-icon icon="eye"></fa-icon>
+                                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Visualizza</span>
+                                  </a>
+                                  <a [routerLink]="['/scheda-settimanale', scheda.id, 'edit']" class="btn btn-primary btn-sm">
+                                    <fa-icon icon="pencil-alt"></fa-icon>
+                                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Modifica</span>
+                                  </a>
+                                  <button class="btn btn-danger btn-sm" (click)="deleteSchedaSettimanale(scheda)">
+                                    <fa-icon icon="times"></fa-icon>
+                                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Elimina</span>
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="d-flex justify-content-center mt-3">
+                      <ngb-pagination
+                        [collectionSize]="schedeSettimanali.length"
+                        [page]="schedePage"
+                        [pageSize]="itemsPerPage"
+                        [maxSize]="5"
+                        [rotate]="true"
+                        [boundaryLinks]="true"
+                        (pageChange)="navigateToSchedePage($event)"
+                      ></ngb-pagination>
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="d-grid gap-2">
+                    <a [routerLink]="['/scheda-settimanale/new']" [queryParams]="{ clienteId: cliente()?.id }" class="btn btn-success">
+                      <fa-icon icon="plus"></fa-icon>&nbsp;Crea Nuova Scheda Settimanale
+                    </a>
+                  </div>
+                </div>
+              </div>
+            }
+
+            <!-- Report Settimanali Tab Content -->
+            @if (activeTab === 'reportSettimanale') {
+              <div class="row mb-4">
+                <div class="col-md-12">
+                  <h4>Report Settimanali</h4>
+                  @if (isLoadingReport) {
+                    <div class="d-flex justify-content-center">
+                      <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Caricamento...</span>
+                      </div>
+                    </div>
+                  } @else if (reportSettimanali.length === 0) {
+                    <div class="alert alert-info">Nessun report settimanale disponibile per questo cliente.</div>
+                  } @else {
+                    <div class="table-responsive">
+                      <table class="table table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Voto</th>
+                            <th>Data Creazione</th>
+                            <th>Data Scadenza</th>
+                            <th>Data Completamento</th>
+                            <th>Puntuale</th>
+                            <th>Scheda Settimanale</th>
+                            <th>Azioni</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @for (report of reportSettimanali; track report.id) {
+                            <tr>
+                              <td>
+                                <a [routerLink]="['/report-settimanale', report.id, 'view']">{{ report.id }}</a>
+                              </td>
+                              <td>
+                                <span [jhiTranslate]="'fitnessAngiottiApp.Voto.' + (report.voto ?? 'null')">
+                                  {{
+                                    {
+                                      null: '',
+                                      INSUFFICIENTE: 'INSUFFICIENTE',
+                                      SUFFICIENTE: 'SUFFICIENTE',
+                                      BUONO: 'BUONO',
+                                      OTTIMO: 'OTTIMO',
+                                    }[report.voto ?? 'null']
+                                  }}
+                                </span>
+                              </td>
+                              <td>{{ report.dataCreazione | formatMediumDate }}</td>
+                              <td>{{ report.dataScadenza | formatMediumDate }}</td>
+                              <td>{{ report.dataCompletamento | formatMediumDate }}</td>
+                              <td>
+                                @if (report.puntuale) {
+                                  <span class="badge bg-success">Sì</span>
+                                } @else {
+                                  <span class="badge bg-danger">No</span>
+                                }
+                              </td>
+                              <td>
+                                @if (report.schedaSettimanale) {
+                                  <a [routerLink]="['/scheda-settimanale', report.schedaSettimanale.id, 'view']">
+                                    {{ report.schedaSettimanale.id }}
+                                  </a>
+                                }
+                              </td>
+                              <td>
+                                <div class="btn-group">
+                                  <a [routerLink]="['/report-settimanale', report.id, 'view']" class="btn btn-info btn-sm">
+                                    <fa-icon icon="eye"></fa-icon>
+                                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Visualizza</span>
+                                  </a>
+                                  <a [routerLink]="['/report-settimanale', report.id, 'edit']" class="btn btn-primary btn-sm">
+                                    <fa-icon icon="pencil-alt"></fa-icon>
+                                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Modifica</span>
+                                  </a>
+                                  <button class="btn btn-danger btn-sm" (click)="deleteReportSettimanale(report)">
+                                    <fa-icon icon="times"></fa-icon>
+                                    <span class="d-none d-md-inline" jhiTranslate="entity.action.delete">Elimina</span>
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="d-flex justify-content-center mt-3">
+                      <ngb-pagination
+                        [collectionSize]="reportSettimanali.length"
+                        [page]="reportPage"
+                        [pageSize]="itemsPerPage"
+                        [maxSize]="5"
+                        [rotate]="true"
+                        [boundaryLinks]="true"
+                        (pageChange)="navigateToReportPage($event)"
+                      ></ngb-pagination>
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="d-grid gap-2">
+                    <a [routerLink]="['/report-settimanale/new']" [queryParams]="{ clienteId: cliente()?.id }" class="btn btn-success">
+                      <fa-icon icon="plus"></fa-icon>&nbsp;Crea Nuovo Report Settimanale
+                    </a>
                   </div>
                 </div>
               </div>
