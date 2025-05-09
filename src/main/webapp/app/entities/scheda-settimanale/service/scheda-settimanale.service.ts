@@ -39,6 +39,10 @@ export class SchedaSettimanaleService {
       .pipe(map(res => this.convertResponseFromServer(res)));
   }
 
+  importScheda(scheda: ISchedaSettimanale): Observable<ISchedaSettimanale> {
+    return this.http.post<ISchedaSettimanale>(`${this.resourceUrl}/import`, scheda);
+  }
+
   update(schedaSettimanale: ISchedaSettimanale): Observable<EntityResponseType> {
     const copy = this.convertDateFromClient(schedaSettimanale);
     return this.http
