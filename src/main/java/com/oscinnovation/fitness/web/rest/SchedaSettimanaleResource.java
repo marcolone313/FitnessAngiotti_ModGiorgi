@@ -203,4 +203,31 @@ public class SchedaSettimanaleResource {
             .headers(HeaderUtil.createEntityDeletionAlert(applicationName, true, ENTITY_NAME, id.toString()))
             .build();
     }
+
+    @GetMapping("/{id}/export")
+    public ResponseEntity<SchedaSettimanaleDTO> exportSchedaSettimanale(@PathVariable Long id) {
+        Optional<SchedaSettimanaleDTO> optionalScheda = schedaSettimanaleService.findOne(id);
+
+        if (optionalScheda.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        SchedaSettimanaleDTO scheda = optionalScheda.get();
+
+        // Escludere il cliente dalla risposta
+        scheda.setCliente(null);
+
+        return ResponseEntity.ok(scheda);
+    }
+
+    @PostMapping("/import")
+    public ResponseEntity<SchedaSettimanaleDTO> importSchedaSettimanale(@Valid @RequestBody SchedaSettimanaleDTO schedaDTO)
+        throws URISyntaxException {
+        LOG.debug("REST request to import SchedaSettimanale : {}", schedaDTO);
+
+        SchedaSettimanaleDTO result = schedaSettimanaleService.save(schedaDTO);
+        return ResponseEntity.created(new URI("/api/scheda-settimanales/" + result.getId()))
+            .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId().toString()))
+            .body(result);
+    }
 }

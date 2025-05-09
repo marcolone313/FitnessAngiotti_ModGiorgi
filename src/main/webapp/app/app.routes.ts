@@ -34,6 +34,10 @@ const routes: Routes = [
     title: 'login.title',
   },
   {
+    path: 'scheda-import',
+    loadChildren: () => import('./entities/scheda-import/scheda-import.module').then(m => m.SchedaImportModule),
+  },
+  {
     path: '',
     loadChildren: () => import(`./entities/entity.routes`),
   },

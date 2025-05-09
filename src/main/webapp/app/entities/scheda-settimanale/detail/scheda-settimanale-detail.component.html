@@ -50,6 +50,10 @@
         <button type="button" [routerLink]="['/scheda-settimanale', schedaSettimanaleRef.id, 'edit']" class="btn btn-primary">
           <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Modifica</span>
         </button>
+
+        <button class="btn btn-outline-primary" (click)="exportScheda()" [disabled]="!schedaSettimanale()?.id">
+          Esporta Scheda in JSON
+        </button>
       </div>
     }
   </div>

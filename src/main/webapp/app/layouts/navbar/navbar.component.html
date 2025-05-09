@@ -130,6 +130,18 @@
               <li>
                 <a
                   class="dropdown-item"
+                  routerLink="/scheda-import"
+                  routerLinkActive="active"
+                  [routerLinkActiveOptions]="{ exact: true }"
+                  (click)="collapseNavbar()"
+                >
+                  <fa-icon icon="asterisk" [fixedWidth]="true"></fa-icon>
+                  <span>Import Scheda Settimanale</span>
+                </a>
+              </li>
+              <li>
+                <a
+                  class="dropdown-item"
                   routerLink="/allenamento-giornaliero"
                   routerLinkActive="active"
                   [routerLinkActiveOptions]="{ exact: true }"
