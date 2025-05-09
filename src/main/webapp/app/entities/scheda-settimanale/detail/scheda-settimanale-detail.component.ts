@@ -2,6 +2,20 @@ import { Component, OnInit, inject, input } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable, finalize } from 'rxjs';
+import dayjs from 'dayjs/esm';
+
+// Import FontAwesomeModule and specific icons
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import {
+  faDownload,
+  faCalendarDay,
+  faRunning,
+  faDumbbell,
+  faArrowLeft,
+  faPencilAlt,
+  faEye,
+  faPlus,
+} from '@fortawesome/free-solid-svg-icons';
 
 import SharedModule from 'app/shared/shared.module';
 import { DurationPipe, FormatMediumDatePipe, FormatMediumDatetimePipe } from 'app/shared/date';
@@ -9,11 +23,10 @@ import { ISchedaSettimanale } from '../scheda-settimanale.model';
 import { IAllenamentoGiornaliero } from 'app/entities/allenamento-giornaliero/allenamento-giornaliero.model';
 import { ICorsa } from 'app/entities/corsa/corsa.model';
 import { IGym } from 'app/entities/gym/gym.model';
-import { ICircuito } from 'app/entities/circuito/circuito.model';
 import { ApplicationConfigService } from 'app/core/config/application-config.service';
 
 // Definire i tipi di tab possibili
-type TabType = 'allenamenti' | 'corsa' | 'gym' | 'circuito';
+type TabType = 'allenamenti' | 'corsa' | 'gym';
 
 // Definire i tipi di allenamento
 type TipoAllenamento = 'CORSA' | 'GYM' | 'CIRCUITO';
@@ -22,28 +35,42 @@ type TipoAllenamento = 'CORSA' | 'GYM' | 'CIRCUITO';
   standalone: true,
   selector: 'jhi-scheda-settimanale-detail',
   templateUrl: './scheda-settimanale-detail.component.html',
-  imports: [SharedModule, RouterModule, DurationPipe, FormatMediumDatetimePipe, FormatMediumDatePipe],
+  imports: [
+    SharedModule,
+    RouterModule,
+    DurationPipe,
+    FormatMediumDatetimePipe,
+    FormatMediumDatePipe,
+    FontAwesomeModule, // Add FontAwesomeModule to the imports
+  ],
 })
 export class SchedaSettimanaleDetailComponent implements OnInit {
   schedaSettimanale = input<ISchedaSettimanale | null>(null);
   allenamenti: IAllenamentoGiornaliero[] = [];
   corsa: ICorsa[] = [];
   gym: IGym[] = [];
-  circuiti: ICircuito[] = [];
 
   isLoadingAllenamenti = false;
   isLoadingCorsa = false;
   isLoadingGym = false;
-  isLoadingCircuiti = false;
 
   activeTab: TabType = 'allenamenti'; // Default tab
+
+  // Define Font Awesome icons
+  downloadIcon = faDownload;
+  calendarDayIcon = faCalendarDay;
+  runningIcon = faRunning;
+  dumbbellIcon = faDumbbell;
+  arrowLeftIcon = faArrowLeft;
+  pencilAltIcon = faPencilAlt;
+  eyeIcon = faEye;
+  plusIcon = faPlus;
 
   // Tenere traccia di quali tab sono state caricate
   private loadedTabs: Record<TabType, boolean> = {
     allenamenti: false,
     corsa: false,
     gym: false,
-    circuito: false,
   };
 
   // Cache degli ID degli allenamenti per tipo
@@ -94,13 +121,6 @@ export class SchedaSettimanaleDetailComponent implements OnInit {
           this.loadAllenamenti(schedaId, () => this.loadGym());
         }
         break;
-      case 'circuito':
-        if (this.loadedTabs.allenamenti) {
-          this.loadCircuiti();
-        } else {
-          this.loadAllenamenti(schedaId, () => this.loadCircuiti());
-        }
-        break;
     }
   }
 
@@ -123,7 +143,11 @@ export class SchedaSettimanaleDetailComponent implements OnInit {
       )
       .subscribe({
         next: data => {
-          this.allenamenti = data;
+          // Ensure all dates are properly converted to dayjs objects
+          this.allenamenti = data.map(item => ({
+            ...item,
+            dataAllenamento: item.dataAllenamento ? dayjs(item.dataAllenamento) : null,
+          }));
 
           // Organizza gli ID degli allenamenti per tipo per le future query
           this.categorizeAllenamenti();
@@ -215,38 +239,6 @@ export class SchedaSettimanaleDetailComponent implements OnInit {
         },
         error: error => {
           console.error('Error loading gym:', error);
-        },
-      });
-  }
-
-  loadCircuiti(): void {
-    if (this.isLoadingCircuiti || this.loadedTabs.circuito) return;
-
-    const circuitoIds = this.allenamentoIdsByType['CIRCUITO'];
-    if (!circuitoIds.length) {
-      this.loadedTabs.circuito = true;
-      return;
-    }
-
-    this.isLoadingCircuiti = true;
-    const params = new HttpParams().set('allenamentoGiornalieroId.in', circuitoIds.join(',')).set('size', '100');
-
-    const apiUrl = this.applicationConfigService.getEndpointFor('api/circuitos');
-
-    this.http
-      .get<ICircuito[]>(apiUrl, { params })
-      .pipe(
-        finalize(() => {
-          this.isLoadingCircuiti = false;
-          this.loadedTabs.circuito = true;
-        }),
-      )
-      .subscribe({
-        next: data => {
-          this.circuiti = data;
-        },
-        error: error => {
-          console.error('Error loading circuiti:', error);
         },
       });
   }

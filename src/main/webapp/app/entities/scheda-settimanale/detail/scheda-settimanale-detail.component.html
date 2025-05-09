@@ -44,15 +44,15 @@
         </dl>
 
         <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Indietro</span>
+          <fa-icon [icon]="arrowLeftIcon"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Indietro</span>
         </button>
 
         <button type="button" [routerLink]="['/scheda-settimanale', schedaSettimanaleRef.id, 'edit']" class="btn btn-primary">
-          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Modifica</span>
+          <fa-icon [icon]="pencilAltIcon"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Modifica</span>
         </button>
 
         <button class="btn btn-outline-primary ms-2" (click)="exportScheda()" [disabled]="!schedaSettimanale()?.id">
-          <fa-icon icon="download"></fa-icon>&nbsp;Esporta Scheda in JSON
+          <fa-icon [icon]="downloadIcon"></fa-icon>&nbsp;Esporta Scheda in JSON
         </button>
 
         <!-- Dettagli Allenamenti Tabs -->
@@ -61,22 +61,17 @@
             <ul class="nav nav-tabs card-header-tabs">
               <li class="nav-item">
                 <a class="nav-link" [class.active]="activeTab === 'allenamenti'" (click)="setActiveTab('allenamenti')">
-                  <fa-icon icon="calendar-day"></fa-icon> Allenamenti Giornalieri
+                  <fa-icon [icon]="calendarDayIcon"></fa-icon> Allenamenti Giornalieri
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" [class.active]="activeTab === 'corsa'" (click)="setActiveTab('corsa')">
-                  <fa-icon icon="running"></fa-icon> Corsa
+                  <fa-icon [icon]="runningIcon"></fa-icon> Corsa
                 </a>
               </li>
               <li class="nav-item">
                 <a class="nav-link" [class.active]="activeTab === 'gym'" (click)="setActiveTab('gym')">
-                  <fa-icon icon="dumbbell"></fa-icon> Gym
-                </a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" [class.active]="activeTab === 'circuito'" (click)="setActiveTab('circuito')">
-                  <fa-icon icon="sync"></fa-icon> Circuiti
+                  <fa-icon [icon]="dumbbellIcon"></fa-icon> Gym
                 </a>
               </li>
             </ul>
@@ -126,15 +121,21 @@
                                   <span class="badge bg-danger">No</span>
                                 }
                               </td>
-                              <td>{{ allenamento.dataAllenamento | formatMediumDate }}</td>
+                              <td>
+                                @if (allenamento.dataAllenamento) {
+                                  {{ allenamento.dataAllenamento | formatMediumDate }}
+                                } @else {
+                                  Non programmato
+                                }
+                              </td>
                               <td>
                                 <div class="btn-group">
                                   <a [routerLink]="['/allenamento-giornaliero', allenamento.id, 'view']" class="btn btn-info btn-sm">
-                                    <fa-icon icon="eye"></fa-icon>
+                                    <fa-icon [icon]="eyeIcon"></fa-icon>
                                     <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Visualizza</span>
                                   </a>
                                   <a [routerLink]="['/allenamento-giornaliero', allenamento.id, 'edit']" class="btn btn-primary btn-sm">
-                                    <fa-icon icon="pencil-alt"></fa-icon>
+                                    <fa-icon [icon]="pencilAltIcon"></fa-icon>
                                     <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Modifica</span>
                                   </a>
                                 </div>
@@ -156,7 +157,7 @@
                       [queryParams]="{ schedaSettimanaleId: schedaSettimanale()?.id }"
                       class="btn btn-success"
                     >
-                      <fa-icon icon="plus"></fa-icon>&nbsp;Aggiungi Allenamento Giornaliero
+                      <fa-icon [icon]="plusIcon"></fa-icon>&nbsp;Aggiungi Allenamento Giornaliero
                     </a>
                   </div>
                 </div>
@@ -224,11 +225,11 @@
                               <td>
                                 <div class="btn-group">
                                   <a [routerLink]="['/corsa', c.id, 'view']" class="btn btn-info btn-sm">
-                                    <fa-icon icon="eye"></fa-icon>
+                                    <fa-icon [icon]="eyeIcon"></fa-icon>
                                     <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Visualizza</span>
                                   </a>
                                   <a [routerLink]="['/corsa', c.id, 'edit']" class="btn btn-primary btn-sm">
-                                    <fa-icon icon="pencil-alt"></fa-icon>
+                                    <fa-icon [icon]="pencilAltIcon"></fa-icon>
                                     <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Modifica</span>
                                   </a>
                                 </div>
@@ -314,95 +315,11 @@
                               <td>
                                 <div class="btn-group">
                                   <a [routerLink]="['/gym', g.id, 'view']" class="btn btn-info btn-sm">
-                                    <fa-icon icon="eye"></fa-icon>
+                                    <fa-icon [icon]="eyeIcon"></fa-icon>
                                     <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Visualizza</span>
                                   </a>
                                   <a [routerLink]="['/gym', g.id, 'edit']" class="btn btn-primary btn-sm">
-                                    <fa-icon icon="pencil-alt"></fa-icon>
-                                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Modifica</span>
-                                  </a>
-                                </div>
-                              </td>
-                            </tr>
-                          }
-                        </tbody>
-                      </table>
-                    </div>
-                  }
-                </div>
-              </div>
-            }
-
-            <!-- Circuito Tab Content -->
-            @if (activeTab === 'circuito') {
-              <div class="row mb-4">
-                <div class="col-md-12">
-                  <h4>Circuiti</h4>
-                  @if (isLoadingCircuiti) {
-                    <div class="d-flex justify-content-center">
-                      <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Caricamento...</span>
-                      </div>
-                    </div>
-                  } @else if (circuiti.length === 0) {
-                    <div class="alert alert-info">Nessun circuito associato a questa scheda.</div>
-                  } @else {
-                    <div class="table-responsive">
-                      <table class="table table-striped table-hover">
-                        <thead>
-                          <tr>
-                            <th>ID</th>
-                            <th>Tempo Limite</th>
-                            <th>Tempo Impiegato</th>
-                            <th>Catena Ripetizioni</th>
-                            <th>Circuiti Completati</th>
-                            <th>Svolto</th>
-                            <th>Completato</th>
-                            <th>Feedback</th>
-                            <th>Allenamento</th>
-                            <th>Azioni</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          @for (circuito of circuiti; track circuito.id) {
-                            <tr>
-                              <td>
-                                <a [routerLink]="['/circuito', circuito.id, 'view']">{{ circuito.id }}</a>
-                              </td>
-                              <td title="{{ circuito.tempoLimite }}">{{ circuito.tempoLimite | duration }}</td>
-                              <td title="{{ circuito.tempoImpiegato }}">{{ circuito.tempoImpiegato | duration }}</td>
-                              <td>{{ circuito.catenaRipetizioni }}</td>
-                              <td>{{ circuito.circuitiCompletati }}</td>
-                              <td>
-                                @if (circuito.svolto) {
-                                  <span class="badge bg-success">Sì</span>
-                                } @else {
-                                  <span class="badge bg-danger">No</span>
-                                }
-                              </td>
-                              <td>
-                                @if (circuito.completato) {
-                                  <span class="badge bg-success">Sì</span>
-                                } @else {
-                                  <span class="badge bg-danger">No</span>
-                                }
-                              </td>
-                              <td>{{ circuito.feedback }}</td>
-                              <td>
-                                @if (circuito.allenamentoGiornaliero) {
-                                  <a [routerLink]="['/allenamento-giornaliero', circuito.allenamentoGiornaliero.id, 'view']">
-                                    {{ circuito.allenamentoGiornaliero.id }}
-                                  </a>
-                                }
-                              </td>
-                              <td>
-                                <div class="btn-group">
-                                  <a [routerLink]="['/circuito', circuito.id, 'view']" class="btn btn-info btn-sm">
-                                    <fa-icon icon="eye"></fa-icon>
-                                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Visualizza</span>
-                                  </a>
-                                  <a [routerLink]="['/circuito', circuito.id, 'edit']" class="btn btn-primary btn-sm">
-                                    <fa-icon icon="pencil-alt"></fa-icon>
+                                    <fa-icon [icon]="pencilAltIcon"></fa-icon>
                                     <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Modifica</span>
                                   </a>
                                 </div>
