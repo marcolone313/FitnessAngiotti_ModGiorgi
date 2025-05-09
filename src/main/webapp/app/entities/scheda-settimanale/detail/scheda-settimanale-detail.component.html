@@ -44,16 +44,297 @@
         </dl>
 
         <button type="submit" (click)="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
-          <fa-icon icon="arrow-left"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Indietro</span>
+          <fa-icon [icon]="arrowLeftIcon"></fa-icon>&nbsp;<span jhiTranslate="entity.action.back">Indietro</span>
         </button>
 
         <button type="button" [routerLink]="['/scheda-settimanale', schedaSettimanaleRef.id, 'edit']" class="btn btn-primary">
-          <fa-icon icon="pencil-alt"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Modifica</span>
+          <fa-icon [icon]="pencilAltIcon"></fa-icon>&nbsp;<span jhiTranslate="entity.action.edit">Modifica</span>
         </button>
 
-        <button class="btn btn-outline-primary" (click)="exportScheda()" [disabled]="!schedaSettimanale()?.id">
-          Esporta Scheda in JSON
+        <button class="btn btn-outline-primary ms-2" (click)="exportScheda()" [disabled]="!schedaSettimanale()?.id">
+          <fa-icon [icon]="downloadIcon"></fa-icon>&nbsp;Esporta Scheda in JSON
         </button>
+
+        <!-- Dettagli Allenamenti Tabs -->
+        <div class="card mt-4">
+          <div class="card-header">
+            <ul class="nav nav-tabs card-header-tabs">
+              <li class="nav-item">
+                <a class="nav-link" [class.active]="activeTab === 'allenamenti'" (click)="setActiveTab('allenamenti')">
+                  <fa-icon [icon]="calendarDayIcon"></fa-icon> Allenamenti Giornalieri
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" [class.active]="activeTab === 'corsa'" (click)="setActiveTab('corsa')">
+                  <fa-icon [icon]="runningIcon"></fa-icon> Corsa
+                </a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" [class.active]="activeTab === 'gym'" (click)="setActiveTab('gym')">
+                  <fa-icon [icon]="dumbbellIcon"></fa-icon> Gym
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="card-body">
+            <!-- Allenamenti Giornalieri Tab Content -->
+            @if (activeTab === 'allenamenti') {
+              <div class="row mb-4">
+                <div class="col-md-12">
+                  <h4>Allenamenti Giornalieri</h4>
+                  @if (isLoadingAllenamenti) {
+                    <div class="d-flex justify-content-center">
+                      <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Caricamento...</span>
+                      </div>
+                    </div>
+                  } @else if (allenamenti.length === 0) {
+                    <div class="alert alert-info">Nessun allenamento giornaliero associato a questa scheda.</div>
+                  } @else {
+                    <div class="table-responsive">
+                      <table class="table table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Tipo</th>
+                            <th>Giorno</th>
+                            <th>Svolto</th>
+                            <th>Data Allenamento</th>
+                            <th>Azioni</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @for (allenamento of allenamenti; track allenamento.id) {
+                            <tr>
+                              <td>
+                                <a [routerLink]="['/allenamento-giornaliero', allenamento.id, 'view']">{{ allenamento.id }}</a>
+                              </td>
+                              <td [jhiTranslate]="'fitnessAngiottiApp.TipoAllenamento.' + (allenamento.tipo ?? 'null')">
+                                {{ { null: '', CORSA: 'CORSA', GYM: 'GYM', CIRCUITO: 'CIRCUITO' }[allenamento.tipo ?? 'null'] }}
+                              </td>
+                              <td>{{ allenamento.giorno }}</td>
+                              <td>
+                                @if (allenamento.svolto) {
+                                  <span class="badge bg-success">Sì</span>
+                                } @else {
+                                  <span class="badge bg-danger">No</span>
+                                }
+                              </td>
+                              <td>
+                                @if (allenamento.dataAllenamento) {
+                                  {{ allenamento.dataAllenamento | formatMediumDate }}
+                                } @else {
+                                  Non programmato
+                                }
+                              </td>
+                              <td>
+                                <div class="btn-group">
+                                  <a [routerLink]="['/allenamento-giornaliero', allenamento.id, 'view']" class="btn btn-info btn-sm">
+                                    <fa-icon [icon]="eyeIcon"></fa-icon>
+                                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Visualizza</span>
+                                  </a>
+                                  <a [routerLink]="['/allenamento-giornaliero', allenamento.id, 'edit']" class="btn btn-primary btn-sm">
+                                    <fa-icon [icon]="pencilAltIcon"></fa-icon>
+                                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Modifica</span>
+                                  </a>
+                                </div>
+                              </td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                  }
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-md-12">
+                  <div class="d-grid gap-2">
+                    <a
+                      [routerLink]="['/allenamento-giornaliero/new']"
+                      [queryParams]="{ schedaSettimanaleId: schedaSettimanale()?.id }"
+                      class="btn btn-success"
+                    >
+                      <fa-icon [icon]="plusIcon"></fa-icon>&nbsp;Aggiungi Allenamento Giornaliero
+                    </a>
+                  </div>
+                </div>
+              </div>
+            }
+
+            <!-- Corsa Tab Content -->
+            @if (activeTab === 'corsa') {
+              <div class="row mb-4">
+                <div class="col-md-12">
+                  <h4>Attività di Corsa</h4>
+                  @if (isLoadingCorsa) {
+                    <div class="d-flex justify-content-center">
+                      <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Caricamento...</span>
+                      </div>
+                    </div>
+                  } @else if (corsa.length === 0) {
+                    <div class="alert alert-info">Nessuna attività di corsa associata a questa scheda.</div>
+                  } @else {
+                    <div class="table-responsive">
+                      <table class="table table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Distanza (km)</th>
+                            <th>Tempo Impiegato</th>
+                            <th>Svolto</th>
+                            <th>Completato</th>
+                            <th>Feedback</th>
+                            <th>Allenamento</th>
+                            <th>Azioni</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @for (c of corsa; track c.id) {
+                            <tr>
+                              <td>
+                                <a [routerLink]="['/corsa', c.id, 'view']">{{ c.id }}</a>
+                              </td>
+                              <td>{{ c.distanzaDaPercorrere }}</td>
+                              <td title="{{ c.tempoImpiegato }}">{{ c.tempoImpiegato | duration }}</td>
+                              <td>
+                                @if (c.svolto) {
+                                  <span class="badge bg-success">Sì</span>
+                                } @else {
+                                  <span class="badge bg-danger">No</span>
+                                }
+                              </td>
+                              <td>
+                                @if (c.completato) {
+                                  <span class="badge bg-success">Sì</span>
+                                } @else {
+                                  <span class="badge bg-danger">No</span>
+                                }
+                              </td>
+                              <td>{{ c.feedback }}</td>
+                              <td>
+                                @if (c.allenamentoGiornaliero) {
+                                  <a [routerLink]="['/allenamento-giornaliero', c.allenamentoGiornaliero.id, 'view']">
+                                    {{ c.allenamentoGiornaliero.id }}
+                                  </a>
+                                }
+                              </td>
+                              <td>
+                                <div class="btn-group">
+                                  <a [routerLink]="['/corsa', c.id, 'view']" class="btn btn-info btn-sm">
+                                    <fa-icon [icon]="eyeIcon"></fa-icon>
+                                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Visualizza</span>
+                                  </a>
+                                  <a [routerLink]="['/corsa', c.id, 'edit']" class="btn btn-primary btn-sm">
+                                    <fa-icon [icon]="pencilAltIcon"></fa-icon>
+                                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Modifica</span>
+                                  </a>
+                                </div>
+                              </td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+
+            <!-- Gym Tab Content -->
+            @if (activeTab === 'gym') {
+              <div class="row mb-4">
+                <div class="col-md-12">
+                  <h4>Esercizi Gym</h4>
+                  @if (isLoadingGym) {
+                    <div class="d-flex justify-content-center">
+                      <div class="spinner-border text-primary" role="status">
+                        <span class="visually-hidden">Caricamento...</span>
+                      </div>
+                    </div>
+                  } @else if (gym.length === 0) {
+                    <div class="alert alert-info">Nessun esercizio gym associato a questa scheda.</div>
+                  } @else {
+                    <div class="table-responsive">
+                      <table class="table table-striped table-hover">
+                        <thead>
+                          <tr>
+                            <th>ID</th>
+                            <th>Sets</th>
+                            <th>Reps</th>
+                            <th>Recupero</th>
+                            <th>Peso</th>
+                            <th>Svolto</th>
+                            <th>Completato</th>
+                            <th>Feedback</th>
+                            <th>Allenamento</th>
+                            <th>Esercizio</th>
+                            <th>Azioni</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @for (g of gym; track g.id) {
+                            <tr>
+                              <td>
+                                <a [routerLink]="['/gym', g.id, 'view']">{{ g.id }}</a>
+                              </td>
+                              <td>{{ g.sets }}</td>
+                              <td>{{ g.reps }}</td>
+                              <td title="{{ g.recupero }}">{{ g.recupero | duration }}</td>
+                              <td>{{ g.peso }}</td>
+                              <td>
+                                @if (g.svolto) {
+                                  <span class="badge bg-success">Sì</span>
+                                } @else {
+                                  <span class="badge bg-danger">No</span>
+                                }
+                              </td>
+                              <td>
+                                @if (g.completato) {
+                                  <span class="badge bg-success">Sì</span>
+                                } @else {
+                                  <span class="badge bg-danger">No</span>
+                                }
+                              </td>
+                              <td>{{ g.feedback }}</td>
+                              <td>
+                                @if (g.allenamentoGiornaliero) {
+                                  <a [routerLink]="['/allenamento-giornaliero', g.allenamentoGiornaliero.id, 'view']">
+                                    {{ g.allenamentoGiornaliero.id }}
+                                  </a>
+                                }
+                              </td>
+                              <td>
+                                @if (g.esercizio) {
+                                  <a [routerLink]="['/esercizio', g.esercizio.id, 'view']">{{ g.esercizio.nome }}</a>
+                                }
+                              </td>
+                              <td>
+                                <div class="btn-group">
+                                  <a [routerLink]="['/gym', g.id, 'view']" class="btn btn-info btn-sm">
+                                    <fa-icon [icon]="eyeIcon"></fa-icon>
+                                    <span class="d-none d-md-inline" jhiTranslate="entity.action.view">Visualizza</span>
+                                  </a>
+                                  <a [routerLink]="['/gym', g.id, 'edit']" class="btn btn-primary btn-sm">
+                                    <fa-icon [icon]="pencilAltIcon"></fa-icon>
+                                    <span class="d-none d-md-inline" jhiTranslate="entity.action.edit">Modifica</span>
+                                  </a>
+                                </div>
+                              </td>
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </div>
       </div>
     }
   </div>
